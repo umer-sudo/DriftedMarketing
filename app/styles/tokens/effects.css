@@ -1,0 +1,25 @@
+:root {
+  /* Flat brand — shadows are rare; hard offsets and grain do the work. */
+  --shadow-1: 0 1px 0 rgba(242, 240, 234, 0.06) inset; /* @kind shadow */
+  --shadow-2: 0 8px 24px rgba(0, 0, 0, 0.6);  /* @kind shadow */
+  --shadow-3: 0 24px 60px rgba(0, 0, 0, 0.75); /* @kind shadow */
+  --shadow-hard: 6px 6px 0 var(--voltage-500); /* @kind shadow */
+  --shadow-hard-siren: 6px 6px 0 var(--siren-500); /* @kind shadow */
+  --glow-voltage: 0 0 0 1px var(--voltage-500), 0 0 32px -8px rgba(175, 227, 4, 0.7); /* @kind shadow */
+
+  /* Misregistration — the identity's core offset, reusable on any element. */
+  --misreg-x: -9px; /* @kind spacing */
+  --misreg-y: -8px; /* @kind spacing */
+  --misreg-rotate: -3.5deg; /* @kind other */
+  --misreg-tint: 0.34; /* @kind other */
+
+  --grain-opacity: 0.08; /* @kind other */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>"); /* @kind other */
+
+  --scrim-top: linear-gradient(to bottom, rgba(10, 10, 11, 0.92), rgba(10, 10, 11, 0)); /* @kind color */
+  --scrim-bottom: linear-gradient(to top, rgba(10, 10, 11, 0.95), rgba(10, 10, 11, 0)); /* @kind color */
+  --diagonal-split: linear-gradient(107deg, var(--voltage-500) 0 42%, var(--tar) 42%); /* @kind color */
+
+  --hairline: 1px solid var(--border-subtle); /* @kind other */
+  --blur-panel: saturate(160%) blur(18px); /* @kind other */
+}

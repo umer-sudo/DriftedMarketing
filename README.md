@@ -1,29 +1,92 @@
 # Drifted Marketing
 
-Repository for the Drifted Marketing website. The site itself is not built yet — what lands here first is the approved design handoff.
+The Drifted Marketing website — Next.js 15 (App Router), TypeScript, no CSS framework.
 
-## Where things are
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build
+npm run typecheck
+```
 
-Everything is in **[`.claude/skills/drifted-design/`](.claude/skills/drifted-design/)**:
+## Routes
+
+Ten routes, all statically generated.
+
+| Route | Page |
+| --- | --- |
+| `/` | Home |
+| `/work` | Work index, filterable |
+| `/work/[slug]` | Case study — six cases, prerendered |
+| `/services/performance` | Performance media |
+| `/services/creators` | Creator growth |
+| `/services/ai-product` | AI product |
+| `/about` | Studio |
+| `/contact` | The brief form |
+| `/contact/thanks` | Post-submit confirmation |
+| `not-found` | 404 |
+
+## Layout
+
+```
+app/
+  layout.tsx            root chrome: nav, footer, behaviour layer
+  globals.css           imports the token layer, then the component layer
+  styles/tokens/*.css   design-system tokens, shipped as-is
+  styles/components.css component layer, ported from the prototype
+  fonts.ts              self-hosted Schibsted Grotesk / Instrument Sans / JetBrains Mono
+  opengraph-image.tsx   generated 1200×630 OG card
+  sitemap.ts robots.ts
+components/             Nav, Footer, CtaBand, WorkGrid, Chrome (motion), …
+content/cases.ts        the six case studies, typed
+lib/config.ts           site config, unconfirmed endpoints, launch date
+```
+
+`components/Chrome.tsx` carries the global motion the way the prototype's `site.js` did
+— delegated listeners rather than a component per effect. Pages stay server-rendered;
+motion is progressive enhancement. Markup ships settled and `data-motion="on"` is only
+added once the client mounts, so nothing is ever invisible without JS.
+
+## Design source
+
+The approved handoff lives in **[`.claude/skills/drifted-design/`](.claude/skills/drifted-design/)**
+and is also installed as a Claude Code skill (`/drifted-design`) — copy that folder into
+any other project's `.claude/skills/` to make the brand available there.
 
 | File | Read it for |
 | --- | --- |
-| [`README.md`](.claude/skills/drifted-design/README.md) | **Start here.** The website handoff — the full token layer with exact values, the ten-route map, every screen section by section, all motion behaviour, content rules, and the open gaps. |
-| [`DESIGN-SYSTEM.md`](.claude/skills/drifted-design/DESIGN-SYSTEM.md) | Brand-level design system: colour, type, layout, texture, iconography. |
-| [`BRIEF.md`](.claude/skills/drifted-design/BRIEF.md) | Voice, positioning, proof set. §11–12 are hard constraints — never invent a metric. |
-| `styles.css` + `tokens/` | Production-ready CSS. Adopt as-is; do not re-derive the values. |
-| `Drifted Website.html`, `site.js`, `image-slot.js` | Hash-routed prototype of all ten routes. **Reference only — do not ship.** |
-| `reference/*.html` | Approved specimens: foundations, component library, motion spec, mark spec, collateral. |
-| `assets/` | Logos, collage kit, mood references. |
+| [`README.md`](.claude/skills/drifted-design/README.md) | The website handoff: token values, the route map, every screen, motion, content rules, known gaps. |
+| [`DESIGN-SYSTEM.md`](.claude/skills/drifted-design/DESIGN-SYSTEM.md) | Brand-level system: colour, type, layout, texture, iconography. |
+| [`BRIEF.md`](.claude/skills/drifted-design/BRIEF.md) | Voice, positioning, proof set. §11–12 are hard constraints. |
+| `reference/*.html` | Approved specimens: foundations, component library, motion spec, mark spec. |
+| `Drifted Website.html` | The original hash-routed prototype. Reference only. |
 
-The handoff README is self-sufficient: a developer with no context from the design conversation can build from it alone.
+Tokens in `app/styles/tokens/` are copied from the bundle unchanged, with one exception:
+`fonts.css` no longer `@import`s the Google Fonts CDN, because the fonts are self-hosted
+through `next/font` as the handoff asks.
 
-## Using the brand as a skill
+## Content rules
 
-The folder is packaged as a Claude Code skill. It is already at `.claude/skills/drifted-design/`, so in this repo it is live as `/drifted-design`. To use it elsewhere, copy the folder into that project's `.claude/skills/`.
+`content/cases.ts` is the single source of case data. **Never add a figure that has not
+been published or client-approved.** Unmeasured results carry `pending: true` and render
+muted — that flag is a hard constraint from the brief, not a style choice. These numbers
+appeared in early drafts and are permanently unusable: $7M+ revenue driven, 40+ apps
+shipped, 8+ years, 300% ROI, eleven clients.
 
-## Open items
+## Outstanding before launch
 
-Eight gaps are flagged explicitly in the handoff README and need answers before launch: case-study imagery, OG image, Instagram handle, phone number, contact form endpoint, analytics, the countdown date, and the sitemap.
+Carried from the handoff's gap list, plus what surfaced during the build.
 
-Two further flags carry over from the design system: the collage assets are the founder's uploaded references and need rights confirmed (or a commissioned replacement set) before anything ships, and no display font is licensed yet — the system currently runs on Google Fonts.
+| # | Item | State |
+| --- | --- | --- |
+| 1 | Case-study imagery | Placeholders throughout. `ImageSlot` renders a labelled frame; pass `src` when assets land. |
+| 2 | Open Graph image | **Done** — generated from brand tokens at `/opengraph-image`. |
+| 3 | Instagram handle | **Unconfirmed.** `lib/config.ts` carries a guessed handle. Verify or remove the DM buttons. |
+| 4 | Phone number | **Unconfirmed.** The CTA-band phone icon is decorative; set `phone.number` to wire a `tel:` link. |
+| 5 | Contact form endpoint | **Not wired.** Set `CONTACT_FORM_ENDPOINT` and add real spam protection — the honeypot alone is not enough. Until then the form says so rather than pretending to send. |
+| 6 | Analytics | Not added. The brief calls for cookie-free analytics. |
+| 7 | Zoller countdown date | Config value in `lib/config.ts`. Verify 16 Aug 2026 with the client. |
+| 8 | Sitemap / robots | **Done** — `app/sitemap.ts`, `app/robots.ts`. Structured data still outstanding. |
+| 9 | Collage asset licensing | Unresolved. The five collage objects are the founder's uploaded references; confirm rights or commission a replacement set. |
+| 10 | Display font licence | None held. Running on Google Fonts; the handoff notes Helvetica Now Display / Neue Haas Grotesk Display as the intended face. |
+| 11 | Production origin | `NEXT_PUBLIC_SITE_URL` defaults to `https://driftedmarketing.com`. Set it for real before launch — it feeds canonicals, sitemap and OG. |

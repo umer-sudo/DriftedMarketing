@@ -1,0 +1,25 @@
+import type { Metadata } from "next";
+import WorkGrid from "@/components/WorkGrid";
+import CtaBand from "@/components/CtaBand";
+import { FORJWELL_CREDIT } from "@/content/cases";
+
+export const metadata: Metadata = {
+  title: "Work, not decks — Drifted",
+  description:
+    "Selected work: performance media, creator growth, AI product and web builds. Published numbers where they exist, pending flags where they don’t.",
+  alternates: { canonical: "/work" },
+};
+
+export default function WorkPage() {
+  return (
+    <>
+      <WorkGrid />
+      <div className="wrap" style={{ paddingTop: 34 }}>
+        <p className="small" style={{ maxWidth: "78ch" }}>
+          {FORJWELL_CREDIT}
+        </p>
+      </div>
+      <CtaBand />
+    </>
+  );
+}

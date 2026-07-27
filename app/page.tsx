@@ -1,0 +1,576 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { BarChart3, Users, Cpu, PhoneCall, Crosshair, Receipt } from "lucide-react";
+import Orb from "@/components/Orb";
+import Marquee from "@/components/Marquee";
+import ShipTicker from "@/components/ShipTicker";
+import ScrollJack from "@/components/ScrollJack";
+import WorkTile from "@/components/WorkTile";
+import CtaBand from "@/components/CtaBand";
+import ImageSlot from "@/components/ImageSlot";
+import { CASES, CLIENTS } from "@/content/cases";
+
+export const metadata: Metadata = {
+  title: "Drifted — Look bigger than you are",
+  alternates: { canonical: "/" },
+};
+
+const BEATS = [
+  {
+    usual: "A strategist writes the deck. A creative team makes something else. A media buyer runs it.",
+    ours: "The people in the pitch are the people on the work.",
+  },
+  {
+    usual: "You get impressions, reach, engagement rate.",
+    ours: "You get one metric and a date.",
+  },
+  {
+    usual: "Twelve-month lock-in so they can survive the first bad quarter.",
+    ours: "Retainers should be losable. Thirty days’ notice, always.",
+  },
+  {
+    usual: "An app quoted at $60,000 and eighteen months, with no answer for how it earns.",
+    ours: "We decide how it makes money before we build it. If it can’t, we say so.",
+  },
+];
+
+const PROCESS = [
+  {
+    n: "01",
+    Icon: PhoneCall,
+    title: "The call",
+    body: "30 minutes. You bring the number you need to hit and the date. No deck, no pitch theatre.",
+  },
+  {
+    n: "02",
+    Icon: Crosshair,
+    title: "The number",
+    body: "We say yes or no on the call. Yes comes with a scope and a figure we report against weekly.",
+  },
+  {
+    n: "03",
+    Icon: Receipt,
+    title: "The receipts",
+    body: "Published numbers or pending flags — never estimates. If it is not measured yet, it says so.",
+  },
+];
+
+const STEPS = [
+  { n: "01", title: "The number", body: "You tell us the metric and the date. We tell you if we can hit it." },
+  {
+    n: "02",
+    title: "The audit",
+    body: "We go through the account, the funnel, the data. Nothing starts before we know what’s broken.",
+  },
+  { n: "03", title: "The plan", body: "One page. The number, the route, the deadline." },
+  { n: "04", title: "The work", body: "The people who pitched you do the work. Every week, in your inbox." },
+  { n: "05", title: "The proof", body: "Measured against the number. Not against impressions." },
+];
+
+export default function Home() {
+  return (
+    <>
+      {/* ── Hero ───────────────────────────────────────────────────────────── */}
+      <section className="hero wrap grainy">
+        <Orb />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo.svg" alt="" className="wm-logo" aria-hidden="true" />
+
+        <div
+          className="herotext"
+          style={{ position: "relative", gridColumn: 1, gridRow: 1, maxWidth: "min(100%,760px)" }}
+        >
+          <div className="eye">Drifted Marketing · Est. 2026</div>
+          <h1 className="disp" style={{ marginTop: 26 }}>
+            Look <span className="fill">bigger</span>
+            <br />
+            <span className="ol">than</span> you are
+          </h1>
+          <p className="body" style={{ maxWidth: "44ch", marginTop: 34, fontSize: 19 }}>
+            5.2× ROAS. 400 hours saved. 2.2 million views on an 811-follower account. Three
+            clients, no account layer, and a number in every contract.
+          </p>
+          <div style={{ display: "flex", gap: 14, marginTop: 38, flexWrap: "wrap" }}>
+            <Link href="/contact" className="btn">
+              Tell us the number ↗
+            </Link>
+            <Link href="/work" className="btn sec">
+              See the work
+            </Link>
+          </div>
+        </div>
+
+        <div className="herofoot">
+          <span className="cue">
+            <i /> Keep going
+          </span>
+          <span className="eye mut">Karachi · Est. 2026</span>
+        </div>
+      </section>
+
+      <Marquee />
+
+      {/* ── The numbers ────────────────────────────────────────────────────── */}
+      <section className="wrap" style={{ paddingBlock: "clamp(48px,6vw,88px)" }}>
+        <div className="eye">The numbers</div>
+        <div className="nums">
+          <div className="rv">
+            <div className="n acc" data-count="5.2" data-suffix="–6×">
+              0×
+            </div>
+            <div className="small" style={{ marginTop: 14, color: "var(--text-primary)" }}>
+              ROAS on every campaign
+            </div>
+            <div className="eye mut" style={{ marginTop: 8 }}>
+              The Gallery
+            </div>
+          </div>
+          <div className="rv">
+            <div className="n" data-count="400" data-suffix="+">
+              0
+            </div>
+            <div className="small" style={{ marginTop: 14, color: "var(--text-primary)" }}>
+              Hours saved per year
+            </div>
+            <div className="eye mut" style={{ marginTop: 8 }}>
+              Frank Zoller Authentic History
+            </div>
+          </div>
+          <div className="rv">
+            <div className="n" data-count="2.2" data-suffix="M">
+              0M
+            </div>
+            <div className="small" style={{ marginTop: 14, color: "var(--text-primary)" }}>
+              Views in 90 days, 80% organic
+            </div>
+            <div className="eye mut" style={{ marginTop: 8 }}>
+              The Poster Project
+            </div>
+          </div>
+          <div className="rv">
+            <div className="n" data-count="3" data-suffix="K">
+              0K
+            </div>
+            <div className="small" style={{ marginTop: 14, color: "var(--text-primary)" }}>
+              New followers per month
+            </div>
+            <div className="eye mut" style={{ marginTop: 8, overflowWrap: "anywhere" }}>
+              @theonlycanadianbacon
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why we left ────────────────────────────────────────────────────── */}
+      <section className="wrap sect opwrap" style={{ paddingBottom: 0 }}>
+        <span className="opnum" aria-hidden="true">
+          01
+        </span>
+        <div className="eye">Why we left</div>
+        <h2 className="disp" style={{ fontSize: "clamp(34px,5.4vw,84px)", marginTop: 14 }}>
+          Every agency
+          <br />
+          says growth.
+        </h2>
+        <p className="body" style={{ maxWidth: "56ch", marginTop: 22 }}>
+          We say the number. One metric, one date, written into the contract.
+        </p>
+      </section>
+
+      <div style={{ marginTop: 44 }}>
+        {BEATS.map((b) => (
+          <div className="beat rv" key={b.ours}>
+            <div>
+              <div className="eye mut">How it usually works</div>
+              <p
+                className="disp"
+                style={{
+                  fontSize: "clamp(21px,2.4vw,34px)",
+                  color: "var(--ink-300)",
+                  marginTop: 16,
+                }}
+              >
+                <span className="strike">{b.usual}</span>
+              </p>
+            </div>
+            <div>
+              <div className="eye">How we work</div>
+              <p className="disp" style={{ fontSize: "clamp(21px,2.4vw,34px)", marginTop: 16 }}>
+                {b.ours}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="wrap" style={{ paddingTop: 44 }}>
+        <p className="disp" style={{ fontSize: "clamp(20px,2.6vw,38px)" }}>
+          We&rsquo;re not the cheap option and we don&rsquo;t pretend to be.
+        </p>
+      </div>
+
+      {/* ── Services ───────────────────────────────────────────────────────── */}
+      <section className="wrap sect opwrap" style={{ paddingBottom: 0 }}>
+        <span className="opnum" aria-hidden="true">
+          02
+        </span>
+        <div className="eye">Three disciplines, one P&amp;L</div>
+        <h2 className="disp" style={{ fontSize: "clamp(34px,5.4vw,84px)", marginTop: 14 }}>
+          Pick your
+          <br />
+          departure.
+        </h2>
+      </section>
+
+      <div className="svc" style={{ marginTop: 44 }}>
+        <div className="rv" style={{ gridRow: "span 2", minHeight: 400 }}>
+          <div>
+            <div style={{ marginBottom: 4 }}>
+              <BarChart3 className="lu" style={{ width: 26, height: 26, color: "var(--voltage-500)" }} aria-hidden="true" />
+            </div>
+            <div className="svcno">01</div>
+            <h3 className="disp" style={{ fontSize: "clamp(28px,3.4vw,52px)", marginTop: 16 }}>
+              <Link href="/services/performance" className="tilelink">
+                Views don&rsquo;t
+                <br />
+                pay invoices
+              </Link>
+            </h3>
+          </div>
+          <div>
+            <p className="body" style={{ maxWidth: "46ch" }}>
+              Paid social and search, plus the creative that feeds it. Built for DTC brands who
+              need the ad account and the content to stop arguing with each other.
+            </p>
+            <div className="eye" style={{ marginTop: 24 }}>
+              Run the media →
+            </div>
+            <div className="eye" style={{ marginTop: 18 }}>
+              5.2–6× ROAS — The Gallery
+            </div>
+          </div>
+        </div>
+
+        <div className="rv" style={{ minHeight: 200 }}>
+          <div>
+            <div style={{ marginBottom: 4 }}>
+              <Users className="lu" style={{ width: 26, height: 26, color: "var(--voltage-500)" }} aria-hidden="true" />
+            </div>
+            <div className="svcno" style={{ fontSize: "clamp(36px,4vw,64px)" }}>
+              02
+            </div>
+            <h3 className="disp" style={{ fontSize: "clamp(22px,2.6vw,36px)", marginTop: 12 }}>
+              <Link href="/services/creators" className="tilelink">
+                An audience is
+                <br />
+                not a business
+              </Link>
+            </h3>
+          </div>
+          <div>
+            <p className="small" style={{ maxWidth: "44ch" }}>
+              Monetization, product, and the launch that turns followers into revenue. We built
+              Noted. from a red pen and a merch idea.
+            </p>
+            <div className="eye" style={{ marginTop: 18 }}>
+              Build the business →
+            </div>
+            <div className="eye" style={{ marginTop: 18 }}>
+              3K followers / month — Noted.
+            </div>
+          </div>
+        </div>
+
+        <div className="rv" style={{ minHeight: 200 }}>
+          <div>
+            <div style={{ marginBottom: 4 }}>
+              <Cpu className="lu" style={{ width: 26, height: 26, color: "var(--voltage-500)" }} aria-hidden="true" />
+            </div>
+            <div className="svcno" style={{ fontSize: "clamp(36px,4vw,64px)" }}>
+              03
+            </div>
+            <h3 className="disp" style={{ fontSize: "clamp(22px,2.6vw,36px)", marginTop: 12 }}>
+              <Link href="/services/ai-product" className="tilelink">
+                Software
+                <br />
+                without a price
+              </Link>
+            </h3>
+          </div>
+          <div>
+            <p className="small" style={{ maxWidth: "44ch" }}>
+              Apps and PWAs where the revenue model is written before the first commit. Shipped in
+              weeks. Priced like it.
+            </p>
+            <div className="eye" style={{ marginTop: 18 }}>
+              Ship the product →
+            </div>
+            <div className="eye" style={{ marginTop: 18 }}>
+              400+ hours saved — Zoller
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Client strip ───────────────────────────────────────────────────── */}
+      <section style={{ paddingTop: 56 }}>
+        <div className="wrap">
+          <div className="eye mut" style={{ marginBottom: 16 }}>
+            On the books
+          </div>
+          <div className="clientstrip">
+            {CLIENTS.map((name) => (
+              <b key={name}>{name}</b>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Work preview ───────────────────────────────────────────────────── */}
+      <section
+        className="wrap sect opwrap"
+        style={{
+          paddingBottom: 0,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          gap: 24,
+          flexWrap: "wrap",
+        }}
+      >
+        <span className="opnum" aria-hidden="true">
+          03
+        </span>
+        <div>
+          <div className="eye">The receipts</div>
+          <h2 className="disp" style={{ fontSize: "clamp(34px,5.4vw,84px)", marginTop: 14 }}>
+            Work,
+            <br />
+            not decks.
+          </h2>
+        </div>
+        <Link href="/work" className="btn sec">
+          All work
+        </Link>
+      </section>
+
+      <div className="work" style={{ marginTop: 40 }}>
+        {CASES.slice(0, 4).map((c, i) => (
+          <WorkTile key={c.slug} c={c} index={i} />
+        ))}
+      </div>
+
+      {/* ── The part nobody else does ──────────────────────────────────────── */}
+      <section className="appsec">
+        <div className="wire" aria-hidden="true" />
+        <div
+          className="wrap appgrid"
+          style={{ position: "relative", paddingBlock: "clamp(64px,9vw,132px)" }}
+        >
+          <div className="rv">
+            <div className="eye" style={{ color: "var(--klein-300)" }}>
+              The part nobody else does
+            </div>
+            <h2 className="disp" style={{ fontSize: "clamp(34px,5.4vw,86px)", marginTop: 18 }}>
+              We decide
+              <br />
+              how it earns.
+            </h2>
+            <p className="body" style={{ maxWidth: "52ch", marginTop: 24 }}>
+              Most agencies build the app and hand you the problem. Eighteen months, sixty thousand
+              dollars, and a product with no answer for how it makes money.
+            </p>
+            <p className="body" style={{ maxWidth: "52ch", marginTop: 14 }}>
+              We start at the revenue model. If the idea can&rsquo;t earn, we tell you before you
+              spend — and we&rsquo;ve turned work down for exactly that reason.
+            </p>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3,minmax(0,1fr))",
+                gap: 20,
+                marginTop: 34,
+              }}
+            >
+              <div>
+                <div className="disp" style={{ fontSize: 22 }}>
+                  01 Monetize
+                </div>
+                <div className="eye mut" style={{ marginTop: 8, lineHeight: 1.7 }}>
+                  Priced and stress-tested before design starts
+                </div>
+              </div>
+              <div>
+                <div className="disp" style={{ fontSize: 22 }}>
+                  02 Design
+                </div>
+                <div className="eye mut" style={{ marginTop: 8, lineHeight: 1.7 }}>
+                  The shortest path from open to paid
+                </div>
+              </div>
+              <div>
+                <div className="disp" style={{ fontSize: 22 }}>
+                  03 Ship
+                </div>
+                <div className="eye mut" style={{ marginTop: 8, lineHeight: 1.7 }}>
+                  Weeks, not quarters
+                </div>
+              </div>
+            </div>
+
+            <p
+              className="disp"
+              style={{
+                fontSize: "clamp(19px,2.2vw,30px)",
+                marginTop: 32,
+                color: "var(--voltage-500)",
+              }}
+            >
+              Software without a price is a hobby with a repo.
+            </p>
+            <div style={{ marginTop: 26 }}>
+              <Link href="/services/ai-product" className="btn sec">
+                Bring us the idea ↗
+              </Link>
+            </div>
+          </div>
+
+          <div className="term rv">
+            <div className="bar">
+              <i />
+              <i />
+              <i />
+              <span style={{ marginLeft: 8, color: "var(--ink-400)", fontSize: 11, letterSpacing: ".1em" }}>
+                example · monetization.spec (illustrative)
+              </span>
+            </div>
+            <div className="out">
+              <div>
+                <b>01</b> model &nbsp;→ subscription · $19/mo · annual −20%
+              </div>
+              <div>
+                <b>02</b> wedge &nbsp;→ free plan capped at 3 / week
+              </div>
+              <div>
+                <b>03</b> trigger → paywall on action #4 · day 6 median
+              </div>
+              <div>
+                <b>04</b> loop &nbsp;&nbsp;→ weekly digest · D7 reactivation
+              </div>
+              <div>
+                <b>05</b> target → 35% D30 · $19 ARPU · CAC &lt; $42
+              </div>
+              <div style={{ color: "var(--voltage-500)" }}>— design starts here —</div>
+              <div style={{ color: "var(--ink-400)" }}>example spec · not a client result</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <ScrollJack />
+
+      {/* ── No account managers ────────────────────────────────────────────── */}
+      <section className="wrap sect opwrap">
+        <span className="opnum" aria-hidden="true">
+          05
+        </span>
+        <div className="eye">Five steps, no surprises</div>
+        <h2 className="disp" style={{ fontSize: "clamp(34px,5.4vw,84px)", marginTop: 14 }}>
+          No account
+          <br />
+          managers.
+        </h2>
+        <div style={{ marginTop: 34 }}>
+          {STEPS.map((s) => (
+            <div className="step rv" key={s.n}>
+              <div className="stepno">{s.n}</div>
+              <h3 className="disp" style={{ fontSize: 22 }}>
+                {s.title}
+              </h3>
+              <p className="small" style={{ maxWidth: "58ch" }}>
+                {s.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Proof ──────────────────────────────────────────────────────────── */}
+      <section className="wrap sect">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            gap: 20,
+            flexWrap: "wrap",
+          }}
+        >
+          <div>
+            <div className="eye">Receipts</div>
+            <h2 className="disp" style={{ fontSize: "clamp(28px,4vw,64px)", marginTop: 14 }}>
+              Proof you can look at.
+            </h2>
+          </div>
+        </div>
+        <div className="proofgrid">
+          <div>
+            <div className="slotframe">
+              <ImageSlot placeholder="Zoller platform — 400+ hours saved" />
+            </div>
+          </div>
+          <div>
+            <div className="slotframe">
+              <ImageSlot placeholder="The Gallery — 5.2–6× ROAS dashboard" />
+            </div>
+          </div>
+          <div>
+            <div className="slotframe">
+              <ImageSlot placeholder="Noted. — launch or product shot" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Testimonials, held ─────────────────────────────────────────────── */}
+      <section className="wrap sect">
+        <div className="eye">What they say</div>
+        <div className="held rv" style={{ marginTop: 26 }}>
+          <div className="eye mut">Section held</div>
+          <p
+            className="disp"
+            style={{ fontSize: "clamp(24px,3.4vw,52px)", marginTop: 16, color: "var(--ink-300)" }}
+          >
+            [Testimonials pending]
+          </p>
+          <p className="small" style={{ marginTop: 16, maxWidth: "52ch" }}>
+            Held until real client quotes exist. No placeholder praise ships — an invented
+            testimonial is the fastest way to look like the agencies we left.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Process ────────────────────────────────────────────────────────── */}
+      <section className="wrap sect">
+        <div className="eye">How it runs</div>
+        <h2 className="disp" style={{ fontSize: "clamp(26px,3.6vw,54px)", marginTop: 14 }}>
+          Three steps. No theatre.
+        </h2>
+        <div className="steps" style={{ marginTop: 28 }}>
+          {PROCESS.map(({ n, Icon, title, body }) => (
+            <div key={n}>
+              <span className="sno">{n}</span>
+              <Icon className="lu" aria-hidden="true" />
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <ShipTicker />
+      <CtaBand />
+    </>
+  );
+}

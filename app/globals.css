@@ -1,0 +1,12 @@
+/* Token layer, shipped as-is from the design bundle. Order matters — base.css
+   consumes the variables the earlier files declare. */
+@import url("./styles/tokens/fonts.css");
+@import url("./styles/tokens/colors.css");
+@import url("./styles/tokens/typography.css");
+@import url("./styles/tokens/spacing.css");
+@import url("./styles/tokens/effects.css");
+@import url("./styles/tokens/motion.css");
+@import url("./styles/tokens/base.css");
+
+/* Component layer, ported from the prototype. */
+@import url("./styles/components.css");
