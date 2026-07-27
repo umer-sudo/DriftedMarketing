@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Drifted — Design System Foundations</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{margin:0;background:var(--tar);color:var(--text-body)}
+.wrap{max-width:1560px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
+.mast{padding-block:66px 42px}
+.sect{padding-block:76px;border-top:1px solid var(--border-subtle)}
+.eye{font:500 11px/1 var(--font-mono);letter-spacing:.24em;text-transform:uppercase;color:var(--voltage-500)}
+.note{font:400 10.5px/1.6 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+h1{margin:16px 0 0;font-size:clamp(52px,10.5vw,164px);line-height:.82;letter-spacing:-.05em}
+h2{margin:14px 0 0;font-size:clamp(32px,4.2vw,58px);line-height:.9;letter-spacing:-.045em}
+h3{margin:0;font-size:19px}
+.lede{margin:18px 0 0;max-width:78ch;font-size:16.5px;line-height:1.6}
+.sub{margin:34px 0 16px;font:500 11px/1 var(--font-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--text-primary);padding-bottom:10px;border-bottom:1px solid var(--border-subtle)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border-subtle);vertical-align:top}
+th{font:400 10px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+td b{color:var(--text-primary)}
+code,.mono{font-family:var(--font-mono);font-size:12.5px;color:var(--voltage-300)}
+pre{margin:18px 0 0;padding:22px 24px;background:var(--tar-2);border:1px solid var(--border-subtle);overflow-x:auto;font:400 12px/1.7 var(--font-mono);color:var(--ink-100);white-space:pre}
+pre .k{color:var(--voltage-500)}
+.ramp{display:grid;grid-template-columns:120px repeat(10,1fr);gap:4px;align-items:stretch;margin-bottom:8px}
+.ramp .rl{display:flex;flex-direction:column;justify-content:center}
+.ramp .rl b{font-family:var(--font-display);font-weight:900;font-size:15px;text-transform:uppercase;color:var(--text-primary);letter-spacing:-.02em}
+.chip{height:70px;padding:7px;display:flex;flex-direction:column;justify-content:space-between;font:400 8.5px/1.3 var(--font-mono)}
+.chip b{font-weight:500;font-size:9.5px;opacity:.75}
+.pass{color:var(--success-500)}.warn{color:var(--warning-500)}.fail{color:var(--siren-400)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border-subtle);margin-top:26px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border-subtle);margin-top:26px}
+@media(max-width:1100px){.grid2,.grid3{grid-template-columns:1fr}}
+.cell{background:var(--tar-2);padding:26px}
+.spec{display:flex;align-items:baseline;gap:22px;padding:14px 0;border-bottom:1px solid var(--border-subtle)}
+.spec .meta{width:230px;flex:0 0 auto}
+.spec .meta b{display:block;font:500 11px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text-primary)}
+.spec .meta span{display:block;margin-top:5px;font:400 10px/1.5 var(--font-mono);color:var(--text-muted)}
+.spec .demo{flex:1;min-width:0;overflow:hidden}
+@media(max-width:1200px){.spec{flex-wrap:wrap}.spec .meta{width:100%}.disp{white-space:normal}}
+.disp{font-family:var(--font-display);font-weight:900;color:var(--text-primary);text-transform:uppercase;letter-spacing:-.045em;line-height:.86;white-space:nowrap}
+.sw{height:64px;display:flex;align-items:flex-end;padding:8px;font:400 9.5px/1 var(--font-mono)}
+.gridfig{position:relative;height:120px;background:var(--tar-2);border:1px solid var(--border-subtle);display:grid;gap:8px;padding:12px}
+.gridfig div{background:rgba(175,227,4,.16);border-top:2px solid var(--voltage-500)}
+.foot{padding-block:34px 80px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;border-top:1px solid var(--border-subtle)}
+.misreg{position:relative;display:inline-block}
+.misreg .u{position:absolute;inset:0;background:var(--voltage-500);transform:rotate(var(--misreg-rotate)) translate(var(--misreg-x),var(--misreg-y))}
+.misreg .o{position:relative}
+</style></head>
+<body>
+
+<div class="wrap mast">
+  <div class="eye">Drifted Marketing · Design system · Foundations v1</div>
+  <h1>Tokens</h1>
+  <p class="lede">Everything in this document is a named token with a fixed value. Locked inputs: the D mark on the 1A skeleton with misregistration; Schibsted Grotesk 900 wordmark, never offset; Blunt Force territory, refined and engineered; Tar base, Voltage hero, Siren support. The Tailwind config at the end of the colour section is the machine-readable version of the whole thing.</p>
+</div>
+
+<!-- ══════ COLOUR ══════ -->
+<section class="wrap sect">
+  <div class="eye">01</div><h2>Colour</h2>
+  <p class="lede">Four families. Tar and Newsprint carry every surface; Voltage is the hero and appears on every screen; Siren is support and appears once or twice. Values are engineered off default fluorescent — the lime is greened so it reads anodized, the red has the pink removed.</p>
+
+  <div class="sub">Core values</div>
+  <div class="grid2" style="grid-template-columns:repeat(4,1fr)">
+    <div class="cell" style="background:#0A0A0B"><div class="note">Tar — base</div><div class="disp" style="font-size:26px;margin-top:12px">#0A0A0B</div><div class="note" style="margin-top:8px">rgb(10 10 11) · every page background</div></div>
+    <div class="cell" style="background:#F2F0EA;color:#33333A"><div class="note" style="color:#6A6A63">Newsprint — paper</div><div class="disp" style="font-size:26px;margin-top:12px;color:#0A0A0B">#F2F0EA</div><div class="note" style="margin-top:8px;color:#6A6A63">rgb(242 240 234) · light sections, print</div></div>
+    <div class="cell" style="background:#AFE304;color:#0A0A0B"><div class="note" style="color:rgba(10,10,11,.6)">Voltage — hero</div><div class="disp" style="font-size:26px;margin-top:12px;color:#0A0A0B">#AFE304</div><div class="note" style="margin-top:8px;color:rgba(10,10,11,.6)">rgb(175 227 4) · 13.0:1 on Tar</div></div>
+    <div class="cell" style="background:#F5330A;color:#F2F0EA"><div class="note" style="color:rgba(242,240,234,.7)">Siren — support</div><div class="disp" style="font-size:26px;margin-top:12px;color:#F2F0EA">#F5330A</div><div class="note" style="margin-top:8px;color:rgba(242,240,234,.7)">rgb(245 51 10) · 5.1:1 on Tar</div></div>
+  </div>
+
+  <div class="sub">Ramps 50 → 900</div>
+  <div class="ramp"><div class="rl"><b>Voltage</b><span class="note">hero</span></div>
+    <div class="chip" style="background:#F7FFE3;color:#29350B"><b>50</b>F7FFE3</div><div class="chip" style="background:#ECFFB5;color:#29350B"><b>100</b>ECFFB5</div><div class="chip" style="background:#DEFF7E;color:#29350B"><b>200</b>DEFF7E</div><div class="chip" style="background:#CFFB4A;color:#29350B"><b>300</b>CFFB4A</div><div class="chip" style="background:#C2F125;color:#29350B"><b>400</b>C2F125</div><div class="chip" style="background:#AFE304;color:#0A0A0B;outline:2px solid #F2F0EA;outline-offset:-2px"><b>500</b>AFE304</div><div class="chip" style="background:#93BF00;color:#0A0A0B"><b>600</b>93BF00</div><div class="chip" style="background:#6F8F06;color:#F2F0EA"><b>700</b>6F8F06</div><div class="chip" style="background:#4B600A;color:#F2F0EA"><b>800</b>4B600A</div><div class="chip" style="background:#29350B;color:#F2F0EA"><b>900</b>29350B</div>
+  </div>
+  <div class="ramp"><div class="rl"><b>Siren</b><span class="note">support</span></div>
+    <div class="chip" style="background:#FFF1EC;color:#3A0A03"><b>50</b>FFF1EC</div><div class="chip" style="background:#FFD9CF;color:#3A0A03"><b>100</b>FFD9CF</div><div class="chip" style="background:#FFB39F;color:#3A0A03"><b>200</b>FFB39F</div><div class="chip" style="background:#FF8663;color:#3A0A03"><b>300</b>FF8663</div><div class="chip" style="background:#FF5A2E;color:#3A0A03"><b>400</b>FF5A2E</div><div class="chip" style="background:#F5330A;color:#F2F0EA;outline:2px solid #F2F0EA;outline-offset:-2px"><b>500</b>F5330A</div><div class="chip" style="background:#CC2606;color:#F2F0EA"><b>600</b>CC2606</div><div class="chip" style="background:#9C1C05;color:#F2F0EA"><b>700</b>9C1C05</div><div class="chip" style="background:#6B1304;color:#F2F0EA"><b>800</b>6B1304</div><div class="chip" style="background:#3A0A03;color:#F2F0EA"><b>900</b>3A0A03</div>
+  </div>
+  <div class="ramp"><div class="rl"><b>Tar</b><span class="note">base + UI greys</span></div>
+    <div class="chip" style="background:#F4F4F6;color:#0A0A0B"><b>50</b>F4F4F6</div><div class="chip" style="background:#D6D6DC;color:#0A0A0B"><b>100</b>D6D6DC</div><div class="chip" style="background:#B2B2BB;color:#0A0A0B"><b>200</b>B2B2BB</div><div class="chip" style="background:#7C7C86;color:#0A0A0B"><b>300</b>7C7C86</div><div class="chip" style="background:#464650;color:#F2F0EA"><b>400</b>464650</div><div class="chip" style="background:#2C2C34;color:#F2F0EA"><b>500</b>2C2C34</div><div class="chip" style="background:#212127;color:#F2F0EA"><b>600</b>212127</div><div class="chip" style="background:#17171B;color:#F2F0EA"><b>700</b>17171B</div><div class="chip" style="background:#101013;color:#F2F0EA"><b>800</b>101013</div><div class="chip" style="background:#0A0A0B;color:#F2F0EA;outline:2px solid #F2F0EA;outline-offset:-2px"><b>900</b>0A0A0B</div>
+  </div>
+  <div class="ramp"><div class="rl"><b>Newsprint</b><span class="note">paper scope</span></div>
+    <div class="chip" style="background:#FFFFFF;color:#0A0A0B"><b>50</b>FFFFFF</div><div class="chip" style="background:#FAF9F6;color:#0A0A0B"><b>100</b>FAF9F6</div><div class="chip" style="background:#F2F0EA;color:#0A0A0B;outline:2px solid #AFE304;outline-offset:-2px"><b>200</b>F2F0EA</div><div class="chip" style="background:#E6E2D8;color:#0A0A0B"><b>300</b>E6E2D8</div><div class="chip" style="background:#D3CEC0;color:#0A0A0B"><b>400</b>D3CEC0</div><div class="chip" style="background:#B4AE9E;color:#0A0A0B"><b>500</b>B4AE9E</div><div class="chip" style="background:#8C8779;color:#F2F0EA"><b>600</b>8C8779</div><div class="chip" style="background:#6A6A63;color:#F2F0EA"><b>700</b>6A6A63</div><div class="chip" style="background:#4A4A45;color:#F2F0EA"><b>800</b>4A4A45</div><div class="chip" style="background:#2B2B28;color:#F2F0EA"><b>900</b>2B2B28</div>
+  </div>
+
+  <div class="sub">Semantic tokens</div>
+  <table>
+    <tr><th>Token</th><th>Value</th><th>Hex</th><th>Use</th></tr>
+    <tr><td><b>background</b></td><td><code>tar.900</code></td><td>#0A0A0B</td><td>Page. Never a gradient, never a lighter black.</td></tr>
+    <tr><td><b>surface</b></td><td><code>tar.700</code></td><td>#17171B</td><td>Cards, panels, table rows.</td></tr>
+    <tr><td><b>surface-raised</b></td><td><code>tar.800</code></td><td>#101013</td><td>Inputs, modals, sticky nav fill.</td></tr>
+    <tr><td><b>surface-hover</b></td><td><code>tar.600</code></td><td>#212127</td><td>Row and ghost-control hover.</td></tr>
+    <tr><td><b>border</b></td><td><code>rgba(242,240,234,.14)</code></td><td>—</td><td>Default hairline. Strong variant <code>.30</code>, subtle <code>.08</code>.</td></tr>
+    <tr><td><b>text-primary</b></td><td><code>newsprint.200</code></td><td>#F2F0EA</td><td>Headlines, key UI text.</td></tr>
+    <tr><td><b>text-body</b></td><td><code>tar.200</code></td><td>#B2B2BB</td><td>Paragraphs.</td></tr>
+    <tr><td><b>text-muted</b></td><td><code>tar.300</code></td><td>#7C7C86</td><td>Labels, metadata. Large sizes only.</td></tr>
+    <tr><td><b>accent</b></td><td><code>voltage.500</code></td><td>#AFE304</td><td>Primary action, links, active state, data.</td></tr>
+    <tr><td><b>accent-hover</b></td><td><code>voltage.300</code></td><td>#CFFB4A</td><td>Hover on accent text and fills.</td></tr>
+    <tr><td><b>success</b></td><td><code>#2BE08A</code></td><td>#2BE08A</td><td>Confirmation only.</td></tr>
+    <tr><td><b>warning</b></td><td><code>#FFB020</code></td><td>#FFB020</td><td>Caution states.</td></tr>
+    <tr><td><b>error</b></td><td><code>siren.500</code></td><td>#F5330A</td><td>Validation, destructive.</td></tr>
+  </table>
+
+  <div class="sub">Contrast — every text pairing, WCAG AA</div>
+  <table>
+    <tr><th>Foreground</th><th>Background</th><th>Ratio</th><th>AA normal (4.5)</th><th>AA large (3.0)</th><th>Rule</th></tr>
+    <tr><td><b>Newsprint</b></td><td>Tar 900</td><td>17.4:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td>Default headline and UI text.</td></tr>
+    <tr><td><b>Newsprint</b></td><td>Surface #17171B</td><td>15.7:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td>Card text.</td></tr>
+    <tr><td><b>Voltage 300</b></td><td>Tar 900</td><td>16.5:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td>Link hover.</td></tr>
+    <tr><td><b>Voltage 500</b></td><td>Tar 900</td><td>13.0:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td>Links, accent text, data.</td></tr>
+    <tr><td><b>Voltage 500</b></td><td>Surface #17171B</td><td>11.8:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td>Accent on cards.</td></tr>
+    <tr><td><b>Tar 200</b> (body)</td><td>Tar 900</td><td>9.4:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td>Paragraph text.</td></tr>
+    <tr><td><b>Siren 400</b></td><td>Tar 900</td><td>6.4:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td><b>Use this for inline error text</b>, not Siren 500.</td></tr>
+    <tr><td><b>Tar 900</b></td><td>Voltage 500</td><td>13.0:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td>Primary button label.</td></tr>
+    <tr><td><b>Siren 500</b></td><td>Tar 900</td><td>5.1:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td>Fine at ≥15px; prefer Siren 400 below that.</td></tr>
+    <tr><td><b>Tar 900</b></td><td>Siren 500</td><td>5.1:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td><b>Siren button labels are Tar</b>, not Newsprint.</td></tr>
+    <tr><td><b>Tar 300</b> (muted)</td><td>Tar 900</td><td>4.8:1</td><td class="pass">Pass</td><td class="pass">Pass</td><td>Metadata; do not drop below 11px.</td></tr>
+    <tr><td><b>Newsprint</b></td><td>Siren 500</td><td>3.4:1</td><td class="fail">Fail</td><td class="pass">Pass</td><td class="fail">Large display only — never a button label or body copy.</td></tr>
+    <tr><td><b>Tar 400</b></td><td>Tar 900</td><td>2.1:1</td><td class="fail">Fail</td><td class="fail">Fail</td><td class="fail">Non-text only: dividers, disabled fills.</td></tr>
+    <tr><td><b>Klein 500</b></td><td>Tar 900</td><td>2.3:1</td><td class="fail">Fail</td><td class="fail">Fail</td><td class="fail">Graphic device only. Never text, at any size.</td></tr>
+  </table>
+
+  <div class="sub">Tailwind config</div>
+<pre><span class="k">// tailwind.config.js — Drifted Marketing</span>
+module.exports = {
+  theme: {
+    colors: {
+      transparent: 'transparent', current: 'currentColor',
+      tar:       { 50:'#F4F4F6',100:'#D6D6DC',200:'#B2B2BB',300:'#7C7C86',400:'#464650',500:'#2C2C34',600:'#212127',700:'#17171B',800:'#101013',900:'#0A0A0B' },
+      newsprint: { 50:'#FFFFFF',100:'#FAF9F6',200:'#F2F0EA',300:'#E6E2D8',400:'#D3CEC0',500:'#B4AE9E',600:'#8C8779',700:'#6A6A63',800:'#4A4A45',900:'#2B2B28' },
+      voltage:   { 50:'#F7FFE3',100:'#ECFFB5',200:'#DEFF7E',300:'#CFFB4A',400:'#C2F125',500:'#AFE304',600:'#93BF00',700:'#6F8F06',800:'#4B600A',900:'#29350B' },
+      siren:     { 50:'#FFF1EC',100:'#FFD9CF',200:'#FFB39F',300:'#FF8663',400:'#FF5A2E',500:'#F5330A',600:'#CC2606',700:'#9C1C05',800:'#6B1304',900:'#3A0A03' },
+      klein:     { 500:'#2417F0' },   <span class="k">// graphic device only, never text</span>
+      success:'#2BE08A', warning:'#FFB020', error:'#F5330A',
+    },
+    extend: {
+      colors: {
+        background:'#0A0A0B', surface:'#17171B', 'surface-raised':'#101013', 'surface-hover':'#212127',
+        border:'rgba(242,240,234,0.14)', 'border-strong':'rgba(242,240,234,0.30)',
+        'text-primary':'#F2F0EA', 'text-body':'#B2B2BB', 'text-muted':'#7C7C86',
+        accent:'#AFE304', 'accent-hover':'#CFFB4A',
+      },
+      fontFamily: {
+        display: ['"Schibsted Grotesk"','Helvetica Neue','Arial','sans-serif'],
+        body:    ['"Instrument Sans"','Helvetica Neue','Arial','sans-serif'],
+        mono:    ['"JetBrains Mono"','ui-monospace','monospace'],
+      },
+      fontSize: {
+        'label-xs': ['12px',{ lineHeight:'1',    letterSpacing:'0.18em', fontWeight:'500' }],
+        'label':    ['13px',{ lineHeight:'1',    letterSpacing:'0.18em', fontWeight:'500' }],
+        'body-sm':  ['15px',{ lineHeight:'1.65', letterSpacing:'-0.005em' }],
+        'body':     ['17px',{ lineHeight:'1.55', letterSpacing:'-0.005em' }],
+        'body-lg':  ['20px',{ lineHeight:'1.5',  letterSpacing:'-0.01em' }],
+        'h4':       ['24px',{ lineHeight:'1.15', letterSpacing:'-0.03em',  fontWeight:'900' }],
+        'h3':       ['30px',{ lineHeight:'1.1',  letterSpacing:'-0.035em', fontWeight:'900' }],
+        'h2':       ['40px',{ lineHeight:'1',    letterSpacing:'-0.04em',  fontWeight:'900' }],
+        'h1':       ['56px',{ lineHeight:'0.94', letterSpacing:'-0.045em', fontWeight:'900' }],
+        'display-3':['72px',{ lineHeight:'0.9',  letterSpacing:'-0.045em', fontWeight:'900' }],
+        'display-2':['96px',{ lineHeight:'0.88', letterSpacing:'-0.05em',  fontWeight:'900' }],
+        'display-1':['128px',{lineHeight:'0.84', letterSpacing:'-0.05em',  fontWeight:'900' }],
+        'mega':     ['160px',{lineHeight:'0.82', letterSpacing:'-0.055em', fontWeight:'900' }],
+      },
+      spacing: { 0:'0',1:'4px',2:'8px',3:'12px',4:'16px',5:'24px',6:'32px',7:'48px',8:'64px',9:'96px',10:'128px',11:'176px',12:'240px' },
+      maxWidth: { content:'1440px', prose:'62ch' },
+      screens: { sm:'480px', md:'768px', lg:'1024px', xl:'1280px', '2xl':'1536px' },
+      borderRadius: { none:'0', xs:'2px', sm:'4px', md:'8px', full:'9999px' },
+      boxShadow: {
+        hard:'6px 6px 0 #AFE304', 'hard-siren':'6px 6px 0 #F5330A',
+        glow:'0 0 0 1px #AFE304, 0 0 32px -8px rgba(175,227,4,0.7)',
+        'glow-siren':'0 0 0 1px #F5330A, 0 0 32px -8px rgba(245,51,10,0.7)',
+        overlay:'0 24px 60px rgba(0,0,0,0.75)',
+      },
+      transitionTimingFunction: { hit:'cubic-bezier(.2,.9,.1,1)', cut:'cubic-bezier(.85,0,.15,1)', expo:'cubic-bezier(.16,1,.3,1)' },
+      transitionDuration: { instant:'90ms', fast:'160ms', base:'280ms', slow:'520ms', mark:'1150ms' },
+      translate: { misreg:'-9px' }, <span class="k">// paired with -misreg-y and rotate-misreg below</span>
+      rotate: { misreg:'-3.5deg' },
+    },
+  },
+};</pre>
+</section>
+
+<!-- ══════ TYPOGRAPHY ══════ -->
+<section class="wrap sect">
+  <div class="eye">02</div><h2>Typography</h2>
+  <p class="lede">Schibsted Grotesk for display and every lockup — a neo-grotesque whose stem is 0.30 of cap, matching the mark exactly. Instrument Sans for body. JetBrains Mono for labels, metadata and data. Three registers, nothing in between.</p>
+
+  <div class="sub">Schibsted Grotesk — weight range</div>
+  <div style="display:flex;flex-direction:column;gap:2px">
+    <div style="display:flex;align-items:baseline;gap:20px"><span class="note" style="width:110px">400 Regular</span><span style="font-family:var(--font-display);font-weight:400;font-size:36px;letter-spacing:-.02em;color:var(--text-primary)">Departure by design</span></div>
+    <div style="display:flex;align-items:baseline;gap:20px"><span class="note" style="width:110px">500 Medium</span><span style="font-family:var(--font-display);font-weight:500;font-size:36px;letter-spacing:-.025em;color:var(--text-primary)">Departure by design</span></div>
+    <div style="display:flex;align-items:baseline;gap:20px"><span class="note" style="width:110px">700 Bold</span><span style="font-family:var(--font-display);font-weight:700;font-size:36px;letter-spacing:-.03em;color:var(--text-primary)">Departure by design</span></div>
+    <div style="display:flex;align-items:baseline;gap:20px"><span class="note" style="width:110px">900 Black — brand</span><span style="font-family:var(--font-display);font-weight:900;font-size:36px;letter-spacing:-.04em;color:var(--text-primary)">Departure by design</span></div>
+  </div>
+  <p class="lede" style="font-size:15px"><b style="color:var(--text-primary)">Only 900 is used in brand material.</b> 400–700 exist for interface density (tables, dense app UI) and are never used in headlines, decks or marketing pages.</p>
+
+  <div class="sub">900 from 160px to 24px — tracking compensates</div>
+  <div style="display:flex;flex-direction:column;gap:6px;overflow:hidden">
+    <div><span class="note">160 / −5.5% / lh .82</span><div class="disp" style="font-size:160px;letter-spacing:-.055em;line-height:.82">Drifted</div></div>
+    <div><span class="note">96 / −5%</span><div class="disp" style="font-size:96px;letter-spacing:-.05em">Drifted</div></div>
+    <div><span class="note">56 / −4.5%</span><div class="disp" style="font-size:56px;letter-spacing:-.045em">Drifted</div></div>
+    <div><span class="note">36 / −4%</span><div class="disp" style="font-size:36px;letter-spacing:-.04em">Drifted</div></div>
+    <div><span class="note">24 / −3% — floor for display use</span><div class="disp" style="font-size:24px;letter-spacing:-.03em">Drifted</div></div>
+  </div>
+  <p class="lede" style="font-size:15px">Tracking opens as size drops: −5.5% at 160px, −3% at 24px. Below 24px Schibsted 900 is never used — that job belongs to mono labels.</p>
+
+  <div class="sub">Type scale — 12px to 160px</div>
+  <div class="spec"><div class="meta"><b>mega · 160/0.82</b><span>−5.5% · 900 · display</span></div><div class="demo"><span class="disp" style="font-size:74px;letter-spacing:-.055em">Look bigger</span></div></div>
+  <div class="spec"><div class="meta"><b>display-1 · 128/0.84</b><span>−5% · 900 · display</span></div><div class="demo"><span class="disp" style="font-size:60px;letter-spacing:-.05em">Stop looking like a startup</span></div></div>
+  <div class="spec"><div class="meta"><b>display-2 · 96/0.88</b><span>−5% · 900 · display</span></div><div class="demo"><span class="disp" style="font-size:46px">A departure, by design</span></div></div>
+  <div class="spec"><div class="meta"><b>display-3 · 72/0.90</b><span>−4.5% · 900 · display</span></div><div class="demo"><span class="disp" style="font-size:36px">Monetize before line one</span></div></div>
+  <div class="spec"><div class="meta"><b>h1 · 56/0.94</b><span>−4.5% · 900 · display</span></div><div class="demo"><span class="disp" style="font-size:34px">Performance content that hits</span></div></div>
+  <div class="spec"><div class="meta"><b>h2 · 40/1.0</b><span>−4% · 900 · display</span></div><div class="demo"><span class="disp" style="font-size:30px">Three things, done properly</span></div></div>
+  <div class="spec"><div class="meta"><b>h3 · 30/1.1</b><span>−3.5% · 900 · display</span></div><div class="demo"><span class="disp" style="font-size:26px">Halcyon Labs</span></div></div>
+  <div class="spec"><div class="meta"><b>h4 · 24/1.15</b><span>−3% · 900 · display</span></div><div class="demo"><span class="disp" style="font-size:22px">What we actually do</span></div></div>
+  <div class="spec"><div class="meta"><b>body-lg · 20/1.5</b><span>−1% · 400 · Instrument Sans</span></div><div class="demo"><span style="font-size:19px;color:var(--text-body)">We run the account and make the work.</span></div></div>
+  <div class="spec"><div class="meta"><b>body · 17/1.55</b><span>−0.5% · 400 · Instrument Sans</span></div><div class="demo"><span style="font-size:17px;color:var(--text-body)">Monetization is designed before the first screen, not bolted on after launch.</span></div></div>
+  <div class="spec"><div class="meta"><b>body-sm · 15/1.65</b><span>−0.5% · 400 · Instrument Sans</span></div><div class="demo"><span style="font-size:15px;color:var(--text-body)">Two clients a quarter, one senior team, no account managers.</span></div></div>
+  <div class="spec"><div class="meta"><b>label · 13/1</b><span>+18% · 500 · mono, uppercase</span></div><div class="demo"><span class="mono" style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-primary)">Selected work</span></div></div>
+  <div class="spec"><div class="meta"><b>label-xs · 12/1</b><span>+18% · 500 · mono, uppercase</span></div><div class="demo"><span class="mono" style="font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted)">11 clients · 3 disciplines · 2021—</span></div></div>
+
+  <div class="sub">When to use each level</div>
+  <table>
+    <tr><th>Level</th><th>Use</th><th>Never</th></tr>
+    <tr><td><b>mega, display-1</b></td><td>One per page. Hero and closing CTA only.</td><td>Two on the same screen.</td></tr>
+    <tr><td><b>display-2, display-3</b></td><td>Section openers, case-study titles, big numbers.</td><td>Anything longer than six words.</td></tr>
+    <tr><td><b>h1–h2</b></td><td>Sub-section headings on long pages, card titles at scale.</td><td>Body-adjacent captions.</td></tr>
+    <tr><td><b>h3–h4</b></td><td>Card titles, list headings, modal titles.</td><td>More than two lines.</td></tr>
+    <tr><td><b>body-lg</b></td><td>Hero standfirst, pull paragraphs. One per section.</td><td>Long-form copy.</td></tr>
+    <tr><td><b>body / body-sm</b></td><td>Everything else. Max 62ch measure.</td><td>Uppercase.</td></tr>
+    <tr><td><b>label / label-xs</b></td><td>Eyebrows, metadata, buttons, nav, data captions.</td><td>Sentences. Four words maximum.</td></tr>
+  </table>
+
+  <div class="sub">Signature move 01 — cap-tight knockout</div>
+  <div class="grid2">
+    <div class="cell"><div class="disp" style="font-size:clamp(30px,3.6vw,54px);white-space:normal">Look <span class="drift-fill">bigger</span><br>than you are</div></div>
+    <div class="cell"><p class="lede" style="margin:0;font-size:15px">A Voltage block clipped to <b style="color:var(--text-primary)">cap height, not the line box</b> — <code>line-height:.78; padding:.1em .06em .04em</code>. It sits a hair below the baseline like a printed knockout and never bleeds into the line beneath. One highlighted word per headline, always a noun or a verb, never an adjective. Token: <code>.drift-fill</code>.</p></div>
+  </div>
+
+  <div class="sub">Signature move 02 — the locked stack</div>
+  <div class="grid2">
+    <div class="cell"><div style="display:flex;flex-direction:column"><span class="disp" style="font-size:clamp(26px,3.2vw,46px)">We drifted</span><span class="disp" style="font-size:clamp(26px,3.2vw,46px);color:transparent;-webkit-text-stroke:1.5px var(--newsprint)">from how</span><span class="disp" style="font-size:clamp(26px,3.2vw,46px)">agencies work</span></div></div>
+    <div class="cell"><p class="lede" style="margin:0;font-size:15px">Alternating solid and <b style="color:var(--text-primary)">1.5px outlined</b> lines inside one headline block, set at leading 0.84 so the lines nearly touch. The outline is always the middle line of three, or the second of two. It keeps a wall of 900-weight type readable at billboard size and is the only place a text stroke is permitted. Token: <code>-webkit-text-stroke: 1.5px var(--text-primary)</code>.</p></div>
+  </div>
+</section>
+
+<!-- ══════ SPACING ══════ -->
+<section class="wrap sect">
+  <div class="eye">03</div><h2>Spacing &amp; layout</h2>
+  <p class="lede">8pt base with a 4px half-step for control interiors. Everything above <code>space-6</code> steps in multiples of 16.</p>
+  <div class="sub">Scale</div>
+  <table>
+    <tr><th>Token</th><th>Value</th><th>Use</th></tr>
+    <tr><td><b>space-1</b></td><td>4px</td><td>Icon-to-label, inline gaps.</td></tr>
+    <tr><td><b>space-2</b></td><td>8px</td><td>Tag rows, chip gaps.</td></tr>
+    <tr><td><b>space-3</b></td><td>12px</td><td>Control interior vertical.</td></tr>
+    <tr><td><b>space-4</b></td><td>16px</td><td>Control interior horizontal, list rhythm.</td></tr>
+    <tr><td><b>space-5</b></td><td>24px</td><td>Card padding, grid gutter.</td></tr>
+    <tr><td><b>space-6</b></td><td>32px</td><td>Card-to-card, form field stack.</td></tr>
+    <tr><td><b>space-7</b></td><td>48px</td><td>Sub-section spacing.</td></tr>
+    <tr><td><b>space-8</b></td><td>64px</td><td>Mobile section padding.</td></tr>
+    <tr><td><b>space-9</b></td><td>96px</td><td>Tablet section padding.</td></tr>
+    <tr><td><b>space-10</b></td><td>128px</td><td>Desktop section padding.</td></tr>
+    <tr><td><b>space-11 / 12</b></td><td>176 / 240px</td><td>Hero and full-viewport moments only.</td></tr>
+  </table>
+
+  <div class="sub">Grid</div>
+  <table>
+    <tr><th>Breakpoint</th><th>Width</th><th>Columns</th><th>Gutter</th><th>Margin</th><th>Section padding</th></tr>
+    <tr><td><b>Mobile</b></td><td>&lt; 768px</td><td>4</td><td>16px</td><td>20px</td><td>64px</td></tr>
+    <tr><td><b>Tablet</b></td><td>768 – 1023px</td><td>8</td><td>20px</td><td>40px</td><td>96px</td></tr>
+    <tr><td><b>Desktop</b></td><td>1024 – 1439px</td><td>12</td><td>24px</td><td>64px</td><td>128px</td></tr>
+    <tr><td><b>Wide</b></td><td>≥ 1440px</td><td>12</td><td>24px</td><td>80px, content capped at 1440</td><td>160px</td></tr>
+  </table>
+  <div class="gridfig" style="grid-template-columns:repeat(12,1fr);margin-top:22px">
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+  </div>
+  <p class="lede" style="font-size:15px"><b style="color:var(--text-primary)">Full-bleed rules.</b> Marquees, accent bands, image fields and the closing CTA break the 1440 cap and run edge to edge. Everything else stays inside it. Text never sits in a full-bleed band without its own inner container at the same margins. Body copy is capped at <code>62ch</code> regardless of column span. Only the nav is fixed; nothing else in the system is position:fixed.</p>
+</section>
+
+<!-- ══════ MISREGISTRATION ══════ -->
+<section class="wrap sect">
+  <div class="eye">04</div><h2>Misregistration as a system</h2>
+  <p class="lede">The offset is a brand device, not a logo detail. Anywhere it appears it uses the same two numbers — no per-component values, no eyeballing.</p>
+  <div class="grid3">
+    <div class="cell"><div class="note">Tokens</div>
+      <table style="margin-top:14px">
+        <tr><td><code>--misreg-x</code></td><td><b>−9px</b></td></tr>
+        <tr><td><code>--misreg-y</code></td><td><b>−8px</b></td></tr>
+        <tr><td><code>--misreg-rotate</code></td><td><b>−3.5deg</b></td></tr>
+        <tr><td><code>--misreg-tint</code></td><td><b>0.34</b></td></tr>
+      </table>
+      <p class="lede" style="font-size:14px">At sizes above 200px the offset scales with the element: 9 units = 9% of element width. Below 64px it stays fixed at 9px so it never disappears.</p>
+    </div>
+    <div class="cell"><div class="note">Where it applies</div>
+      <table style="margin-top:14px">
+        <tr><td><b>The mark</b></td><td>Always, in every two-layer reproduction.</td></tr>
+        <tr><td><b>Image treatments</b></td><td>A Voltage or Siren plate offset behind a photo or video frame.</td></tr>
+        <tr><td><b>Card hover</b></td><td>An accent plate slides out from behind the card on hover — 160ms, and it returns on leave.</td></tr>
+        <tr><td><b>Section dividers</b></td><td>A double rule, the lower one offset and 34% tint.</td></tr>
+        <tr><td><b>Stat callouts</b></td><td>The figure duplicated behind itself in Voltage at 34%.</td></tr>
+        <tr><td><b>404 and stings</b></td><td>Free rein — the device can be exaggerated to 18–24 units.</td></tr>
+      </table>
+    </div>
+    <div class="cell"><div class="note" style="color:var(--siren-400)">Where it never applies</div>
+      <table style="margin-top:14px">
+        <tr><td><b>The wordmark</b></td><td>DRIFTED is always set square and single-layer.</td></tr>
+        <tr><td><b>Body copy</b></td><td>Any text below 24px. Legibility outranks the device.</td></tr>
+        <tr><td><b>UI controls</b></td><td>Buttons, inputs, toggles, tabs — anything a user clicks or types into.</td></tr>
+        <tr><td><b>Functional data</b></td><td>Tables, dashboards, invoices, pricing.</td></tr>
+        <tr><td><b>Anything moving</b></td><td>Never animate the offset on scroll; it is a resting state, not a parallax effect.</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="grid3" style="margin-top:26px">
+    <div class="cell" style="display:grid;place-items:center;padding:40px"><span class="misreg"><span class="u"></span><span class="o" style="display:block;background:var(--newsprint);width:120px;height:88px"></span></span><div class="note" style="margin-top:20px">Image plate</div></div>
+    <div class="cell" style="display:grid;place-items:center;padding:40px"><div style="position:relative"><span class="disp" style="position:absolute;left:-9px;top:-8px;font-size:52px;color:var(--voltage-500);opacity:.34;transform:rotate(-3.5deg);transform-origin:left center">4.6×</span><span class="disp" style="position:relative;font-size:52px">4.6×</span></div><div class="note" style="margin-top:20px">Stat callout</div></div>
+    <div class="cell" style="display:grid;place-items:center;padding:40px"><div style="width:100%"><div style="height:2px;background:var(--newsprint)"></div><div style="height:2px;background:var(--voltage-500);opacity:.34;transform:translate(-9px,6px) rotate(-.6deg)"></div></div><div class="note" style="margin-top:24px">Section divider</div></div>
+  </div>
+</section>
+
+<!-- ══════ RADIUS / ELEVATION / MOTION / GRAIN ══════ -->
+<section class="wrap sect">
+  <div class="eye">05</div><h2>Radius, elevation, motion, grain</h2>
+
+  <div class="sub">Border radius</div>
+  <div style="display:flex;gap:18px;flex-wrap:wrap">
+    <div style="text-align:center"><div style="width:88px;height:64px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:0"></div><div class="note" style="margin-top:8px">none · 0<br>full-bleed, plates</div></div>
+    <div style="text-align:center"><div style="width:88px;height:64px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:2px"></div><div class="note" style="margin-top:8px">xs · 2px<br>controls, chips</div></div>
+    <div style="text-align:center"><div style="width:88px;height:64px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:4px"></div><div class="note" style="margin-top:8px">sm · 4px<br>cards, modals</div></div>
+    <div style="text-align:center"><div style="width:88px;height:64px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:8px"></div><div class="note" style="margin-top:8px">md · 8px<br>app icons only</div></div>
+    <div style="text-align:center"><div style="width:88px;height:64px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:9999px"></div><div class="note" style="margin-top:8px;color:var(--siren-400)">full<br>avatars only</div></div>
+  </div>
+
+  <div class="sub">Elevation on dark — glow and border, not shadow</div>
+  <table>
+    <tr><th>Level</th><th>Token</th><th>Value</th><th>Use</th></tr>
+    <tr><td><b>0 — flat</b></td><td><code>border</code></td><td>1px rgba(242,240,234,.14)</td><td>Default card. Depth comes from the hairline alone.</td></tr>
+    <tr><td><b>1 — raised</b></td><td><code>border-strong</code></td><td>1px rgba(242,240,234,.30)</td><td>Hover, active row, focused panel.</td></tr>
+    <tr><td><b>2 — accented</b></td><td><code>shadow-hard</code></td><td>6px 6px 0 #AFE304</td><td>Pulled-forward card, pricing, featured case.</td></tr>
+    <tr><td><b>3 — live</b></td><td><code>shadow-glow</code></td><td>0 0 0 1px #AFE304, 0 0 32px −8px rgba(175,227,4,.7)</td><td>Focus-critical UI, active recording/live states. Sparingly.</td></tr>
+    <tr><td><b>4 — overlay</b></td><td><code>shadow-overlay</code></td><td>0 24px 60px rgba(0,0,0,.75)</td><td>Modals and menus only — the one soft shadow in the system.</td></tr>
+  </table>
+  <div class="grid3" style="margin-top:20px">
+    <div class="cell" style="display:grid;place-items:center;padding:40px"><div style="width:150px;height:80px;background:var(--surface-card);border:1px solid var(--border-subtle)"></div></div>
+    <div class="cell" style="display:grid;place-items:center;padding:40px"><div style="width:150px;height:80px;background:var(--surface-card);border:1px solid var(--border-strong);box-shadow:var(--shadow-hard)"></div></div>
+    <div class="cell" style="display:grid;place-items:center;padding:40px"><div style="width:150px;height:80px;background:var(--surface-card);box-shadow:var(--glow-voltage)"></div></div>
+  </div>
+
+  <div class="sub">Motion</div>
+  <table>
+    <tr><th>Token</th><th>Value</th><th>Applies to</th></tr>
+    <tr><td><b>duration-instant</b></td><td>90ms</td><td>Colour flips, tooltip appear.</td></tr>
+    <tr><td><b>duration-fast</b></td><td>160ms</td><td>Hover, press, tab bar, card lift.</td></tr>
+    <tr><td><b>duration-base</b></td><td>280ms</td><td>Wipes, panel swaps, accordion.</td></tr>
+    <tr><td><b>duration-slow</b></td><td>520ms</td><td>Image scale, scroll reveals, menu open.</td></tr>
+    <tr><td><b>duration-mark</b></td><td>1150ms</td><td>Logo drift. The only thing allowed over 520ms.</td></tr>
+    <tr><td><b>ease-hit</b></td><td>cubic-bezier(.2,.9,.1,1)</td><td>Controls and micro-interactions.</td></tr>
+    <tr><td><b>ease-cut</b></td><td>cubic-bezier(.85,0,.15,1)</td><td>Wipes and plate moves.</td></tr>
+    <tr><td><b>ease-expo</b></td><td>cubic-bezier(.16,1,.3,1)</td><td>Entrances and the logo drift.</td></tr>
+  </table>
+  <p class="lede" style="font-size:15px"><b style="color:var(--text-primary)">Named transitions.</b> <code>hard-cut-wipe</code> — accent plate wipes across on clip-path, 280ms ease-cut, foreground flips colour at the midpoint; replaces every fade in the system. <code>slam</code> — content lands from 1.06 scale and 14px with zero overshoot in 120ms, then a 6px Siren bar shoots underneath over 160ms. <code>mark-drift</code> — the logo's 1,150ms separation. <b style="color:var(--text-primary)">Never</b> bounce, spring, elastic, or anything over 520ms outside the mark.</p>
+
+  <div class="sub">Grain &amp; texture</div>
+  <table>
+    <tr><th>Surface</th><th>Opacity</th><th>Blend</th><th>Notes</th></tr>
+    <tr><td><b>Tar backgrounds</b></td><td>8%</td><td>overlay</td><td>Token <code>--grain</code>, an inline fractal-noise SVG at baseFrequency 1.1, 4 octaves, tiled 200×200.</td></tr>
+    <tr><td><b>Voltage / Siren fields</b></td><td>26%</td><td>multiply</td><td>Gives flat accent fields tooth; without it they look like plastic.</td></tr>
+    <tr><td><b>Newsprint sections</b></td><td>18%</td><td>multiply</td><td>Paper tooth for print-adjacent layouts.</td></tr>
+    <tr><td><b>Imagery</b></td><td>10–14%</td><td>overlay</td><td>Applied over the photo, never under. Cool, high-contrast, no warm filters.</td></tr>
+    <tr><td class="fail"><b>Never</b></td><td colspan="3" class="fail">Visible halftone dots, photocopy artefacts, scan lines, or grain over body copy.</td></tr>
+  </table>
+</section>
+
+<div class="wrap"><div class="foot"><span class="note">Drifted · foundations v1 · stage 1 of 7</span><span class="note">Mark 1A + misregistration · Schibsted Grotesk 900 · Voltage #AFE304</span></div></div>
+</body></html>

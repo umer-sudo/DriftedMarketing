@@ -1,0 +1,33 @@
+:root {
+  --dur-instant: 90ms;  /* @kind other */
+  --dur-fast: 160ms;    /* @kind other */
+  --dur-base: 280ms;    /* @kind other */
+  --dur-slow: 520ms;    /* @kind other */
+  --dur-mark: 1150ms;   /* @kind other */
+  --dur-marquee: 22s;   /* @kind other */
+  /* proof-strip bands */
+  --dur-marquee-slow: 64s; /* @kind other */
+
+  /* Fast in, dead stop. Never bounce, spring or elastic. */
+  --ease-hit: cubic-bezier(0.2, 0.9, 0.1, 1);   /* @kind other */
+  --ease-cut: cubic-bezier(0.85, 0, 0.15, 1);   /* @kind other */
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);   /* @kind other */
+
+  --transition-control: color var(--dur-fast) var(--ease-hit),
+    background-color var(--dur-fast) var(--ease-hit),
+    border-color var(--dur-fast) var(--ease-hit),
+    transform var(--dur-fast) var(--ease-hit),
+    box-shadow var(--dur-fast) var(--ease-hit); /* @kind other */
+
+  --press-scale: 0.97; /* @kind other */
+  --hover-lift: -2px;  /* @kind spacing */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;  /* @kind other */
+    --dur-base: 1ms;  /* @kind other */
+    --dur-slow: 1ms;  /* @kind other */
+    --dur-mark: 1ms;  /* @kind other */
+  }
+}

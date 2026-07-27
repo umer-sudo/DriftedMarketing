@@ -1,0 +1,358 @@
+<!-- @dsCard group="Motion" viewport="700x400" name="Visual &amp; motion spec" subtitle="Six persistent layers and five signature moments, live" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Drifted — Visual &amp; motion spec</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{margin:0;background:var(--tar);color:var(--text-body);overflow-x:hidden;--sf:1}
+body.rm{--sf:.001}
+.page{max-width:1600px;margin:0 auto;border-inline:1px solid var(--border-subtle)}
+.wrap{padding-inline:clamp(20px,5vw,80px)}
+.pagehd{background:var(--tar-2);padding:22px clamp(20px,5vw,80px);display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--border-subtle)}
+.pagehd h2{font-family:var(--font-display);font-weight:900;font-size:clamp(22px,2.4vw,34px);letter-spacing:-.035em;text-transform:uppercase;color:var(--text-primary);margin:0}
+.sect{padding-block:clamp(48px,6vw,88px);border-top:1px solid var(--border-subtle)}
+.eye{font:500 11px/1 var(--font-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--voltage-500)}
+.eye.mut{color:var(--text-muted)}
+.disp{font-family:var(--font-display);font-weight:900;text-transform:uppercase;letter-spacing:-.045em;line-height:.9;margin:0;color:var(--text-primary)}
+.big{font-size:clamp(30px,4vw,64px);margin-top:14px}
+.body{font:400 16.5px/1.6 var(--font-body);color:var(--text-body);max-width:74ch;margin-top:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:2px;background:var(--border-subtle);margin-top:30px}
+.card{background:var(--tar-2);padding:26px;display:flex;flex-direction:column;gap:13px}
+.card h3{font-family:var(--font-display);font-weight:900;font-size:19px;letter-spacing:-.02em;text-transform:uppercase;color:var(--text-primary);margin:0}
+.spec{font:400 11px/1.7 var(--font-mono);color:var(--ink-300)}
+.spec s{color:var(--voltage-500);text-decoration:none}
+.stage{position:relative;overflow:hidden;background:var(--tar);border:1px solid var(--border-subtle);height:236px;display:grid;place-items:center}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.note{font:400 12.5px/1.6 var(--font-body);color:var(--text-muted)}
+.btn{font:500 10.5px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;background:transparent;color:var(--text-muted);border:1px solid var(--border-subtle);padding:9px 13px;cursor:pointer;transition:var(--transition-control)}
+.btn:hover{color:var(--text-primary);border-color:var(--border-strong)}
+.btn[aria-pressed="true"]{background:var(--voltage-500);color:var(--tar);border-color:var(--voltage-500)}
+.bar{position:sticky;top:0;z-index:40;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#08080A;border-bottom:1px solid var(--border-subtle);padding:12px clamp(20px,5vw,80px)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:20px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border-subtle);vertical-align:top}
+th{font:400 10px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+td b{color:var(--text-primary);font-weight:500}
+td.ok{color:var(--voltage-500)}td.adj{color:var(--siren-400)}
+ul.tight{margin:12px 0 0;padding-left:18px}ul.tight li{font:400 15px/1.6 var(--font-body);margin-bottom:7px}
+
+/* 1 grain */
+.gr{position:absolute;inset:0;background-image:var(--grain);opacity:.08;mix-blend-mode:overlay;pointer-events:none}
+.gr.acc{opacity:.26;mix-blend-mode:multiply}
+.half{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}
+.half>div{position:relative;display:grid;place-items:center;font-family:var(--font-display);font-weight:900;font-size:26px;text-transform:uppercase;letter-spacing:-.03em}
+
+/* 2 overprint numeral */
+.scroller{height:236px;overflow-y:auto;position:relative;background:var(--tar);width:100%}
+.scroller::-webkit-scrollbar{width:5px}.scroller::-webkit-scrollbar-thumb{background:var(--ink-500)}
+.sc-in{height:760px;position:relative;padding:26px}
+.op-num{position:sticky;top:6px;font-family:var(--font-display);font-weight:900;font-size:190px;line-height:.8;letter-spacing:-.05em;color:var(--tar-4);pointer-events:none}
+.op-copy{position:relative;margin-top:-120px}
+.op-copy p{font:400 14.5px/1.6 var(--font-body);color:var(--text-body);max-width:34ch;margin:0 0 14px}
+
+/* 3 misregistration reveal */
+.mis{position:relative;display:inline-block}
+.mis .under{position:absolute;inset:0;color:var(--voltage-500);transform:translate(9px,7.8px) rotate(-3.5deg)}
+.mis .over{position:relative;color:var(--newsprint)}
+.run .mis .under{animation:misU calc(280ms * var(--sf)) var(--ease-cut) both}
+.run .mis .over{animation:misO calc(280ms * var(--sf)) var(--ease-cut) both}
+@keyframes misU{from{transform:translate(34px,26px) rotate(-9deg);opacity:0}to{transform:translate(9px,7.8px) rotate(-3.5deg);opacity:1}}
+@keyframes misO{from{transform:translate(-22px,-16px) rotate(4deg);opacity:0}to{transform:none;opacity:1}}
+.mistype{font-family:var(--font-display);font-weight:900;font-size:clamp(30px,4vw,54px);text-transform:uppercase;letter-spacing:-.045em;line-height:.9}
+
+/* 4 die-cut wipe */
+.dc-a,.dc-b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--font-display);font-weight:900;font-size:34px;text-transform:uppercase;letter-spacing:-.035em}
+.dc-a{background:var(--tar-3);color:var(--newsprint)}
+.dc-b{background:var(--voltage-500);color:var(--tar);clip-path:polygon(-40% 0,-10% 0,-40% 100%,-70% 100%)}
+.run .dc-b{animation:dcw calc(280ms * var(--sf)) var(--ease-cut) forwards}
+@keyframes dcw{from{clip-path:polygon(-40% 0,-10% 0,-40% 100%,-70% 100%)}to{clip-path:polygon(-40% 0,140% 0,140% 100%,-70% 100%)}}
+
+/* 5 cursor */
+.cur-stage{cursor:none}
+.dot{position:absolute;width:8px;height:8px;background:var(--voltage-500);pointer-events:none;transform:translate(-50%,-50%);transition:width 90ms var(--ease-hit),height 90ms var(--ease-hit),border-radius 90ms var(--ease-hit);z-index:5;display:grid;place-items:center;overflow:hidden}
+.dot span{font:500 9px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--tar);opacity:0;transition:opacity 90ms linear}
+.dot.big{width:48px;height:48px}
+.dot.big span{opacity:1}
+.cur-card{width:64%;height:120px;background:linear-gradient(107deg,var(--voltage-500) 0 42%,var(--tar-3) 42%);position:relative}
+
+/* 6 velocity coupling */
+.vel-head{font-family:var(--font-display);font-weight:900;font-size:44px;text-transform:uppercase;letter-spacing:-.045em;color:var(--text-primary);transition:letter-spacing 320ms var(--ease-expo),transform 320ms var(--ease-expo)}
+
+/* signature moments */
+.pre-mark{position:relative;width:104px;height:104px}
+.pre-mark svg{position:absolute;inset:0;width:100%;height:100%}
+.run .p-u{animation:pLock calc(1150ms * var(--sf)) var(--ease-hit) both}
+@keyframes pLock{0%{transform:translate(-52px,-34px) rotate(-13deg);opacity:0}16%{opacity:1}54%,66%{transform:none}100%{transform:rotate(-3.5deg) translate(-10.8%,-9.4%)}}
+.counter{font:500 12px/1 var(--font-mono);letter-spacing:.2em;color:var(--voltage-500);margin-top:18px}
+.words span{display:inline-block;position:relative;margin-right:.22em}
+.words span i{position:absolute;inset:0;color:var(--voltage-500);font-style:normal;transform:translate(9px,7.8px) rotate(-3.5deg)}
+.words span b{position:relative;font-weight:900;color:var(--newsprint)}
+.run .words span{animation:wIn calc(220ms * var(--sf)) var(--ease-hit) both;animation-delay:calc(var(--i) * 90ms * var(--sf))}
+@keyframes wIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.strike{position:relative;display:inline-block;color:var(--ink-300)}
+.strike:after{content:"";position:absolute;left:0;top:52%;height:3px;width:100%;background:var(--voltage-500);transform:scaleX(0);transform-origin:left}
+.run .strike:after{animation:strk calc(280ms * var(--sf)) var(--ease-cut) both}
+@keyframes strk{to{transform:scaleX(1)}}
+.jack{display:flex;height:100%;align-items:center;gap:26px;padding-left:26px;transition:transform 90ms linear}
+.jack>div{flex:none;width:230px}
+.jack .n{font-family:var(--font-display);font-weight:900;font-size:76px;line-height:1;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:2px var(--voltage-500)}
+.inv{position:absolute;inset:0;background:var(--voltage-500);clip-path:polygon(-40% 100%,-10% 100%,-40% 200%,-70% 200%);display:grid;place-items:center}
+.run .inv{animation:invw calc(380ms * var(--sf)) var(--ease-cut) forwards}
+@keyframes invw{from{clip-path:polygon(-40% 100%,-10% 100%,-40% 200%,-70% 200%)}to{clip-path:polygon(-40% -100%,140% -100%,140% 100%,-70% 100%)}}
+.inv .t{font-family:var(--font-display);font-weight:900;font-size:38px;line-height:.86;text-transform:uppercase;letter-spacing:-.045em;color:var(--tar);text-align:center}
+.fill{display:inline-block;line-height:.78;padding:.1em .06em .04em;background:var(--tar);color:var(--voltage-500);vertical-align:baseline}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="plate"><path fill-rule="evenodd" d="M14 10 H48 C74 10 88 26 88 50 C88 74 74 90 48 90 H14 Z M46 40 H54 C64 40 70 47 70 58 C70 69 64 76 54 76 H46 Z"/></g>
+</defs></svg>
+
+<div class="page">
+<div class="pagehd"><h2>Visual &amp; motion spec</h2><span class="eye mut">Six persistent layers · five signature moments · all live</span></div>
+
+<div class="bar">
+  <span class="eye mut" style="letter-spacing:.2em">Speed</span>
+  <button class="btn" data-speed="1" aria-pressed="true">1×</button>
+  <button class="btn" data-speed="2">0.5×</button>
+  <button class="btn" data-speed="4">0.25×</button>
+  <button class="btn" id="playall" style="margin-left:12px">Replay all</button>
+  <button class="btn" id="rm" aria-pressed="false">Reduced motion</button>
+  <span class="note" style="margin-left:auto">Hover the cursor card · scroll inside the scroll frames</span>
+</div>
+
+<section class="wrap sect" style="border-top:0">
+  <div class="eye">Reconciliation</div><h2 class="disp big">Adopted, adjusted,<br>and one rejection.</h2>
+  <p class="body">The spec from the build side is adopted almost whole. Four things changed to stay inside the locked token system, and one was cut because it fights a rule we already committed to.</p>
+  <table>
+    <tr><th style="width:200px">From the spec</th><th style="width:110px">Status</th><th>Decision</th></tr>
+    <tr><td><b>Six persistent layers</b></td><td class="ok">Adopted</td><td>All six built below. The misregistration reveal is promoted to the system's default entrance — it replaces the generic slam on headings, stat blocks and card images.</td></tr>
+    <tr><td><b>Marquee 60s / 75s</b></td><td class="adj">Adjusted</td><td>Token added rather than overridden: <b>--dur-marquee-slow: 64s</b> for the proof strip, existing <b>--dur-marquee: 22s</b> stays for the footer band. Two speeds, both tokenised.</td></tr>
+    <tr><td><b>Grain as a tiled PNG &lt;20KB</b></td><td class="adj">Adjusted</td><td>We already ship grain as a ~1KB inline SVG turbulence data-URI — smaller than the PNG budget, no extra request, and resolution-independent. Keep the SVG; the intent (no per-frame canvas noise) is met.</td></tr>
+    <tr><td><b>Scroll-velocity type skew 2°</b></td><td class="adj">Adjusted</td><td>Tracking coupling kept, skew reduced to <b>1°</b> and capped. At 2° Schibsted's verticals visibly bend on wide headlines and it reads as a rendering fault, not a choice.</td></tr>
+    <tr><td><b>Pull quote on a Klein field</b></td><td class="ok">Adopted</td><td>Legal under the colour rule: Klein is banned as <em>text</em> (2.3:1 on Tar), not as a field. Newsprint on Klein is 7.5:1. One Klein moment per page still holds.</td></tr>
+    <tr><td><b>Card video on hover, 3s loops</b></td><td class="adj">Held</td><td>Specified and wired, but no footage exists. Cards ship with the die-cut wedge hover until real loops land — see asset gaps.</td></tr>
+    <tr><td><b>Live-thumbnail cursor on work cards</b></td><td style="color:var(--siren-500)">Cut</td><td>Two competing hover payloads on one element (thumbnail cursor + image snapping to register). The drift device wins; the cursor stays an 8px square with a mono label.</td></tr>
+  </table>
+</section>
+
+<section class="wrap sect">
+  <div class="eye">01 — Persistent layers</div><h2 class="disp big">Build these once.</h2>
+  <p class="body">Six layers running everywhere. Together they do more work than any single animation, and none of them needs an asset.</p>
+
+  <div class="grid">
+    <div class="card"><h3>1 · Grain</h3>
+      <div class="spec">Fixed viewport canvas · <s>8%</s> over flat, <s>26%</s> over accent · overlay on Tar, multiply on Newsprint · does not scroll</div>
+      <div class="stage"><div class="half">
+        <div style="background:var(--tar-3);color:var(--newsprint)">No grain</div>
+        <div style="background:var(--voltage-500);color:var(--tar)">26% grain<div class="gr acc"></div></div>
+      </div></div>
+      <p class="note">The page moves under it. That fixed relationship is what makes a flat field read as printed rather than rendered.</p>
+    </div>
+
+    <div class="card"><h3>2 · Overprint numerals</h3>
+      <div class="spec">400–600px in <s>#212127</s> on Tar · parallax <s>0.3×</s> · behind the headline, never over it</div>
+      <div class="stage" style="padding:0">
+        <div class="scroller"><div class="sc-in"><div class="op-num">01</div>
+          <div class="op-copy"><p>Scroll this frame. The numeral holds while the copy passes it — depth for the price of one absolutely-positioned element.</p><p>Every section carries one. It is structure you feel before you read.</p><p>Never lighter than one step off the page black, or it starts competing.</p></div>
+        </div></div>
+      </div>
+      <p class="note">Free depth, zero assets, no image budget.</p>
+    </div>
+
+    <div class="card"><h3>3 · Misregistration reveal</h3>
+      <div class="spec"><s>280ms</s> · ease-cut · under-plate lands at <s>9 / −3.5°</s>, over-plate snaps to register — the offset stays visible</div>
+      <div class="stage" data-demo><div class="mis mistype"><span class="under">Departure</span><span class="over">Departure</span></div></div>
+      <div class="foot"><span class="note">The default entrance for headings, stat blocks and card images.</span><button class="btn" data-replay>Replay</button></div>
+    </div>
+
+    <div class="card"><h3>4 · Die-cut wipe</h3>
+      <div class="spec"><s>280ms</s> · ease-cut · 107° diagonal, matching the brand's cut angle · never a horizontal fade</div>
+      <div class="stage" data-demo><div class="dc-a">Section A</div><div class="dc-b">Section B</div></div>
+      <div class="foot"><span class="note">Section transitions and route changes. The same edge angle as every die-cut field.</span><button class="btn" data-replay>Replay</button></div>
+    </div>
+
+    <div class="card"><h3>5 · Cursor</h3>
+      <div class="spec">8px Voltage square · no trail · scales to <s>48px</s> with a mono label over interactive elements · <s>90ms</s></div>
+      <div class="stage cur-stage" id="curstage"><div class="cur-card" data-label="View"></div><div class="dot" id="dot"><span>View</span></div></div>
+      <p class="note">Labels: VIEW, DRAG, PLAY. Desktop pointer only — hidden on touch and under reduced motion.</p>
+    </div>
+
+    <div class="card"><h3>6 · Scroll-velocity coupling</h3>
+      <div class="spec">Tracking −6% and <s>1°</s> skew at full velocity · settles over <s>320ms</s> ease-expo · display type only</div>
+      <div class="stage" style="padding:0"><div class="scroller" id="velscroll"><div style="height:900px;padding:26px">
+        <div class="vel-head" id="velhead">Scroll fast</div>
+        <p class="note" style="margin-top:14px;max-width:32ch">Type compresses while you move and settles when you stop. You feel it; you don't watch it.</p>
+        <div style="height:640px"></div><div class="vel-head" style="font-size:34px">Still coupled</div>
+      </div></div></div>
+      <p class="note">Capped so it never reads as a rendering fault. Body copy and mono labels never couple.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap sect">
+  <div class="eye">02 — Signature moments</div><h2 class="disp big">Five things carry it.</h2>
+  <p class="body">Not everything moves equally. These five carry the impression; everything else supports them. If a sixth thing starts competing, it gets cut.</p>
+
+  <div class="grid">
+    <div class="card"><h3>01 · Preloader lock &amp; slip</h3>
+      <div class="spec"><s>1150ms</s> · ease-hit · plates converge, lock hard, slip to rest · mono counter 000→100 · exit on the 107° die-cut</div>
+      <div class="stage" data-demo><div style="text-align:center">
+        <div class="pre-mark" style="margin:0 auto"><svg viewBox="0 0 100 100" class="p-u"><use href="#plate" fill="#AFE304"/></svg><svg viewBox="0 0 100 100"><use href="#plate" fill="#F2F0EA"/></svg></div>
+        <div class="counter" data-count>000</div>
+      </div></div>
+      <div class="foot"><span class="note">Once per session, cookie-gated. Skipped entirely under reduced motion.</span><button class="btn" data-replay>Replay</button></div>
+    </div>
+
+    <div class="card"><h3>02 · Hero, word by word</h3>
+      <div class="spec"><s>90ms</s> stagger · each word arrives misregistered and snaps · the 3D object never moves with the type</div>
+      <div class="stage" data-demo><div class="words mistype" style="font-size:clamp(26px,3.4vw,44px);text-align:center">
+        <span style="--i:0"><i>Look</i><b>Look</b></span><span style="--i:1"><i>bigger</i><b>bigger</b></span><br><span style="--i:2"><i>than</i><b>than</b></span><span style="--i:3"><i>you</i><b>you</b></span><span style="--i:4"><i>are</i><b>are</b></span>
+      </div></div>
+      <div class="foot"><span class="note">Behind it: one anodized object at 0.2rpm, specular tracking the cursor. Type stays put.</span><button class="btn" data-replay>Replay</button></div>
+    </div>
+
+    <div class="card"><h3>03 · The argument, struck through</h3>
+      <div class="spec">Scroll-locked per beat · Voltage rule draws L→R <s>280ms</s> · right column arrives misregistered and snaps</div>
+      <div class="stage" data-demo style="place-items:stretch;align-content:center;padding:0 26px">
+        <div><div class="eye mut" style="color:var(--ink-400)">How it usually works</div><p class="disp" style="font-size:22px;margin-top:10px;color:var(--ink-300)"><span class="strike">You get impressions and reach</span></p></div>
+        <div style="margin-top:22px"><div class="eye">How we work</div><div class="mis mistype" style="font-size:24px;margin-top:10px"><span class="under">One metric, one date</span><span class="over">One metric, one date</span></div></div>
+      </div>
+      <div class="foot"><span class="note">Progress rail on the left edge fills Voltage across the four beats.</span><button class="btn" data-replay>Replay</button></div>
+    </div>
+
+    <div class="card"><h3>04 · The pinned scroll-jack</h3>
+      <div class="spec">Section pins · three steps advance on vertical scroll · numerals at 200px in Voltage outline · releases on mobile</div>
+      <div class="stage" style="padding:0"><div class="scroller" id="jackscroll"><div style="height:820px;position:relative">
+        <div style="position:sticky;top:0;height:236px;overflow:hidden"><div class="jack" id="jack">
+          <div><div class="n">01</div><div class="disp" style="font-size:20px;margin-top:10px">Monetize</div><p class="note" style="margin-top:8px">Priced and stress-tested before design starts.</p></div>
+          <div><div class="n">02</div><div class="disp" style="font-size:20px;margin-top:10px">Design</div><p class="note" style="margin-top:8px">The shortest path from open to paid.</p></div>
+          <div><div class="n">03</div><div class="disp" style="font-size:20px;margin-top:10px">Ship</div><p class="note" style="margin-top:8px">Weeks, not quarters.</p></div>
+        </div></div>
+      </div></div></div>
+      <p class="note">Scroll the frame. On the real page this sits on the faint Voltage wireframe grid with a slow scan line.</p>
+    </div>
+
+    <div class="card"><h3>05 · The Voltage inversion</h3>
+      <div class="spec"><s>380ms</s> · ease-cut · the field wipes up the diagonal, the page turns Voltage · grain jumps to 26%</div>
+      <div class="stage" data-demo><div class="dc-a" style="background:var(--tar);color:var(--newsprint);font-size:24px">Scrolling…</div><div class="inv"><div class="t">Tell us<br>the <span class="fill">number</span></div><div class="gr acc"></div></div></div>
+      <div class="foot"><span class="note">The one place the palette inverts entirely. Full viewport, Tar type, nothing else on the screen.</span><button class="btn" data-replay>Replay</button></div>
+    </div>
+
+    <div class="card"><h3>Footer · clipped wordmark</h3>
+      <div class="spec">Oversized DRIFTED cropped by the bottom viewport edge — the descender never resolves</div>
+      <div class="stage" style="align-items:end;padding:0"><div class="disp" style="font-size:clamp(60px,11vw,132px);line-height:.8;transform:translateY(24%)">Drifted</div></div>
+      <p class="note">Cheap, memorable, on-concept: the mark leaves the frame the way the counter leaves the D.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap sect">
+  <div class="eye">03 — Section rules</div><h2 class="disp big">Where each layer lands.</h2>
+  <table>
+    <tr><th style="width:180px">Section</th><th>Behaviour</th></tr>
+    <tr><td><b>Preloader</b></td><td>Lock &amp; slip, mono counter 000→100, exit on the 107° die-cut into a hero that is already in place. Session-gated.</td></tr>
+    <tr><td><b>Hero</b></td><td>Words arrive misregistered on a 90ms stagger. One PBR-lit anodized object at 0.2rpm behind; its specular highlight tracks the cursor, the type does not. Scrolls out to 0.94 scale under a diagonal wipe.</td></tr>
+    <tr><td><b>Proof strip</b></td><td>Two opposing marquees at 64s and 75s — names in mono on top, the same list in Voltage outline below. Slows to 30% on hover over 160ms; scroll velocity adds up to 1.6×.</td></tr>
+    <tr><td><b>The argument</b></td><td>Scroll-locked, one beat per hold. Voltage strikethrough draws left to right; the right column snaps into register. Overprint <b>01</b> at 0.3× behind. 2px progress rail on the left edge.</td></tr>
+    <tr><td><b>What we do</b></td><td>Hairline cards on #16161A. Hover: 2px lift, Voltage border, a 107° Voltage wedge wiping in from the corner over 280ms, and the other two cards drop to 40% brightness. Focus by subtraction.</td></tr>
+    <tr><td><b>Selected work</b></td><td>Asymmetric grid, one card breaking the container edge. Images sit misregistered by default and snap to register on hover. Mono metadata slides up from under the title, 160ms. Entrance: 24px travel, 90ms stagger, ease-hit.</td></tr>
+    <tr><td><b>App pitch</b></td><td>Faint Voltage wireframe grid at 6% with a slow scan line. Three steps advance on a pinned horizontal scroll-jack; numerals at 200px in Voltage outline. Pull quote on the page's single Klein field.</td></tr>
+    <tr><td><b>How we work</b></td><td>Vertical timeline. 2px Voltage rail draws with scroll; completed portion stays Voltage, the rest sits at 14% white. Numerals scale 0.8 → 1 at centre viewport, 160ms.</td></tr>
+    <tr><td><b>Closing CTA</b></td><td>Full-viewport Voltage inversion, Tar type at maximum display size with the cap-tight die-cut. Button is Tar on Voltage; on hover the fill wipes out on the diagonal leaving outline only, 160ms. Grain at 26%.</td></tr>
+    <tr><td><b>Footer</b></td><td>Tar. Oversized wordmark clipped by the viewport edge. No parallax — the one section that sits still.</td></tr>
+    <tr><td><b>Route change</b></td><td>Voltage panel wipes across on the 107° diagonal, 280ms in / 280ms out, ease-cut. The mark sits centred as a single plate during the covered frame. No spinner, ever.</td></tr>
+  </table>
+</section>
+
+<section class="wrap sect">
+  <div class="eye">04 — Performance &amp; stack</div><h2 class="disp big">Budgets, not intentions.</h2>
+  <div class="grid" style="grid-template-columns:1fr 1fr">
+    <div class="card"><h3>Budget</h3>
+      <ul class="tight">
+        <li><b style="color:var(--text-primary)">LCP under 2.5s on 4G</b> with the hero object loaded — inbound and organic means Core Web Vitals are a ranking input, not a nicety.</li>
+        <li>Exactly <b style="color:var(--text-primary)">one</b> 3D object on the site. Under 2MB, lazy-initialised, static poster frame until interactive.</li>
+        <li>Grain is a ~1KB inline SVG data-URI, not a canvas noise function and not a PNG request.</li>
+        <li>Card video: <code style="font-family:var(--font-mono);font-size:12px;color:var(--voltage-500)">poster</code> + <code style="font-family:var(--font-mono);font-size:12px;color:var(--voltage-500)">preload="none"</code>, fetched on hover intent.</li>
+        <li>Scroll-jacked sections release scroll below 768px. Pinned horizontal scroll on touch is a trap.</li>
+        <li>Every effect degrades to a static, well-composed layout under reduced motion — tested before launch, not after.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Stack</h3>
+      <ul class="tight">
+        <li><b style="color:var(--text-primary)">GSAP + ScrollTrigger</b> — pinning, scroll-locking, stagger.</li>
+        <li><b style="color:var(--text-primary)">Lenis</b> — smooth scroll.</li>
+        <li><b style="color:var(--text-primary)">Three.js</b> — the single hero object, nothing else.</li>
+        <li>Everything else is CSS against the existing tokens. If an effect needs a library beyond these three, it isn't in the system yet.</li>
+        <li>Durations and easings are read from CSS custom properties, never hard-coded in JS — one place to change the feel of the whole site.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="wrap sect">
+  <div class="eye">05 — Blocking</div><h2 class="disp big">Four missing assets.</h2>
+  <p class="body">The density specified above assumes material that doesn't exist. Named plainly so nothing gets built around a gap:</p>
+  <table>
+    <tr><th style="width:220px">Asset</th><th>Status</th></tr>
+    <tr><td><b>Case study imagery</b></td><td>None. No photography, no product shots, no screen captures. This is the binding constraint on the whole work section — a gallery of placeholders reads worse than no gallery.</td></tr>
+    <tr><td><b>Hero 3D object</b></td><td>Specified, not produced. Anodized metal, PBR, single specular highlight, under 2MB.</td></tr>
+    <tr><td><b>Card loops</b></td><td>Three 3-second muted loops, one per service card. Cards ship with the wedge hover until they exist.</td></tr>
+    <tr><td><b>Logo animation</b></td><td>CSS prototypes only. Needs a Lottie or video export for social and email use.</td></tr>
+  </table>
+  <p class="body" style="margin-top:22px"><b style="color:var(--voltage-500)">The highest-leverage two hours available:</b> screen recordings of the real products — the Zoller lister filling a template from photographs, Ehsaan's marketplace being browsed. That covers most of the gap above and is more convincing than any rendered or stock alternative.</p>
+</section>
+
+<div class="wrap" style="padding-block:32px;border-top:1px solid var(--border-subtle);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px">
+  <span class="eye mut">Drifted Marketing · Visual &amp; motion spec</span><span class="eye mut">Every duration and curve reads from tokens/motion.css</span>
+</div>
+</div>
+
+<script>
+function replay(st){st.classList.remove('run');void st.offsetWidth;st.classList.add('run');
+  var c=st.querySelector('[data-count]');if(c)count(c);}
+function count(el){
+  var dur=1150*parseFloat(document.body.dataset.sf||1),t0=null;
+  if(document.body.classList.contains('rm')){el.textContent='100';return;}
+  function step(t){if(!t0)t0=t;var p=Math.min((t-t0)/dur,1);el.textContent=String(Math.round(p*100)).padStart(3,'0');if(p<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);
+}
+document.querySelectorAll('[data-replay]').forEach(function(b){b.addEventListener('click',function(){replay(b.closest('.card').querySelector('[data-demo]'))});});
+document.querySelectorAll('[data-speed]').forEach(function(b){b.addEventListener('click',function(){
+  document.querySelectorAll('[data-speed]').forEach(function(o){o.setAttribute('aria-pressed','false')});
+  b.setAttribute('aria-pressed','true');document.body.style.setProperty('--sf',b.dataset.speed);document.body.dataset.sf=b.dataset.speed;
+  document.querySelectorAll('[data-demo]').forEach(replay);
+});});
+document.getElementById('playall').addEventListener('click',function(){document.querySelectorAll('[data-demo]').forEach(replay)});
+document.getElementById('rm').addEventListener('click',function(){
+  var on=document.body.classList.toggle('rm');this.setAttribute('aria-pressed',String(on));
+  document.querySelectorAll('[data-demo]').forEach(replay);
+});
+// cursor
+var cs=document.getElementById('curstage'),dot=document.getElementById('dot');
+cs.addEventListener('mousemove',function(e){
+  var r=cs.getBoundingClientRect();dot.style.left=(e.clientX-r.left)+'px';dot.style.top=(e.clientY-r.top)+'px';
+  var over=document.elementFromPoint(e.clientX,e.clientY);
+  dot.classList.toggle('big',!!(over&&over.closest('[data-label]')));
+});
+// velocity coupling
+var vs=document.getElementById('velscroll'),vh=document.getElementById('velhead'),last=0,lt=0;
+vs.addEventListener('scroll',function(){
+  if(document.body.classList.contains('rm'))return;
+  var now=performance.now(),dy=Math.abs(vs.scrollTop-last),dt=Math.max(now-lt,1);
+  var v=Math.min(dy/dt,2.2)/2.2;last=vs.scrollTop;lt=now;
+  vs.querySelectorAll('.vel-head').forEach(function(h){
+    h.style.letterSpacing=(-0.045-0.06*v)+'em';h.style.transform='skewX('+(-1*v)+'deg)';
+  });
+  clearTimeout(vs._t);vs._t=setTimeout(function(){
+    vs.querySelectorAll('.vel-head').forEach(function(h){h.style.letterSpacing='';h.style.transform='';});
+  },140);
+},{passive:true});
+// scroll-jack
+var js=document.getElementById('jackscroll'),jk=document.getElementById('jack');
+js.addEventListener('scroll',function(){
+  var max=js.scrollHeight-js.clientHeight,p=max?js.scrollTop/max:0;
+  jk.style.transform='translateX('+(-p*(jk.scrollWidth-js.clientWidth+26))+'px)';
+},{passive:true});
+// autoplay on enter
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){replay(e.target);io.unobserve(e.target);}})},{threshold:.4});
+document.querySelectorAll('[data-demo]').forEach(function(s){io.observe(s)});
+</script>
+</body></html>

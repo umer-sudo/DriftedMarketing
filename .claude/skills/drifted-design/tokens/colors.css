@@ -1,0 +1,100 @@
+:root {
+  /* ── Base ─────────────────────────────────────────────────── */
+  --tar: #0A0A0B;      /* @kind color */
+  --tar-2: #101013;    /* @kind color */
+  --tar-3: #17171B;    /* @kind color */
+  --tar-4: #212127;    /* @kind color */
+  --ink-500: #2C2C34;  /* @kind color */
+  --ink-400: #464650;  /* @kind color */
+  --ink-300: #7C7C86;  /* @kind color */
+  --ink-200: #B2B2BB;  /* @kind color */
+  --ink-100: #D6D6DC;  /* @kind color */
+  --newsprint: #F2F0EA; /* @kind color */
+  --white: #FFFFFF;    /* @kind color */
+
+  /* ── Voltage — hero accent (anodized lime) ─────────────────── */
+  --voltage-50: #F7FFE3;  /* @kind color */
+  --voltage-100: #ECFFB5; /* @kind color */
+  --voltage-200: #DEFF7E; /* @kind color */
+  --voltage-300: #CFFB4A; /* @kind color */
+  --voltage-400: #C2F125; /* @kind color */
+  --voltage-500: #AFE304; /* @kind color */
+  --voltage-600: #93BF00; /* @kind color */
+  --voltage-700: #6F8F06; /* @kind color */
+  --voltage-800: #4B600A; /* @kind color */
+  --voltage-900: #29350B; /* @kind color */
+
+  /* ── Siren — support accent (vermilion), used sparingly ────── */
+  --siren-50: #FFF1EC;  /* @kind color */
+  --siren-100: #FFD9CF; /* @kind color */
+  --siren-200: #FFB39F; /* @kind color */
+  --siren-300: #FF8663; /* @kind color */
+  --siren-400: #FF5A2E; /* @kind color */
+  --siren-500: #F5330A; /* @kind color */
+  --siren-600: #CC2606; /* @kind color */
+  --siren-700: #9C1C05; /* @kind color */
+  --siren-800: #6B1304; /* @kind color */
+  --siren-900: #3A0A03; /* @kind color */
+
+  /* ── Klein — rare, one moment per page, never text ─────────── */
+  --klein-50: #EFEEFF;  /* @kind color */
+  --klein-100: #D6D3FF; /* @kind color */
+  --klein-200: #AFA9FF; /* @kind color */
+  --klein-300: #8279FF; /* @kind color */
+  --klein-400: #5546FF; /* @kind color */
+  --klein-500: #2417F0; /* @kind color */
+  --klein-600: #1B0FC4; /* @kind color */
+  --klein-700: #150B93; /* @kind color */
+  --klein-800: #0E0762; /* @kind color */
+  --klein-900: #080436; /* @kind color */
+
+  /* ── Semantic ─────────────────────────────────────────────── */
+  --success-500: #2BE08A; /* @kind color */
+  --warning-500: #FFB020; /* @kind color */
+  --danger-500: var(--siren-500); /* @kind color */
+
+  /* ── Surfaces ─────────────────────────────────────────────── */
+  --surface-page: var(--tar);      /* @kind color */
+  --surface-raised: var(--tar-2);  /* @kind color */
+  --surface-card: var(--tar-3);    /* @kind color */
+  --surface-hover: var(--tar-4);   /* @kind color */
+  --surface-inverse: var(--newsprint); /* @kind color */
+  --surface-accent: var(--voltage-500); /* @kind color */
+
+  /* ── Text ─────────────────────────────────────────────────── */
+  --text-primary: var(--newsprint); /* @kind color */
+  --text-body: var(--ink-200);      /* @kind color */
+  --text-muted: var(--ink-300);     /* @kind color */
+  --text-accent: var(--voltage-500);/* @kind color */
+  --text-on-accent: var(--tar);     /* @kind color */
+  --text-inverse: var(--tar);       /* @kind color */
+
+  /* ── Lines ────────────────────────────────────────────────── */
+  --border-subtle: rgba(242, 240, 234, 0.14); /* @kind color */
+  --border-default: rgba(242, 240, 234, 0.22); /* @kind color */
+  --border-strong: rgba(242, 240, 234, 0.30); /* @kind color */
+  --border-accent: var(--voltage-500); /* @kind color */
+
+  --link: var(--voltage-500);       /* @kind color */
+  --link-hover: var(--voltage-300); /* @kind color */
+  --focus-ring: var(--voltage-500); /* @kind color */
+}
+
+/* Newsprint / paper scope — light sections, print, business collateral. */
+.drift-paper {
+  --surface-page: var(--newsprint);
+  --surface-raised: var(--white);
+  --surface-card: var(--white);
+  --surface-hover: #E6E2D8;
+  --surface-inverse: var(--tar);
+  --text-primary: var(--tar);
+  --text-body: #33333A;
+  --text-muted: #6A6A63;
+  --text-accent: var(--tar);
+  --text-inverse: var(--newsprint);
+  --border-subtle: rgba(10, 10, 11, 0.12);
+  --border-default: rgba(10, 10, 11, 0.2);
+  --border-strong: rgba(10, 10, 11, 0.42);
+  --link: var(--tar);
+  --link-hover: var(--siren-500);
+}

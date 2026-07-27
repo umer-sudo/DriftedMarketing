@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Drifted — Mark Specification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..900&family=Big+Shoulders+Display:wght@400..900&family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--tar:#0A0A0B;--tar-2:#101013;--tar-3:#17171B;--news:#F2F0EA;--v500:#AFE304;--v300:#CFFB4A;--s500:#F5330A;--line:rgba(242,240,234,.14);--line-2:rgba(242,240,234,.3);--dim:#7C7C86;--body:#B2B2BB;
+--ease-hit:cubic-bezier(.2,.9,.1,1);--ease-cut:cubic-bezier(.85,0,.15,1);--ease-expo:cubic-bezier(.16,1,.3,1);
+--grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>")}
+*{box-sizing:border-box}
+html{background:var(--tar)}
+body{margin:0;background:var(--tar);color:var(--body);font-family:"Instrument Sans",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--v500)}a:hover{color:var(--news)}
+svg{display:block}
+.wrap{max-width:1680px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
+.sect{padding-block:88px;border-top:1px solid var(--line)}
+.eye{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--v500)}
+.note{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+h2{margin:14px 0 0;font-family:"Schibsted Grotesk",sans-serif;font-weight:900;font-size:clamp(36px,4.6vw,66px);line-height:.9;letter-spacing:-.045em;text-transform:uppercase;color:var(--news)}
+h3{margin:0;font-family:"Schibsted Grotesk",sans-serif;font-weight:900;font-size:19px;letter-spacing:-.02em;text-transform:uppercase;color:var(--news)}
+.lede{margin:18px 0 0;max-width:78ch;font-size:16.5px;line-height:1.6}
+.mast{padding-block:68px 40px}
+.mast h1{margin:16px 0 0;font-family:"Schibsted Grotesk",sans-serif;font-weight:900;font-size:clamp(52px,10.5vw,164px);line-height:.82;letter-spacing:-.05em;text-transform:uppercase;color:var(--news)}
+.cols{display:grid;gap:2px;background:var(--line);margin-top:34px}
+.c3{grid-template-columns:repeat(3,1fr)}
+.c2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:1100px){.c3,.c2{grid-template-columns:1fr}}
+.cell{background:var(--tar-2);padding:28px;display:flex;flex-direction:column;gap:18px}
+.cell.light{background:var(--news);color:#44443E}
+.cell.paper{background:var(--news)}
+.hd{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.stage{background:var(--news);display:grid;place-items:center;padding:26px}
+.stage.dark{background:var(--tar-3)}
+.row{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap}
+.szcap{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.14em;color:var(--dim);text-align:center;margin-top:7px}
+.verdict{font-size:14px;line-height:1.55;border-left:3px solid var(--v500);padding-left:13px}
+.verdict.bad{border-color:var(--s500)}
+.tbl{width:100%;border-collapse:collapse;margin-top:26px;font-size:14px}
+.tbl th,.tbl td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:400}
+.tbl td b{color:var(--news)}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--line);margin-top:24px}
+@media(max-width:1100px){.grid4{grid-template-columns:repeat(2,1fr)}}
+.gcell{background:var(--news);padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.gcell.dark{background:var(--tar-3)}
+.glabel{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8A887F}
+.gcell.dark .glabel{color:var(--dim)}
+.pick{outline:2px solid var(--v500);outline-offset:-2px}
+.wm{font-family:"Schibsted Grotesk",sans-serif;font-weight:900;letter-spacing:-.05em;text-transform:uppercase;line-height:.82;color:var(--news)}
+.sub{font-family:"JetBrains Mono",monospace;font-weight:500;text-transform:uppercase;color:var(--v500);display:block}
+.mot{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--line);margin-top:24px}
+@media(max-width:1100px){.mot{grid-template-columns:repeat(2,1fr)}}
+.frame{background:var(--tar-3);padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.playbar{display:flex;gap:12px;align-items:center;margin-top:24px;flex-wrap:wrap}
+button.btn{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;background:var(--v500);color:var(--tar);border:0;padding:13px 20px;cursor:pointer;transition:transform 160ms var(--ease-hit)}
+button.btn:hover{transform:translateY(-2px)}button.btn:active{transform:scale(.97)}
+#playstage{background:var(--tar-3);display:grid;place-items:center;padding:44px;margin-top:16px}
+.anim .under{animation:drift 1150ms var(--ease-expo) forwards}
+@keyframes drift{0%{transform:translate(0,0) rotate(0deg)}26%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(-9px,-8px) rotate(-3.5deg)}}
+.hoverdemo{cursor:pointer}
+.hoverdemo .under{transition:transform 220ms var(--ease-hit)}
+.hoverdemo:hover .under{transform:translate(0,0) rotate(0deg)!important}
+.app{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);margin-top:24px}
+@media(max-width:1100px){.app{grid-template-columns:1fr}}
+.appcell{background:var(--tar-2);padding:26px;display:flex;flex-direction:column;gap:14px}
+.mock{background:var(--tar);border:1px solid var(--line);overflow:hidden;position:relative}
+.grain:after{content:"";position:absolute;inset:0;background-image:var(--grain);opacity:.08;mix-blend-mode:overlay;pointer-events:none}
+.foot{padding-block:36px 80px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;border-top:1px solid var(--line)}
+.bad{color:var(--s500)}
+</style></head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <!-- 1C plate: locked outline, counter drifted +8x / +10y, 10% shorter -->
+  <path id="dplate" fill="currentColor" fill-rule="evenodd" d="M14 10 H48 C74 10 88 26 88 50 C88 74 74 90 48 90 H14 Z M46 40 H54 C64 40 70 47 70 58 C70 69 64 76 54 76 H46 Z"/>
+  <!-- 1B plate: split at 48% and slid -->
+  <clipPath id="cT"><rect x="-20" y="-20" width="140" height="68"/></clipPath>
+  <clipPath id="cB"><rect x="-20" y="48" width="140" height="80"/></clipPath>
+  <path id="dbase" fill="currentColor" fill-rule="evenodd" d="M14 10 H48 C74 10 88 26 88 50 C88 74 74 90 48 90 H14 Z M38 30 H46 C56 30 62 38 62 50 C62 62 56 70 46 70 H38 Z"/>
+  <!-- 1A: stem + separated bowl -->
+  <g id="dstem" fill="currentColor"><rect x="10" y="10" width="19" height="80"/><path fill="currentColor" fill-rule="evenodd" d="M35 10 C63 10 87 26 87 50 C87 74 63 90 35 90 Z M43 32 C59 32 67 40 67 50 C67 60 59 68 43 68 Z" transform="translate(7 4)"/></g>
+  <!-- single-layer fallback: plate cut on the axis perpendicular to the offset, halves separated 4 -->
+  <clipPath id="cutA"><path d="M-16 125 L116 -25 V-46 H-16 Z"/></clipPath>
+  <clipPath id="cutB"><path d="M-16 125 L116 -25 V146 H-16 Z"/></clipPath>
+  <g id="dcut"><g clip-path="url(#cutA)" transform="translate(-1.5 -1.3)"><use href="#dplate"/></g><g clip-path="url(#cutB)" transform="translate(1.5 1.3)"><use href="#dplate"/></g></g>
+</defs></svg>
+
+<div class="wrap mast">
+  <div class="eye">Drifted · Identity · Round 07 — final mark specification</div>
+  <h1>Out of<br>register</h1>
+  <p class="lede">The locked direction: a D whose counter has drifted off-axis, printed twice and never quite lining up. One idea stated twice — the letter is out of position inside itself, and the plate is out of position on the sheet. Everything below is measured in units of a 100-unit em square; at any output size, 1 unit = 1% of the mark's width.</p>
+</div>
+
+<!-- ══ STEP 1 ══ -->
+<section class="wrap sect">
+  <div class="eye">Step 01</div><h2>Resolve the skeleton</h2>
+  <p class="lede">Three crossings, each with the same misregistration applied: under-layer at 34% tint, 7 left / 6 up, −4°.</p>
+  <div class="cols c3">
+    <div class="cell paper">
+      <div class="hd"><h3 style="color:var(--tar)">A · Drifted counter</h3><span class="glabel">1C × 02</span></div>
+      <div class="stage"><svg width="330" height="330" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"/><use href="#dplate" style="color:#0A0A0B"/></svg></div>
+      <div class="row" style="background:var(--tar);padding:18px;gap:18px">
+        <div><svg width="64" height="64" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="szcap">64</div></div>
+        <div><svg width="32" height="32" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="szcap">32</div></div>
+        <div><svg width="24" height="24" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="szcap">24</div></div>
+        <div><svg width="16" height="16" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="szcap">16</div></div>
+      </div>
+      <p class="verdict" style="color:#44443E"><b style="color:var(--tar)">Holds at 16.</b> The outer silhouette is a plain D at every size; all the drift happens inside the counter and behind the plate, so nothing structural is lost when the tint stops resolving.</p>
+    </div>
+    <div class="cell paper">
+      <div class="hd"><h3 style="color:var(--tar)">B · Split + slid</h3><span class="glabel">1B × 02</span></div>
+      <div class="stage"><svg width="330" height="330" viewBox="0 0 100 100">
+        <g style="color:#0A0A0B" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"><g clip-path="url(#cT)"><use href="#dbase"/></g><g clip-path="url(#cB)" transform="translate(11 0)"><use href="#dbase"/></g></g>
+        <g style="color:#0A0A0B"><g clip-path="url(#cT)"><use href="#dbase"/></g><g clip-path="url(#cB)" transform="translate(11 0)"><use href="#dbase"/></g></g></svg></div>
+      <div class="row" style="background:var(--tar);padding:18px;gap:18px">
+        <div><svg width="64" height="64" viewBox="0 0 100 100"><g style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"><g clip-path="url(#cT)"><use href="#dbase"/></g><g clip-path="url(#cB)" transform="translate(11 0)"><use href="#dbase"/></g></g><g style="color:#F2F0EA"><g clip-path="url(#cT)"><use href="#dbase"/></g><g clip-path="url(#cB)" transform="translate(11 0)"><use href="#dbase"/></g></g></svg><div class="szcap">64</div></div>
+        <div><svg width="32" height="32" viewBox="0 0 100 100"><g style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"><g clip-path="url(#cT)"><use href="#dbase"/></g><g clip-path="url(#cB)" transform="translate(11 0)"><use href="#dbase"/></g></g><g style="color:#F2F0EA"><g clip-path="url(#cT)"><use href="#dbase"/></g><g clip-path="url(#cB)" transform="translate(11 0)"><use href="#dbase"/></g></g></svg><div class="szcap">32</div></div>
+        <div><svg width="24" height="24" viewBox="0 0 100 100"><g style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"><g clip-path="url(#cT)"><use href="#dbase"/></g><g clip-path="url(#cB)" transform="translate(11 0)"><use href="#dbase"/></g></g><g style="color:#F2F0EA"><g clip-path="url(#cT)"><use href="#dbase"/></g><g clip-path="url(#cB)" transform="translate(11 0)"><use href="#dbase"/></g></g></svg><div class="szcap">24</div></div>
+        <div><svg width="16" height="16" viewBox="0 0 100 100"><g style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"><g clip-path="url(#cT)"><use href="#dbase"/></g><g clip-path="url(#cB)" transform="translate(11 0)"><use href="#dbase"/></g></g><g style="color:#F2F0EA"><g clip-path="url(#cT)"><use href="#dbase"/></g><g clip-path="url(#cB)" transform="translate(11 0)"><use href="#dbase"/></g></g></svg><div class="szcap">16</div></div>
+      </div>
+      <p class="verdict bad" style="color:#44443E"><b style="color:var(--tar)">Collapses at 24.</b> Two drifts on different axes — an 11-unit horizontal slide plus the diagonal misregistration — fight each other. Below 32 the stem reads as two stacked slabs and the D is gone.</p>
+    </div>
+    <div class="cell paper">
+      <div class="hd"><h3 style="color:var(--tar)">C · Bowl off stem</h3><span class="glabel">1A × 02</span></div>
+      <div class="stage"><svg width="330" height="330" viewBox="0 0 100 100"><g style="color:#0A0A0B" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"><use href="#dstem"/></g><g style="color:#0A0A0B"><use href="#dstem"/></g></svg></div>
+      <div class="row" style="background:var(--tar);padding:18px;gap:18px">
+        <div><svg width="64" height="64" viewBox="0 0 100 100"><g style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"><use href="#dstem"/></g><g style="color:#F2F0EA"><use href="#dstem"/></g></svg><div class="szcap">64</div></div>
+        <div><svg width="32" height="32" viewBox="0 0 100 100"><g style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"><use href="#dstem"/></g><g style="color:#F2F0EA"><use href="#dstem"/></g></svg><div class="szcap">32</div></div>
+        <div><svg width="24" height="24" viewBox="0 0 100 100"><g style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"><use href="#dstem"/></g><g style="color:#F2F0EA"><use href="#dstem"/></g></svg><div class="szcap">24</div></div>
+        <div><svg width="16" height="16" viewBox="0 0 100 100"><g style="color:#AFE304" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"><use href="#dstem"/></g><g style="color:#F2F0EA"><use href="#dstem"/></g></svg><div class="szcap">16</div></div>
+      </div>
+      <p class="verdict bad" style="color:#44443E"><b style="color:var(--tar)">Survives, stops being a D.</b> At 16 the gap between stem and bowl fills in and it reads as a solid blob; at 64 it reads as two objects, not a letter. The concept is legible only in a narrow size band.</p>
+    </div>
+  </div>
+  <p class="lede"><b style="color:var(--news)">Recommendation: A.</b> It is the only crossing where the misregistration is additive rather than competing — one drift inside the letter, one drift between the plates, both on the same diagonal. A is the mark from here on.</p>
+</section>
+
+<!-- ══ STEP 2 ══ -->
+<section class="wrap sect">
+  <div class="eye">Step 02</div><h2>Tune the offset</h2>
+  <p class="lede">Offset distance, measured along the fixed −4° drift axis. All four at 34% tint on newsprint.</p>
+  <div class="grid4">
+    <div class="gcell"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-4 50 50) translate(-3 -2.6)"/><use href="#dplate" style="color:#0A0A0B"/></svg><div class="glabel">3 units — reads as a printing fault</div></div>
+    <div class="gcell"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-4 50 50) translate(-6 -5.2)"/><use href="#dplate" style="color:#0A0A0B"/></svg><div class="glabel">6 units — reads as a drop shadow</div></div>
+    <div class="gcell pick"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-4 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg><div class="glabel" style="color:#0A0A0B"><b>9 units — deliberate</b></div></div>
+    <div class="gcell"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-4 50 50) translate(-12 -10.4)"/><use href="#dplate" style="color:#0A0A0B"/></svg><div class="glabel">12 units — reads as two marks</div></div>
+  </div>
+  <p class="lede" style="margin-top:34px"><b style="color:var(--news)">Rotation</b>, all at 9 units.</p>
+  <div class="grid4" style="grid-template-columns:repeat(3,1fr)">
+    <div class="gcell"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-1.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg><div class="glabel">−1.5° — too subtle to be a decision</div></div>
+    <div class="gcell pick"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg><div class="glabel" style="color:#0A0A0B"><b>−3.5° — reads as intent</b></div></div>
+    <div class="gcell"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-6 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg><div class="glabel">−6° — the plate looks dropped</div></div>
+  </div>
+  <p class="lede" style="margin-top:34px"><b style="color:var(--news)">Under-layer treatment</b>, all at 9 units / −3.5°, on tar.</p>
+  <div class="grid4">
+    <div class="gcell dark"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:#F2F0EA" opacity=".34" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="glabel">34% tint</div></div>
+    <div class="gcell dark pick"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="glabel" style="color:var(--v500)"><b>Solid lime</b></div></div>
+    <div class="gcell dark"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:#F5330A" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="glabel">Solid siren</div></div>
+    <div class="gcell dark"><svg width="180" height="180" viewBox="0 0 100 100"><use href="#dplate" style="color:transparent" stroke="#F2F0EA" stroke-width="1.6" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="glabel">Outline only</div></div>
+  </div>
+  <p class="lede"><b style="color:var(--news)">Locked: 9 units, −3.5°, solid Voltage under-layer on dark; 34% tint when the mark prints in one ink on paper.</b> Solid beats tint because a tint implies transparency and transparency implies shadow — the whole point is two opaque plates that disagree. Siren is held back for the one-per-page rare moment; outline-only reads as an unfinished state and is reserved for the motion in-between frames.</p>
+</section>
+
+<!-- ══ STEP 3 ══ -->
+<section class="wrap sect">
+  <div class="eye">Step 03</div><h2>Construction</h2>
+  <div class="cols c2">
+    <div class="cell paper" style="padding:0">
+      <div class="stage" style="padding:36px;position:relative">
+        <svg width="440" height="440" viewBox="0 0 100 100">
+          <g stroke="#C9C6BC" stroke-width=".4" fill="none">
+            <path d="M0 10 H100 M0 50 H100 M0 90 H100 M14 0 V100 M38 0 V100 M48 0 V100 M88 0 V100"/>
+            <circle cx="48" cy="50" r="40"/><circle cx="54" cy="58" r="22"/>
+          </g>
+          <use href="#dplate" style="color:#0A0A0B" opacity=".14"/>
+          <g stroke="#F5330A" stroke-width=".7" fill="none"><path d="M50 50 L41 42.2"/><circle cx="50" cy="50" r="1.2" fill="#F5330A"/></g>
+          <g style="color:#7C7C86" font-family="JetBrains Mono, monospace" font-size="3.2" letter-spacing=".1">
+            <text x="15.5" y="7">stem 24</text><text x="63" y="7">bowl r40</text>
+            <text x="47" y="96">counter 24 × 36</text><text x="1.5" y="48">cap 80</text>
+            <text x="27" y="40" fill="#F5330A">offset 9 @ −3.5°</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="cell">
+      <h3>Every measurement</h3>
+      <table class="tbl">
+        <tr><th>Element</th><th>Value</th><th>Why</th></tr>
+        <tr><td><b>Em square</b></td><td>100 × 100</td><td>All values below are % of mark width.</td></tr>
+        <tr><td><b>Cap height</b></td><td>80 (y 10 → 90)</td><td>Matches Schibsted Grotesk 900 cap at the same optical size.</td></tr>
+        <tr><td><b>Stem</b></td><td>24 wide (x 14 → 38)</td><td>0.30 of cap height — the wordmark's stem ratio, so mark and type read as one weight.</td></tr>
+        <tr><td><b>Bowl</b></td><td>r 40 from (48,50)</td><td>Half the cap height; the outer curve is a true circle, not a superellipse.</td></tr>
+        <tr><td><b>Counter</b></td><td>24 × 36</td><td>Counter-to-stem ratio 1:1 — the void weighs the same as the stroke.</td></tr>
+        <tr><td><b>Counter drift</b></td><td>+8 x, +10 y</td><td>13 units on the same −4° diagonal as the plate offset; the two drifts are parallel.</td></tr>
+        <tr><td><b>Plate offset</b></td><td>9 @ −3.5°</td><td>0.375 of the stem width — visibly more than a trap, visibly less than a duplicate.</td></tr>
+        <tr><td><b>Terminals</b></td><td>Square, 0 radius</td><td>No rounding anywhere in the system.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <p class="lede" style="margin-top:40px"><b style="color:var(--news)">Optical corrections.</b> Mathematical centre and visual centre are not the same object.</p>
+  <div class="cols c3">
+    <div class="cell paper"><div class="stage"><svg width="230" height="230" viewBox="0 0 100 100"><g stroke="#C9C6BC" stroke-width=".5" fill="none"><path d="M0 10 H100 M0 90 H100"/></g><use href="#dplate" style="color:#0A0A0B"/><g stroke="#F5330A" stroke-width=".6" fill="none"><path d="M0 8.6 H100 M0 91.4 H100"/></g></svg></div><p class="verdict" style="color:#44443E"><b style="color:var(--tar)">Overshoot 1.4.</b> The bowl breaks the cap and baseline by 1.4 units top and bottom, or the round side reads shorter than the flat stem.</p></div>
+    <div class="cell paper"><div class="stage"><svg width="230" height="230" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B"/><g stroke="#F5330A" stroke-width=".6"><path d="M50 0 V100"/></g><g stroke="#2417F0" stroke-width=".6"><path d="M48.2 0 V100"/></g></svg></div><p class="verdict" style="color:#44443E"><b style="color:var(--tar)">Centre shifts 1.8 left.</b> Red is geometric centre; blue is optical, because the drifted counter loads mass to the lower right. All lockups align to blue.</p></div>
+    <div class="cell paper"><div class="stage"><svg width="230" height="230" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B"/><g fill="none" stroke="#F5330A" stroke-width=".6"><path d="M14 30 H38 M14 70 H38"/><path d="M38 46 H46"/></g></svg></div><p class="verdict" style="color:#44443E"><b style="color:var(--tar)">Joint thinning 0.8.</b> Where the bowl meets the stem the stroke is cut 0.8 units on both junctions so the corner doesn't blot at small sizes or in embroidery.</p></div>
+  </div>
+
+  <p class="lede" style="margin-top:40px"><b style="color:var(--news)">Three passes.</b></p>
+  <div class="cols c3">
+    <div class="cell paper"><div class="stage"><svg width="200" height="200" viewBox="0 0 100 100"><use href="#dbase" style="color:#0A0A0B" opacity=".34" transform="translate(-6 -6)"/><use href="#dbase" style="color:#0A0A0B"/></svg></div><p class="verdict" style="color:#44443E"><b style="color:var(--tar)">Rough.</b> Centred counter, orthogonal offset, no rotation. Reads as a shadow; the drift has no direction.</p></div>
+    <div class="cell paper"><div class="stage"><svg width="200" height="200" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-4 50 50) translate(-7 -6)"/><use href="#dplate" style="color:#0A0A0B"/></svg></div><p class="verdict" style="color:#44443E"><b style="color:var(--tar)">Refined.</b> Counter drifted onto the diagonal, plate rotated −4°, offset 7. Correct idea, offset still short of decisive and the tint muddies at 24px.</p></div>
+    <div class="cell paper pick"><div class="stage"><svg width="200" height="200" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg></div><p class="verdict" style="color:#44443E"><b style="color:var(--tar)">Final.</b> Offset to 9, rotation eased to −3.5°, under-layer solid. Counter drift set parallel to the plate offset so the whole mark leans on one axis.</p></div>
+  </div>
+</section>
+
+<!-- ══ STEP 4 ══ -->
+<section class="wrap sect">
+  <div class="eye">Step 04</div><h2>Single-layer fallback</h2>
+  <p class="lede">One ink, one plate, one thread colour. The offset becomes a physical cut: the D is split on the axis perpendicular to the drift and the halves separated by 3 units — the same displacement, expressed as a gap instead of a second plate. Outer silhouette is unchanged, so it swaps in anywhere without relayout.</p>
+  <div class="grid4">
+    <div class="gcell"><svg width="200" height="200" viewBox="0 0 100 100" style="color:#0A0A0B"><use href="#dcut"/></svg><div class="glabel">Single plate · tar on newsprint</div></div>
+    <div class="gcell dark"><svg width="200" height="200" viewBox="0 0 100 100" style="color:#F2F0EA"><use href="#dcut"/></svg><div class="glabel">Reversed</div></div>
+    <div class="gcell dark"><svg width="200" height="200" viewBox="0 0 100 100" style="color:#AFE304"><use href="#dcut"/></svg><div class="glabel">Voltage · screen print</div></div>
+    <div class="gcell dark"><div style="display:flex;align-items:flex-end;gap:20px"><div><svg width="64" height="64" viewBox="0 0 100 100" style="color:#F2F0EA"><use href="#dcut"/></svg><div class="szcap">64</div></div><div><svg width="32" height="32" viewBox="0 0 100 100" style="color:#F2F0EA"><use href="#dcut"/></svg><div class="szcap">32</div></div><div><svg width="16" height="16" viewBox="0 0 100 100" style="color:#F2F0EA"><use href="#dplate"/></svg><div class="szcap">16 · plain</div></div></div><div class="glabel">Below 24 the cut closes — use the plain plate</div></div>
+  </div>
+</section>
+
+<!-- ══ STEP 5 ══ -->
+<section class="wrap sect">
+  <div class="eye">Step 05</div><h2>Stress tests</h2>
+  <div class="grid4">
+    <div class="gcell dark"><div style="width:120px;height:120px;background:var(--tar);display:grid;place-items:center;border:1px solid var(--line)"><svg width="16" height="16" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg></div><div class="glabel">16px favicon · two-layer holds</div></div>
+    <div class="gcell dark"><div style="width:130px;height:130px;background:#1D1D22;display:grid;place-items:center;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 2px,transparent 2px 4px)"><svg width="86" height="86" viewBox="0 0 100 100" style="color:#F2F0EA" style="filter:drop-shadow(0 1px 0 rgba(0,0,0,.6))"><use href="#dcut"/></svg></div><div class="glabel">Embroidered 2cm · single-layer, 3-unit gap = 1.2mm stitch break</div></div>
+    <div class="gcell dark"><div style="width:130px;height:150px;background:#141417;display:grid;place-items:center"><svg width="80" height="80" viewBox="0 0 100 100" style="color:#AFE304"><use href="#dcut"/></svg></div><div class="glabel">One-colour tee print</div></div>
+    <div class="gcell"><div style="width:130px;height:130px;background:#E6E2D8;display:grid;place-items:center;box-shadow:inset 0 0 30px rgba(0,0,0,.12)"><svg width="82" height="82" viewBox="0 0 100 100" style="color:#D9D4C7" style="filter:drop-shadow(1px 1px 0 rgba(0,0,0,.28)) drop-shadow(-1px -1px 0 rgba(255,255,255,.9))"><use href="#dcut"/></svg></div><div class="glabel">Debossed on card</div></div>
+    <div class="gcell dark"><div style="width:100%;height:150px;background:linear-gradient(180deg,#17171B,#0A0A0B);display:grid;place-items:center;position:relative;overflow:hidden"><svg width="230" height="230" viewBox="0 0 100 100" style="position:absolute"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg></div><div class="glabel">2 metres tall — offset scales linearly, no adjustment</div></div>
+    <div class="gcell dark"><div style="width:130px;height:130px;display:grid;place-items:center;background:var(--grain),conic-gradient(from 20deg,#3A3F46,#6B6257,#2E3238,#5A5F66,#3A3F46);background-blend-mode:overlay"><svg width="86" height="86" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#AFE304"/></svg></div><div class="glabel">Over busy imagery — lime over tar under-layer, no scrim needed<br><span style="color:var(--s500)">(pattern stands in for a photo)</span></div></div>
+    <div class="gcell dark"><div style="width:130px;height:130px;display:grid;place-items:center"><svg width="96" height="96" viewBox="0 0 100 100" style="transform:rotate(45deg)"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg></div><div class="glabel">At 45° — permitted; the drift axis rotates with the mark</div></div>
+    <div class="gcell"><div style="width:130px;height:130px;background:#fff;display:grid;place-items:center"><svg width="88" height="88" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg></div><div class="glabel">Pure black on white · 34% tint under-layer</div></div>
+    <div class="gcell dark"><div style="width:130px;height:130px;background:#000;display:grid;place-items:center"><svg width="88" height="88" viewBox="0 0 100 100"><use href="#dplate" style="color:#FFFFFF" opacity=".34" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#FFFFFF"/></svg></div><div class="glabel">Pure white on black</div></div>
+    <div class="gcell dark"><div style="width:130px;height:130px;background:var(--tar);display:grid;place-items:center"><svg width="88" height="88" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg></div><div class="glabel">Lime on tar · primary</div></div>
+    <div class="gcell"><div style="width:130px;height:130px;background:var(--v500);display:grid;place-items:center"><svg width="88" height="88" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".28" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg></div><div class="glabel">Tar on lime</div></div>
+  </div>
+</section>
+
+<!-- ══ STEP 6 ══ -->
+<section class="wrap sect">
+  <div class="eye">Step 06</div><h2>Wordmark</h2>
+  <p class="lede">Three display faces, each locked up with the mark at the same cap height. Anton is out of the system entirely.</p>
+  <div class="cols c3">
+    <div class="cell">
+      <div class="hd"><h3>Schibsted Grotesk 900</h3><span class="note">Neo-grotesque</span></div>
+      <div style="display:flex;flex-direction:column;gap:22px;align-items:flex-start;padding:8px 0">
+        <div><svg width="86" height="86" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div style="font-family:'Schibsted Grotesk';font-weight:900;font-size:52px;letter-spacing:-.05em;text-transform:uppercase;color:var(--news);line-height:.9;margin-top:14px">Drifted</div><span class="sub" style="font-size:9px;letter-spacing:.52em;margin-top:8px">Marketing</span></div>
+        <div style="display:flex;align-items:center;gap:14px"><svg width="46" height="46" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div><div style="font-family:'Schibsted Grotesk';font-weight:900;font-size:32px;letter-spacing:-.05em;text-transform:uppercase;color:var(--news);line-height:.86">Drifted</div><span class="sub" style="font-size:7px;letter-spacing:.42em;margin-top:4px">Marketing</span></div></div>
+        <div style="display:flex;align-items:center;gap:14px"><svg width="40" height="40" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div style="font-family:'Schibsted Grotesk';font-weight:900;font-size:30px;letter-spacing:-.05em;text-transform:uppercase;color:var(--news)">Drifted</div></div>
+      </div>
+      <p class="verdict">Stem ratio matches the mark exactly at 0.30 of cap. The most neutral face — it lets the drift do all the talking.</p>
+    </div>
+    <div class="cell">
+      <div class="hd"><h3>Big Shoulders 800</h3><span class="note">Condensed</span></div>
+      <div style="display:flex;flex-direction:column;gap:22px;align-items:flex-start;padding:8px 0">
+        <div><svg width="86" height="86" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div style="font-family:'Big Shoulders Display';font-weight:800;font-size:62px;letter-spacing:-.005em;text-transform:uppercase;color:var(--news);line-height:.9;margin-top:14px">Drifted</div><span class="sub" style="font-size:9px;letter-spacing:.52em;margin-top:8px">Marketing</span></div>
+        <div style="display:flex;align-items:center;gap:14px"><svg width="46" height="46" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div><div style="font-family:'Big Shoulders Display';font-weight:800;font-size:38px;text-transform:uppercase;color:var(--news);line-height:.86">Drifted</div><span class="sub" style="font-size:7px;letter-spacing:.42em;margin-top:4px">Marketing</span></div></div>
+        <div style="display:flex;align-items:center;gap:14px"><svg width="40" height="40" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div style="font-family:'Big Shoulders Display';font-weight:800;font-size:36px;text-transform:uppercase;color:var(--news)">Drifted</div></div>
+      </div>
+      <p class="verdict bad">Condensed stems are 0.19 of cap — half the mark's weight. The lockup reads as a logo borrowed from another brand.</p>
+    </div>
+    <div class="cell">
+      <div class="hd"><h3>Archivo Expanded 900</h3><span class="note">Wide industrial</span></div>
+      <div style="display:flex;flex-direction:column;gap:22px;align-items:flex-start;padding:8px 0">
+        <div><svg width="86" height="86" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div style="font-family:'Archivo';font-variation-settings:'wdth' 125,'wght' 900;font-size:44px;letter-spacing:-.05em;text-transform:uppercase;color:var(--news);line-height:.9;margin-top:14px">Drifted</div><span class="sub" style="font-size:9px;letter-spacing:.52em;margin-top:8px">Marketing</span></div>
+        <div style="display:flex;align-items:center;gap:14px"><svg width="46" height="46" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div><div style="font-family:'Archivo';font-variation-settings:'wdth' 125,'wght' 900;font-size:27px;letter-spacing:-.05em;text-transform:uppercase;color:var(--news);line-height:.86">Drifted</div><span class="sub" style="font-size:7px;letter-spacing:.42em;margin-top:4px">Marketing</span></div></div>
+        <div style="display:flex;align-items:center;gap:14px"><svg width="40" height="40" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div style="font-family:'Archivo';font-variation-settings:'wdth' 125,'wght' 900;font-size:25px;letter-spacing:-.05em;text-transform:uppercase;color:var(--news)">Drifted</div></div>
+      </div>
+      <p class="verdict">Closest in weight and the widest counters, which echo the mark. Strong second choice — but at horizontal-lockup sizes the word gets long enough to dwarf the D.</p>
+    </div>
+  </div>
+
+  <p class="lede" style="margin-top:40px"><b style="color:var(--news)">Recommendation: Schibsted Grotesk 900.</b> Then one more decision — does the drift extend into the word?</p>
+  <div class="cols c2">
+    <div class="cell paper"><div class="stage" style="padding:44px">
+      <div style="display:flex;align-items:center;gap:18px"><svg width="76" height="76" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg><div style="font-family:'Schibsted Grotesk';font-weight:900;font-size:56px;letter-spacing:-.05em;text-transform:uppercase;color:var(--tar);line-height:.86">Drifted</div></div>
+    </div><p class="verdict" style="color:#44443E"><b style="color:var(--tar)">Contained (recommended).</b> The mark drifts; the word is set clean and square. The contrast is the point — the brand can be precise and still be the thing that left. It also survives every reproduction method without a second plate.</p></div>
+    <div class="cell paper"><div class="stage" style="padding:44px">
+      <div style="display:flex;align-items:center;gap:18px"><svg width="76" height="76" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg>
+        <div style="position:relative;font-family:'Schibsted Grotesk';font-weight:900;font-size:56px;letter-spacing:-.05em;text-transform:uppercase;line-height:.86">
+          <span style="position:absolute;left:-6px;top:-5px;color:rgba(10,10,11,.34);transform:rotate(-3.5deg);transform-origin:left center">Drifted</span>
+          <span style="position:relative;color:var(--tar)">Drifted</span>
+        </div></div>
+    </div><p class="verdict bad" style="color:#44443E"><b style="color:var(--tar)">Extended.</b> Louder, but the word loses legibility at small sizes and the effect starts to read as a 90s photocopy filter. Permitted only as a poster/large-format variant above 200px cap height.</p></div>
+  </div>
+</section>
+
+<!-- ══ STEP 7 ══ -->
+<section class="wrap sect">
+  <div class="eye">Step 07</div><h2>Clearspace &amp; rules</h2>
+  <div class="cols c2">
+    <div class="cell paper"><div class="stage" style="padding:34px">
+      <svg width="330" height="330" viewBox="-30 -30 160 160">
+        <rect x="-24" y="-24" width="148" height="148" fill="none" stroke="#C9C6BC" stroke-width=".8" stroke-dasharray="3 3"/>
+        <rect x="-24" y="-24" width="24" height="24" fill="#AFE304" opacity=".5"/>
+        <use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/>
+        <text x="-22" y="-27" font-family="JetBrains Mono, monospace" font-size="5" fill="#7C7C86">clearspace = stem width (24 units)</text>
+      </svg></div>
+      <p class="verdict" style="color:#44443E"><b style="color:var(--tar)">Clearspace</b> equals one stem width on all four sides, measured from the over-layer, not the under-layer — the drifted plate is allowed to eat into the margin. Nothing sets inside it, including the wordmark's own secondary line.</p>
+    </div>
+    <div class="cell">
+      <h3>Minimums &amp; version rule</h3>
+      <table class="tbl">
+        <tr><th>Context</th><th>Minimum</th><th>Version</th></tr>
+        <tr><td>Screen</td><td>16px</td><td><b>Two-layer</b>, solid lime under-layer</td></tr>
+        <tr><td>Print, ≥2 inks</td><td>8mm</td><td><b>Two-layer</b>, 34% tint on light stock</td></tr>
+        <tr><td>Print, 1 ink</td><td>10mm</td><td><b>Single-layer cut</b></td></tr>
+        <tr><td>Embroidery / etch / deboss</td><td>18mm</td><td><b>Single-layer cut</b></td></tr>
+        <tr><td>Favicon / app icon ≤24px</td><td>—</td><td><b>Plain plate</b>, no cut, no offset</td></tr>
+      </table>
+      <h3 style="margin-top:12px">Never</h3>
+      <div class="cols c3" style="margin-top:6px;gap:1px">
+        <div class="cell paper" style="padding:14px;gap:8px"><svg width="100%" height="90" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="translate(9 7.8) rotate(3.5 50 50)"/><use href="#dplate" style="color:#0A0A0B"/></svg><span class="glabel bad">Drift reversed</span></div>
+        <div class="cell paper" style="padding:14px;gap:8px"><svg width="100%" height="90" viewBox="0 0 100 100"><use href="#dplate" style="color:#2417F0" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F5330A"/></svg><span class="glabel bad">Off-palette pair</span></div>
+        <div class="cell paper" style="padding:14px;gap:8px"><svg width="100%" height="90" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-3.5 50 50) translate(-9 -7.8) scale(1.14) translate(-6 -6)"/><use href="#dplate" style="color:#0A0A0B"/></svg><span class="glabel bad">Layers at different scales</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STEP 8 ══ -->
+<section class="wrap sect">
+  <div class="eye">Step 08</div><h2>Motion</h2>
+  <p class="lede">The mark arrives in register and then fails to hold it. Total 1,150ms — under the 1.2s budget. The under-layer is the only thing that moves; the over-layer never shifts, so the letter is legible from frame one.</p>
+  <div class="mot">
+    <div class="frame"><svg width="120" height="120" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" /><use href="#dplate" style="color:#F2F0EA"/></svg><div class="glabel">0ms · aligned, one solid plate</div></div>
+    <div class="frame"><svg width="120" height="120" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="glabel">0–300ms · hold, no movement</div></div>
+    <div class="frame"><svg width="120" height="120" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-1.6 50 50) translate(-4 -3.5)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="glabel">300–620ms · separation begins</div></div>
+    <div class="frame"><svg width="120" height="120" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.2 50 50) translate(-8.2 -7.1)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="glabel">620–1000ms · 92% of travel</div></div>
+    <div class="frame"><svg width="120" height="120" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><div class="glabel">1150ms · locked, dead stop</div></div>
+  </div>
+  <table class="tbl">
+    <tr><th>Phase</th><th>Time</th><th>Easing</th><th>Property</th></tr>
+    <tr><td><b>Hold</b></td><td>0 → 300ms</td><td>—</td><td>Both plates aligned. Nothing animates; this beat is what makes the drift read as departure rather than assembly.</td></tr>
+    <tr><td><b>Drift</b></td><td>300 → 1150ms (850ms)</td><td><b>cubic-bezier(.16, 1, .3, 1)</b></td><td>Under-layer translate 0,0 → −9,−7.8 and rotate 0 → −3.5°, on one timing function so position and rotation land together.</td></tr>
+    <tr><td><b>Stop</b></td><td>1150ms</td><td>—</td><td>No overshoot, no settle, no bounce. The plate stops exactly where the spec says it stops.</td></tr>
+    <tr><td><b>Hover / reverse</b></td><td>220ms</td><td><b>cubic-bezier(.2, .9, .1, 1)</b></td><td>Layers snap back into register — fast, so it reads as a correction. On mouse-out they drift back out over 420ms with the same expo curve.</td></tr>
+  </table>
+  <div class="playbar"><button class="btn" id="replay">Replay ▸</button><span class="note">and hover the mark below for the reverse</span></div>
+  <div id="playstage"><div class="hoverdemo" id="demo"><svg width="220" height="220" viewBox="0 0 100 100"><g class="under" style="transform:translate(-9px,-8px) rotate(-3.5deg);transform-origin:50% 50%"><use href="#dplate" style="color:#AFE304"/></g><use href="#dplate" style="color:#F2F0EA"/></svg></div></div>
+</section>
+
+<!-- ══ STEP 9 ══ -->
+<section class="wrap sect">
+  <div class="eye">Step 09</div><h2>In the world</h2>
+  <div class="app">
+    <div class="appcell"><span class="note">Website header</span>
+      <div class="mock grain" style="height:150px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:10px"><svg width="30" height="30" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg><span style="font-family:'Schibsted Grotesk';font-weight:900;font-size:17px;letter-spacing:-.05em;text-transform:uppercase;color:var(--news)">Drifted</span></div>
+          <div style="display:flex;gap:16px" class="note">Work · Services · Studio</div>
+        </div>
+        <div style="padding:18px 20px"><div style="font-family:'Schibsted Grotesk';font-weight:900;font-size:34px;line-height:.86;letter-spacing:-.05em;text-transform:uppercase;color:var(--news)">Look bigger<br>than you are</div></div>
+      </div>
+    </div>
+    <div class="appcell"><span class="note">Instagram avatar</span>
+      <div style="display:flex;gap:18px;align-items:center;justify-content:center;padding:20px 0">
+        <div style="width:110px;height:110px;border-radius:50%;background:var(--v500);display:grid;place-items:center"><svg width="66" height="66" viewBox="0 0 100 100"><use href="#dplate" style="color:#0A0A0B" opacity=".28" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg></div>
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--tar-3);display:grid;place-items:center"><svg width="34" height="34" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg></div>
+      </div>
+    </div>
+    <div class="appcell"><span class="note">Tee · one-colour print</span>
+      <div class="mock" style="height:170px;background:#131316;display:grid;place-items:center"><svg width="92" height="92" viewBox="0 0 100 100" style="color:#AFE304"><use href="#dcut"/></svg></div>
+    </div>
+    <div class="appcell"><span class="note">Deck cover 16:9</span>
+      <div class="mock grain" style="aspect-ratio:16/9;background:var(--v500);position:relative">
+        <svg width="74" height="74" viewBox="0 0 100 100" style="position:absolute;top:18px;left:20px"><use href="#dplate" style="color:#F2F0EA" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg>
+        <div style="position:absolute;left:20px;bottom:18px;font-family:'Schibsted Grotesk';font-weight:900;font-size:32px;line-height:.84;letter-spacing:-.05em;text-transform:uppercase;color:var(--tar)">Q4 growth<br>plan</div>
+      </div>
+    </div>
+    <div class="appcell"><span class="note">Business card 3.5 × 2</span>
+      <div class="mock" style="aspect-ratio:3.5/2;background:var(--news);position:relative">
+        <svg width="52" height="52" viewBox="0 0 100 100" style="position:absolute;top:16px;left:18px"><use href="#dplate" style="color:#0A0A0B" opacity=".34" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#0A0A0B"/></svg>
+        <div style="position:absolute;left:18px;bottom:16px"><div style="font-family:'Schibsted Grotesk';font-weight:900;font-size:15px;letter-spacing:-.03em;text-transform:uppercase;color:var(--tar)">Marcus Vale</div><div class="note" style="color:#6A6A63;margin-top:4px">Founder · marcus@drifted.co</div></div>
+      </div>
+    </div>
+    <div class="appcell"><span class="note">Phone home screen</span>
+      <div class="mock" style="height:190px;background:linear-gradient(160deg,#1A1A20,#0A0A0B);display:grid;place-items:center">
+        <div style="display:grid;grid-template-columns:repeat(3,44px);gap:14px">
+          <div style="width:44px;height:44px;border-radius:10px;background:#2A2A31"></div>
+          <div style="width:44px;height:44px;border-radius:10px;background:var(--tar);display:grid;place-items:center;box-shadow:0 0 0 1px rgba(255,255,255,.1)"><svg width="30" height="30" viewBox="0 0 100 100"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg></div>
+          <div style="width:44px;height:44px;border-radius:10px;background:#2A2A31"></div>
+          <div style="width:44px;height:44px;border-radius:10px;background:#2A2A31"></div>
+          <div style="width:44px;height:44px;border-radius:10px;background:#2A2A31"></div>
+          <div style="width:44px;height:44px;border-radius:10px;background:#2A2A31"></div>
+        </div>
+      </div>
+    </div>
+    <div class="appcell"><span class="note">Case-study card</span>
+      <div class="mock grain" style="height:210px">
+        <div style="height:110px;background:linear-gradient(120deg,var(--v500) 0 44%,var(--tar-3) 44%);position:relative"><svg width="46" height="46" viewBox="0 0 100 100" style="position:absolute;right:16px;bottom:14px"><use href="#dplate" style="color:#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#dplate" style="color:#F2F0EA"/></svg></div>
+        <div style="padding:16px 18px"><div style="font-family:'Schibsted Grotesk';font-weight:900;font-size:22px;letter-spacing:-.03em;text-transform:uppercase;color:var(--news)">Halcyon Labs</div><div class="note" style="margin-top:8px">Paid social · creative</div><div style="margin-top:12px;font-family:'Schibsted Grotesk';font-weight:900;font-size:14px;color:var(--v500);text-transform:uppercase">↗ 5.2× ROAS in 90 days</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="foot"><span class="note">Drifted · mark specification v1</span><span class="note">Offset 9 @ −3.5° · Voltage #AFE304 · Tar #0A0A0B · Newsprint #F2F0EA</span></div></div>
+
+<script>
+var demo=document.getElementById('demo'),btn=document.getElementById('replay');
+function play(){demo.classList.remove('anim');void demo.offsetWidth;demo.classList.add('anim');}
+btn.addEventListener('click',play);play();
+</script>
+</body></html>

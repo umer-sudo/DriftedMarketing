@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Drifted — Work index &amp; case study</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{margin:0;background:var(--tar);color:var(--text-body);overflow-x:hidden}
+.page{max-width:1600px;margin:0 auto;border-inline:1px solid var(--border-subtle)}
+.wrap{padding-inline:clamp(20px,5vw,80px)}
+.disp{font-family:var(--font-display);font-weight:900;text-transform:uppercase;color:var(--text-primary);letter-spacing:-.045em;line-height:.88;margin:0}
+.eye{font:500 11px/1 var(--font-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--voltage-500)}
+.eye.mut{color:var(--text-muted)}
+.body{font:400 17px/1.55 var(--font-body);color:var(--text-body)}
+.small{font:400 15px/1.6 var(--font-body);color:var(--text-muted)}
+.grainy{position:relative}
+.grainy:after{content:"";position:absolute;inset:0;background-image:var(--grain);opacity:.08;mix-blend-mode:overlay;pointer-events:none}
+.sect{padding-block:clamp(56px,7vw,108px);border-top:1px solid var(--border-subtle)}
+.anno{background:#08080A;border-block:1px solid var(--border-subtle);padding:15px clamp(20px,5vw,80px);display:grid;grid-template-columns:132px 1fr;gap:22px}
+.anno b{font:500 10px/1.6 var(--font-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--voltage-500)}
+.anno div{font:400 12px/1.75 var(--font-mono);color:var(--ink-300)}
+.anno div s{color:var(--newsprint);text-decoration:none}
+.pagehd{background:var(--tar-2);padding:22px clamp(20px,5vw,80px);display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;border-block:1px solid var(--border-subtle)}
+.pagehd h2{font-family:var(--font-display);font-weight:900;font-size:clamp(22px,2.4vw,34px);letter-spacing:-.035em;text-transform:uppercase;color:var(--text-primary);margin:0}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px clamp(20px,5vw,80px);border-bottom:1px solid var(--border-subtle)}
+.navlinks{display:flex;gap:24px;font:500 11px/1 var(--font-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted)}
+.wm{font-family:var(--font-display);font-weight:900;letter-spacing:-.05em;text-transform:uppercase;color:var(--newsprint);line-height:.86}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 20px;font:500 11.5px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;border:1px solid transparent;cursor:pointer;transition:var(--transition-control);background:var(--voltage-500);color:var(--tar)}
+.btn:hover{transform:translateY(-2px)}
+.btn.sec{background:transparent;color:var(--newsprint);border-color:var(--border-strong)}
+.cta{position:relative;display:inline-block}
+.cta .plate{position:absolute;inset:0;background:var(--siren-500);transition:transform var(--dur-fast) var(--ease-hit)}
+.cta:hover .plate{transform:translate(-9px,-8px) rotate(-3.5deg)}
+.cta .face{position:relative;display:inline-flex;align-items:center;gap:14px;background:var(--voltage-500);color:var(--tar);padding:21px 32px;font:500 12.5px/1 var(--font-mono);letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+.tag{display:inline-flex;font:400 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;border:1px solid var(--border-strong);color:var(--text-body)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.filt{font:500 11px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;padding:11px 15px;border:1px solid var(--border-strong);color:var(--text-muted);background:transparent;cursor:pointer;transition:var(--transition-control)}
+.filt:hover{color:var(--newsprint);border-color:var(--newsprint)}
+.filt.on{background:var(--voltage-500);border-color:var(--voltage-500);color:var(--tar)}
+.idx{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;background:var(--border-subtle);margin-top:34px}
+.item{background:var(--tar);cursor:pointer;position:relative;overflow:hidden;grid-column:span 3}
+.item.wide{grid-column:span 4}.item.narrow{grid-column:span 2}
+.item .shot{position:relative;overflow:hidden;height:340px}
+.item.narrow .shot{height:260px}
+.item .img{position:absolute;inset:0;transition:transform var(--dur-slow) var(--ease-expo)}
+.item:hover .img{transform:scale(1.05)}
+.item .veil{position:absolute;inset:0;background:rgba(10,10,11,.42);opacity:0;transition:opacity var(--dur-fast) var(--ease-hit)}
+.item:hover .veil{opacity:1}
+.item .go{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);opacity:0;background:var(--voltage-500);color:var(--tar);padding:14px 20px;font:500 11px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;transition:var(--transition-control)}
+.item:hover .go{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.item .meta{padding:20px clamp(16px,2vw,26px) 28px;display:flex;justify-content:space-between;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.item .res{font-family:var(--font-display);font-weight:900;font-size:16px;text-transform:uppercase;color:var(--voltage-500);white-space:nowrap}
+.item .res.craft{color:var(--text-muted)}
+.hidden{display:none}
+.chero{position:relative;height:520px;overflow:hidden;display:flex;align-items:flex-end}
+.chero .bg{position:absolute;inset:0}
+.chero .scrim{position:absolute;inset:0;background:var(--scrim-bottom)}
+.metabar{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border-subtle);border-block:1px solid var(--border-subtle)}
+.metabar>div{background:var(--tar);padding:20px clamp(16px,2vw,28px)}
+.metabar b{display:block;font-family:var(--font-display);font-weight:900;font-size:17px;letter-spacing:-.02em;text-transform:uppercase;color:var(--text-primary);margin-top:9px}
+.phase{display:grid;grid-template-columns:88px 1fr;gap:26px;padding:34px 0;border-top:1px solid var(--border-subtle)}
+.phaseno{font-family:var(--font-display);font-weight:900;font-size:42px;line-height:.8;letter-spacing:-.05em;color:var(--tar-4)}
+.shotbox{height:280px;background:linear-gradient(126deg,#26262D,#101013);display:grid;place-items:center;margin-top:22px;position:relative;overflow:hidden}
+.bignum{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border-subtle)}
+.bignum>div{background:var(--tar);padding:34px 26px 38px}
+.bignum .n{font-family:var(--font-display);font-weight:900;font-size:clamp(48px,7vw,104px);line-height:.84;letter-spacing:-.05em;color:var(--text-primary)}
+.bignum .n em{font-style:normal;color:var(--voltage-500)}
+.quote{font-family:var(--font-display);font-weight:900;font-size:clamp(26px,3.6vw,58px);line-height:1.02;letter-spacing:-.04em;text-transform:uppercase;color:var(--text-primary);margin:0}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:150px;gap:2px}
+.gal div{background:var(--tar-3);transition:var(--transition-control)}
+.gal div:hover{background:var(--tar-4)}
+.next{display:flex;justify-content:space-between;align-items:center;gap:26px;flex-wrap:wrap;padding-block:clamp(44px,6vw,84px);border-top:1px solid var(--border-subtle);cursor:pointer}
+.next:hover .nexttitle{color:var(--voltage-500)}
+.nexttitle{font-family:var(--font-display);font-weight:900;font-size:clamp(32px,5vw,84px);letter-spacing:-.05em;text-transform:uppercase;color:var(--text-primary);transition:color var(--dur-fast) var(--ease-hit);line-height:.88;margin:0}
+@media(max-width:1100px){.idx{grid-template-columns:1fr}.item,.item.wide,.item.narrow{grid-column:span 1}.metabar,.bignum,.gal{grid-template-columns:1fr 1fr}.phase{grid-template-columns:1fr}}
+</style></head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="plate"><path fill-rule="evenodd" d="M14 10 H48 C74 10 88 26 88 50 C88 74 74 90 48 90 H14 Z M46 40 H54 C64 40 70 47 70 58 C70 69 64 76 54 76 H46 Z"/></g>
+</defs></svg>
+
+<div class="page">
+<div class="pagehd"><h2>Stage 5 — Work index &amp; case study template</h2><span class="eye mut">A · gallery index &nbsp;·&nbsp; B · numbers case &nbsp;·&nbsp; C · craft case</span></div>
+
+<div class="nav"><span style="display:flex;align-items:center;gap:11px"><svg width="28" height="28" viewBox="0 0 100 100"><use href="#plate" fill="#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#plate" fill="#F2F0EA"/></svg><span class="wm" style="font-size:17px">Drifted</span></span><span class="navlinks"><span style="color:var(--voltage-500)">Work</span><span>Services</span><span>Studio</span><span>Journal</span></span><span class="btn" style="padding:10px 16px">Book a call</span></div>
+
+<section class="wrap" style="padding-block:clamp(46px,6vw,90px)">
+  <div class="eye">Selected work</div>
+  <h1 class="disp" style="font-size:clamp(48px,9vw,148px);margin-top:20px">Work,<br>not decks.</h1>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:26px;flex-wrap:wrap;margin-top:34px">
+    <p class="body" style="max-width:48ch">Three clients. Everything below shipped or ships this year. Some have a figure attached, some are still measuring — we show which is which.</p>
+    <span class="eye mut" id="count">Showing 6 of 6</span>
+  </div>
+  <div class="filters" style="margin-top:32px">
+    <button class="filt on" data-f="all">All work</button>
+    <button class="filt" data-f="performance">Performance</button>
+    <button class="filt" data-f="creators">Creators</button>
+    <button class="filt" data-f="product">AI product</button>
+    <button class="filt" data-f="brand">Web &amp; brand</button>
+  </div>
+</section>
+
+<div class="wrap"><div class="idx" id="grid">
+  <div class="item wide" data-cat="performance">
+    <div class="shot"><div class="img grainy" style="background:linear-gradient(107deg,var(--voltage-500) 0 46%,var(--tar-3) 46%)"></div><div class="veil"></div><div class="go">View case ↗</div></div>
+    <div class="meta"><div><h3 class="disp" style="font-size:clamp(24px,2.6vw,38px)">The Gallery</h3><div style="display:flex;gap:8px;margin-top:12px"><span class="tag">Performance media</span><span class="tag">DM-first</span></div></div><div class="res">5.2–6× ROAS, every campaign</div></div>
+  </div>
+  <div class="item narrow" data-cat="product">
+    <div class="shot"><div class="img" style="background:var(--klein-500)"></div><div style="position:absolute;inset:0;background-image:linear-gradient(rgba(242,240,234,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(242,240,234,.14) 1px,transparent 1px);background-size:32px 32px"></div><div class="veil"></div><div class="go">View case ↗</div></div>
+    <div class="meta"><div><h3 class="disp" style="font-size:24px">Inventory Watch</h3><div style="display:flex;gap:8px;margin-top:12px"><span class="tag">AI product</span></div></div><div class="res">21 dealer sites, watched live</div></div>
+  </div>
+  <div class="item narrow" data-cat="creators">
+    <div class="shot"><div class="img" style="background:linear-gradient(90deg,#3A3B40,#8C8F98 22%,#4A4C52 36%,#B9BCC4 54%,#55575E 68%,#33343A);opacity:.62"></div><div style="position:absolute;left:20px;bottom:16px;font-family:var(--font-display);font-weight:900;font-size:44px;letter-spacing:-.05em;color:rgba(10,10,11,.55);mix-blend-mode:multiply">115K</div><div class="veil"></div><div class="go">View case ↗</div></div>
+    <div class="meta"><div><h3 class="disp" style="font-size:24px">Noted.</h3><div style="display:flex;gap:8px;margin-top:12px"><span class="tag">Creator growth</span></div></div><div class="res">3K new followers a month</div></div>
+  </div>
+  <div class="item wide" data-cat="product">
+    <div class="shot"><div class="img grainy" style="background:linear-gradient(200deg,var(--siren-500) 0 40%,var(--tar-2) 40%)"></div><div class="veil"></div><div class="go">View case ↗</div></div>
+    <div class="meta"><div><h3 class="disp" style="font-size:clamp(24px,2.6vw,38px)">Frank Zoller Authentic History</h3><div style="display:flex;gap:8px;margin-top:12px"><span class="tag">AI product</span><span class="tag">Live Aug 2026</span></div></div><div class="res">400+ hours saved per auction year</div></div>
+  </div>
+  <div class="item" data-cat="performance">
+    <div class="shot"><div class="img grainy" style="background:linear-gradient(140deg,var(--tar-4),var(--tar-2) 60%)"></div><div style="position:absolute;right:22px;bottom:20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 34% 26%,#fff 0 3%,var(--voltage-300) 9%,var(--voltage-500) 34%,var(--voltage-700) 76%)"></div><div class="veil"></div><div class="go">View case ↗</div></div>
+    <div class="meta"><div><h3 class="disp" style="font-size:28px">Multi-brand social</h3><div style="display:flex;gap:8px;margin-top:12px"><span class="tag">Strategy</span><span class="tag">Production</span></div></div><div class="res craft">Four accounts, run direct</div></div>
+  </div>
+  <div class="item" data-cat="brand">
+    <div class="shot"><div class="img" style="background:var(--newsprint)"></div><div style="position:absolute;inset:0;display:grid;place-items:center"><span style="font-family:var(--font-display);font-weight:900;font-size:64px;letter-spacing:-.05em;color:var(--tar);text-transform:uppercase">Seyr</span></div><div class="veil"></div><div class="go">Visit seyr.shop ↗</div></div>
+    <div class="meta"><div><h3 class="disp" style="font-size:28px">Seyr</h3><div style="display:flex;gap:8px;margin-top:12px"><span class="tag">Web build</span><span class="tag">Live</span></div></div><div class="res craft">Built to convert, not to win awards</div></div>
+  </div>
+</div></div>
+<div class="wrap" style="padding-top:34px"><p class="small" style="max-width:78ch;color:var(--text-muted)">Earlier work led while Creative Strategist at ForjWell: BamBamNYC, Better With A Cup Of Coffee, Mystify.eer, LAFO40, Lipanda Foundation, Feature8, The Leaf.</p></div>
+
+<div class="anno"><b>A · Work index</b><div><s>Layout</s> Six-column bed with mixed spans (4/2/2/4/3/3) so the grid reads as an edit, not a feed. Order is curated, never chronological. · <s>Filter</s> Buttons are Tags at control scale; filtering re-flows with a 160ms cut on the outgoing items and a 220ms wipe on the incoming — no fade, no layout library. Count updates live. · <s>Hover</s> Image scales 1.05 / 520ms ease-expo, a 42% Tar veil fades in at 160ms, and the Voltage "View case" pill scales from .9 to 1 — the whole tile is the target. · <s>Craft cases</s> Projects without a metric use the same tile; the result slot carries scope in muted type instead of a Voltage figure, so nothing looks like a missing field.</div></div>
+
+<div class="pagehd"><h2>B — Case study template · numbers-led</h2><span class="eye mut">Frank Zoller Authentic History</span></div>
+
+<section class="chero grainy">
+  <div class="bg" style="background:linear-gradient(107deg,var(--voltage-500) 0 44%,var(--tar-3) 44%)"></div>
+  <div class="scrim"></div>
+  <div class="wrap" style="position:relative;padding-bottom:44px;width:100%">
+    <div class="eye">Frank Zoller Authentic History · AI product</div>
+    <h1 class="disp" style="font-size:clamp(40px,7.2vw,124px);margin-top:18px">1,250 lots.<br>Typed by hand.</h1>
+    <p class="body" style="max-width:52ch;margin-top:22px;font-size:19px">Now filled from photographs — 400+ hours a year off the client's desk.</p>
+  </div>
+</section>
+<div class="metabar">
+  <div><span class="eye mut">Client</span><b>Valkyrie LLC</b></div>
+  <div><span class="eye mut">Service</span><b>AI product · Hosted PWA</b></div>
+  <div><span class="eye mut">Timeline</span><b>2026, live 16 August</b></div>
+  <div><span class="eye mut">Outcome</span><b style="color:var(--voltage-500)">400+ hours saved</b></div>
+</div>
+
+<section class="wrap sect" style="border-top:0">
+  <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:56px">
+    <div><div class="eye">The challenge</div><h2 class="disp" style="font-size:clamp(26px,3.2vw,46px);margin-top:14px">Weeks of typing<br>before a single<br>item went live.</h2></div>
+    <div><p class="body">Every auction meant 1,250 lots entered by hand. Photograph, edit, renumber, then type a title, a description, a start price and an estimate range — one lot at a time, to lot 1,250.</p><p class="body" style="margin-top:16px">The work was not hard. It was long, and it happened before anything could be sold, on every single auction.</p></div>
+  </div>
+</section>
+
+<section class="wrap sect">
+  <div class="eye">What we did</div><h2 class="disp" style="font-size:clamp(28px,3.6vw,54px);margin-top:14px">Four moves,<br>one platform.</h2>
+  <div style="margin-top:30px">
+    <div class="phase"><div class="phaseno">01</div><div><h3 class="disp" style="font-size:24px">Ingestion</h3><p class="body" style="margin-top:12px;max-width:60ch">32,000 past items — titles, descriptions, estimates and realized prices — ingested into a hosted backend as the model's reference set.</p><div class="shotbox grainy"><span class="eye mut">Corpus ingestion · 1600 × 900</span></div></div></div>
+    <div class="phase"><div class="phaseno">02</div><div><h3 class="disp" style="font-size:24px">The engine</h3><p class="body" style="margin-top:12px;max-width:60ch">Photographs in, complete listing rows out. Repeat items pull their own history; new items get identified and described from the image.</p><div class="shotbox"><span class="eye mut">Lister screens · 1600 × 900</span></div></div></div>
+    <div class="phase"><div class="phaseno">03</div><div><h3 class="disp" style="font-size:24px">Review triage</h3><p class="body" style="margin-top:12px;max-width:60ch">Confidence-scored output. Only uncertain items are flagged for a human; everything else passes straight through.</p><div class="shotbox grainy"><span class="eye mut">Triage queue · 1600 × 900</span></div></div></div>
+    <div class="phase"><div class="phaseno">04</div><div><h3 class="disp" style="font-size:24px">The handoff</h3><p class="body" style="margin-top:12px;max-width:60ch">The filled template uploads straight to LiveAuctioneers, and existing automation cross-posts to BidSpirit and the direct bidding site.</p><div class="shotbox"><span class="eye mut">Upload template · 1600 × 900</span></div></div></div>
+  </div>
+</section>
+
+<section class="wrap sect">
+  <div class="eye">What we found</div>
+  <p class="body" style="max-width:62ch;margin-top:14px">Realized prices sat consistently below estimates across the historical set — systematic estimate inflation, invisible until 32,000 records were in one place. Nobody had asked the question because nobody could.</p>
+</section>
+
+<section class="sect" style="padding-bottom:0">
+  <div class="wrap"><div class="eye">Results</div><h2 class="disp" style="font-size:clamp(28px,3.6vw,54px);margin-top:14px">The numbers.</h2>
+    <p class="body" style="max-width:60ch;margin-top:16px">The hours figure is the client's own measurement of what the platform takes off their desk each year. Lots processed lands after the first live auction on 16 August 2026 and is not being estimated in advance.</p></div>
+  <div class="bignum" style="margin-top:34px">
+    <div><div class="n" style="color:var(--voltage-500)"><em>400+</em></div><div class="eye mut" style="margin-top:14px">Hours saved per year</div></div>
+    <div><div class="n">32,000</div><div class="eye mut" style="margin-top:14px">Items in the reference corpus</div></div>
+    <div><div class="n">1,250</div><div class="eye mut" style="margin-top:14px">Lots per auction, previously by hand</div></div>
+    <div><div class="n">21</div><div class="eye mut" style="margin-top:14px">Dealer sites watched by Inventory Watch</div></div>
+    <div><div class="n" style="color:var(--ink-400);font-size:clamp(26px,3vw,44px)">[Lots processed<br>pending]</div><div class="eye mut" style="margin-top:14px">First live auction, 16 Aug</div></div>
+    <div><div class="n">3</div><div class="eye mut" style="margin-top:14px">Builds for this client, and counting</div></div>
+  </div>
+</section>
+
+<section class="wrap sect">
+  <div style="border:1px dashed var(--border-default);padding:clamp(26px,4vw,52px)"><div class="eye mut">Section held</div><p class="disp" style="font-size:clamp(24px,3.2vw,48px);margin-top:16px;color:var(--ink-300)">[Client quote pending]</p><p class="small" style="margin-top:16px;max-width:52ch">No quote ships until the client gives one. A case study with an invented testimonial fails the first time someone checks.</p></div>
+</section>
+
+<section class="wrap sect">
+  <div class="eye">Gallery</div>
+  <div class="gal" style="margin-top:26px">
+    <div style="grid-column:span 2;grid-row:span 2"></div><div></div><div></div><div></div><div></div><div style="grid-column:span 2"></div><div style="grid-column:span 2"></div>
+  </div>
+</section>
+
+<div class="wrap"><div class="next">
+  <div><span class="eye mut">Next project</span><h2 class="nexttitle" style="margin-top:12px">Noted.</h2><div style="display:flex;gap:8px;margin-top:14px"><span class="tag">Creator growth</span><span class="tag">Monetization</span></div></div>
+  <span class="cta"><span class="plate"></span><span class="face">Next case ↗</span></span>
+</div></div>
+
+<div class="anno"><b>B · Numbers case</b><div><s>Hero</s> Full-bleed, 520px, the <s>result</s> is the headline — not the client name, which lives in the eyebrow. Bottom scrim so type never fights the image. Entrance: headline slams line by line, image scales 1.06 → 1 over 900ms ease-expo. · <s>Metadata bar</s> Four fixed columns — client, service, timeline, outcome. Outcome is the only Voltage value on the bar. · <s>Phases</s> Numbered, one image each, staggered slam at 70% viewport; images parallax −0.05×. · <s>Results</s> Six cells at display scale; figures count up over 520ms ease-expo on entry, the primary metric in Voltage and the rest in Newsprint so one number leads. · <s>Next</s> Whole row is the target; title turns Voltage, the CTA plate slips.</div></div>
+
+<div class="pagehd"><h2>C — Same template, no metrics</h2><span class="eye mut">Ehsaan · marketplace, brand &amp; launch</span></div>
+
+<section class="chero grainy" style="height:520px">
+  <div class="bg" style="background:var(--newsprint)"></div>
+  <div style="position:absolute;inset:0;display:grid;place-items:center"><span style="font-family:var(--font-display);font-weight:900;font-size:clamp(80px,16vw,260px);letter-spacing:-.06em;color:var(--tar);text-transform:uppercase;line-height:.8">Ehsaan</span></div>
+  <div class="scrim" style="background:linear-gradient(to top,rgba(242,240,234,.96),rgba(242,240,234,0) 60%)"></div>
+  <div class="wrap" style="position:relative;padding-bottom:44px;width:100%">
+    <div class="eye" style="color:var(--siren-500)">Ehsaan · AI product, brand &amp; launch</div>
+    <h1 class="disp" style="font-size:clamp(36px,6.4vw,110px);margin-top:18px;color:var(--tar)">Pakistan had no<br>thrift marketplace.<br>Now it has one.</h1>
+  </div>
+</section>
+<div class="metabar">
+  <div><span class="eye mut">Client</span><b>Suleman Farooqui</b></div>
+  <div><span class="eye mut">Service</span><b>AI product · Brand · Launch</b></div>
+  <div><span class="eye mut">Timeline</span><b>2026, in production</b></div>
+  <div><span class="eye mut">Scope</span><b>Marketplace PWA, identity, social, launch assets</b></div>
+</div>
+
+<section class="wrap sect" style="border-top:0">
+  <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:56px">
+    <div><div class="eye">The challenge</div><h2 class="disp" style="font-size:clamp(26px,3.2vw,46px);margin-top:14px">A whole category<br>that only existed<br>in Instagram DMs.</h2></div>
+    <div><p class="body">Second-hand clothing in Pakistan moved through comment sections, WhatsApp groups and DM negotiations. There was no C2C marketplace — no listings, no search, no trust layer, nothing that looked like it was built for the people actually using it.</p><p class="body" style="margin-top:16px">There is no ROAS figure on this one yet. It is pre-launch, and what exists is a marketplace, a brand and a launch system where none of the three existed before.</p></div>
+  </div>
+</section>
+
+<section class="wrap sect">
+  <div class="eye">What we did</div><h2 class="disp" style="font-size:clamp(28px,3.6vw,54px);margin-top:14px">Three phases,<br>one product.</h2>
+  <div style="margin-top:30px">
+    <div class="phase"><div class="phaseno">01</div><div><h3 class="disp" style="font-size:24px">Twenty-three prompts to first build</h3><p class="body" style="margin-top:12px;max-width:60ch">React, Vite, TypeScript and Supabase, built through Lovable in twenty-three prompts, then moved to Claude Code against a nineteen-section knowledge base so the product could keep growing without losing its own rules.</p><div class="shotbox" style="background:var(--newsprint)"><span class="eye mut">Marketplace screens · 1600 × 900</span></div></div></div>
+    <div class="phase"><div class="phaseno">02</div><div><h3 class="disp" style="font-size:24px">A Gen-Z-native brand, not a marketplace template</h3><p class="body" style="margin-top:12px;max-width:60ch">Identity, type system and product design built for the audience that already trades this way — fast, visual, and unembarrassed about second-hand.</p><div class="shotbox grainy"><span class="eye mut">Identity system · 1600 × 900</span></div></div></div>
+    <div class="phase"><div class="phaseno">03</div><div><h3 class="disp" style="font-size:24px">The launch system</h3><p class="body" style="margin-top:12px;max-width:60ch">Social content, video and launch assets produced alongside the build, so the product and the campaign shipped as one thing rather than a handover.</p><div class="shotbox"><span class="eye mut">Launch assets · 1600 × 900</span></div></div></div>
+  </div>
+</section>
+
+<section class="sect" style="padding-bottom:0">
+  <div class="wrap"><div class="eye">What shipped</div><h2 class="disp" style="font-size:clamp(28px,3.6vw,54px);margin-top:14px">The work.</h2>
+    <p class="body" style="max-width:60ch;margin-top:18px">No launch metrics here yet — this one is measured in what exists now that did not before. Signups, listings and GMV land after launch, and they go on this page when they do.</p></div>
+  <div class="bignum" style="margin-top:34px;grid-template-columns:repeat(4,1fr)">
+    <div style="padding:28px 24px 32px"><div class="n" style="font-size:clamp(34px,4.4vw,64px)">23</div><div class="eye mut" style="margin-top:12px">Prompts to first build</div></div>
+    <div style="padding:28px 24px 32px"><div class="n" style="font-size:clamp(34px,4.4vw,64px)">19</div><div class="eye mut" style="margin-top:12px">Sections in the knowledge base</div></div>
+    <div style="padding:28px 24px 32px"><div class="n" style="font-size:clamp(34px,4.4vw,64px)">4</div><div class="eye mut" style="margin-top:12px">Disciplines in one contract</div></div>
+    <div style="padding:28px 24px 32px"><div class="n" style="font-size:clamp(26px,3vw,42px);color:var(--ink-400)"><em>[Launch metrics<br>pending]</em></div><div class="eye mut" style="margin-top:12px">Signups, listings, GMV</div></div>
+  </div>
+</section>
+
+<section class="wrap sect">
+  <div class="eye">The system</div>
+  <div class="gal" style="margin-top:26px;grid-auto-rows:190px">
+    <div style="background:var(--newsprint)"></div><div style="background:var(--siren-500)"></div><div style="background:var(--tar-3)"></div><div style="background:var(--klein-500)"></div>
+    <div style="grid-column:span 2;background:var(--tar-4)"></div><div style="background:var(--newsprint)"></div><div style="background:var(--voltage-500)"></div>
+    <div style="background:var(--tar-3)"></div><div style="grid-column:span 2;background:var(--newsprint)"></div><div style="background:var(--siren-500)"></div>
+  </div>
+  <p class="small" style="margin-top:18px">Product screens, identity and launch assets. Real captures replace these placeholders before the page goes live — a gallery of grey boxes reads worse than no gallery.</p>
+</section>
+
+<section class="wrap sect">
+  <div style="border:1px dashed var(--border-default);padding:clamp(26px,4vw,52px)"><div class="eye mut">Section held</div><p class="disp" style="font-size:clamp(24px,3.2vw,48px);margin-top:16px;color:var(--ink-300)">[Client quote pending]</p><p class="small" style="margin-top:16px;max-width:52ch">Same rule on every case: the quote goes up when the client writes one, and not before.</p></div>
+</section>
+
+<div class="wrap"><div class="next">
+  <div><span class="eye mut">Next project</span><h2 class="nexttitle" style="margin-top:12px">Inventory Watch</h2><div style="display:flex;gap:8px;margin-top:14px"><span class="tag">AI product</span><span class="tag">Monitoring</span></div></div>
+  <span class="cta"><span class="plate"></span><span class="face">Next case ↗</span></span>
+</div></div>
+
+<div class="anno" style="border-bottom:0"><b>C · Craft case</b><div><s>The problem it solves</s> Not every project has a ROAS figure, and a template that assumes one makes those projects look like failures. · <s>What changes</s> Four things, nothing else: the hero result becomes a <s>claim</s> rather than a metric; the metadata bar's fourth column switches from Outcome to Scope; Results becomes <s>What shipped</s> — counts of artefacts, with one qualitative figure ("11 months run without us") carrying the Voltage; and the gallery grows from footnote to full section, because the work is the evidence. · <s>What stays</s> Identical structure, motion and type. Read both in a row and neither should feel like the lesser template.</div></div>
+
+</div>
+
+<script>
+var btns=document.querySelectorAll('.filt'),items=document.querySelectorAll('#grid .item'),count=document.getElementById('count');
+btns.forEach(function(b){b.addEventListener('click',function(){
+  btns.forEach(function(o){o.classList.remove('on')});b.classList.add('on');
+  var f=b.dataset.f,n=0;
+  items.forEach(function(it){var show=f==='all'||it.dataset.cat===f;it.classList.toggle('hidden',!show);if(show)n++;});
+  count.textContent='Showing '+n+' of '+items.length;
+});});
+</script>
+</body></html>

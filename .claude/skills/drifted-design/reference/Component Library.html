@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Drifted — Component Library</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{margin:0;background:var(--tar);color:var(--text-body)}
+.wrap{max-width:1560px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
+.mast{padding-block:66px 42px}
+.sect{padding-block:76px;border-top:1px solid var(--border-subtle)}
+.eye{font:500 11px/1 var(--font-mono);letter-spacing:.24em;text-transform:uppercase;color:var(--voltage-500)}
+.note{font:400 10.5px/1.6 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+h1{margin:16px 0 0;font-size:clamp(52px,10.5vw,164px);line-height:.82;letter-spacing:-.05em}
+h2{margin:14px 0 0;font-size:clamp(32px,4.2vw,58px);line-height:.9;letter-spacing:-.045em}
+.lede{margin:18px 0 0;max-width:78ch;font-size:16.5px;line-height:1.6}
+.sub{margin:38px 0 18px;font:500 11px/1 var(--font-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--text-primary);padding-bottom:10px;border-bottom:1px solid var(--border-subtle)}
+.spec{margin-top:14px;font:400 11px/1.7 var(--font-mono);letter-spacing:.04em;color:var(--text-muted)}
+.spec b{color:var(--voltage-500);font-weight:400}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:22px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border-subtle);vertical-align:top}
+th{font:400 10px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+td b{color:var(--text-primary)}
+code{font-family:var(--font-mono);font-size:12px;color:var(--voltage-300)}
+.grid{display:grid;gap:2px;background:var(--border-subtle);margin-top:20px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g6{grid-template-columns:repeat(6,1fr)}
+@media(max-width:1200px){.g3,.g4,.g6{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
+.cell{background:var(--tar-2);padding:26px;display:flex;flex-direction:column;gap:16px}
+.cell.center{align-items:center;justify-content:center;text-align:center}
+.statelbl{font:400 9.5px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+.row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+
+/* ── buttons ────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:13px 20px;font:500 11.5px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;border-radius:var(--radius-1);border:1px solid transparent;cursor:pointer;transition:var(--transition-control);position:relative}
+.btn-primary{background:var(--voltage-500);color:var(--tar);border-color:var(--voltage-500)}
+.btn-primary.is-hover,.btn-primary:hover{transform:translateY(-2px);background:var(--voltage-400)}
+.btn-primary.is-active,.btn-primary:active{transform:scale(.97);background:var(--voltage-600)}
+.btn-secondary{background:transparent;color:var(--newsprint);border-color:var(--border-strong)}
+.btn-secondary.is-hover,.btn-secondary:hover{transform:translateY(-2px);border-color:var(--voltage-500);color:var(--voltage-500)}
+.btn-secondary.is-active,.btn-secondary:active{transform:scale(.97)}
+.btn-ghost{background:transparent;color:var(--newsprint)}
+.btn-ghost.is-hover,.btn-ghost:hover{background:var(--surface-hover)}
+.btn-siren{background:var(--siren-500);color:var(--tar);border-color:var(--siren-500)}
+.btn-siren.is-hover,.btn-siren:hover{transform:translateY(-2px);background:var(--siren-400)}
+.btn.is-focus,.btn:focus-visible{outline:2px solid var(--voltage-500);outline-offset:2px}
+.btn.is-disabled,.btn:disabled{opacity:.38;cursor:not-allowed;transform:none}
+.btn.is-loading{color:transparent;pointer-events:none}
+.btn.is-loading:after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--tar);border-right-color:transparent;border-radius:50%;animation:spin 620ms linear infinite}
+.btn-secondary.is-loading:after,.btn-ghost.is-loading:after{border-color:var(--newsprint);border-right-color:transparent}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-sm{padding:9px 14px;font-size:10.5px}
+.cta{position:relative;display:inline-block}
+.cta .plate{position:absolute;inset:0;background:var(--siren-500);transform:translate(0,0) rotate(0);transition:transform var(--dur-fast) var(--ease-hit)}
+.cta:hover .plate{transform:translate(-9px,-8px) rotate(-3.5deg)}
+.cta .face{position:relative;display:inline-flex;align-items:center;gap:16px;background:var(--voltage-500);color:var(--tar);padding:24px 38px;font:500 13px/1 var(--font-mono);letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+.cta:active .face{transform:scale(.985)}
+.ico{width:16px;height:16px;flex:0 0 auto;background-color:currentColor;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:contain;mask-size:contain}
+
+/* ── forms ──────────────────────────────────────────────── */
+.field{display:flex;flex-direction:column;gap:8px}
+.flabel{font:500 11px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+.ctrl{width:100%;padding:14px 16px;background:var(--surface-raised);color:var(--text-primary);font:400 16px/1.3 var(--font-body);border:1px solid var(--border-default);border-radius:var(--radius-1);outline:none;transition:var(--transition-control)}
+.ctrl::placeholder{color:var(--ink-400)}
+.ctrl.is-hover,.ctrl:hover{border-color:var(--border-strong)}
+.ctrl.is-focus,.ctrl:focus{border-color:var(--voltage-500)}
+.ctrl.is-error{border-color:var(--siren-500)}
+.ctrl.is-disabled,.ctrl:disabled{opacity:.4;cursor:not-allowed}
+textarea.ctrl{min-height:110px;resize:vertical}
+select.ctrl{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink-300) 50%),linear-gradient(135deg,var(--ink-300) 50%,transparent 50%);background-position:calc(100% - 20px) 22px,calc(100% - 14px) 22px;background-size:6px 6px;background-repeat:no-repeat}
+.hint{font:400 12px/1.4 var(--font-body);color:var(--text-muted)}
+.err{font:400 12px/1.4 var(--font-body);color:var(--siren-400);display:flex;gap:7px;align-items:center}
+.check{display:inline-flex;align-items:center;gap:12px;cursor:pointer;font:400 15px/1.4 var(--font-body);color:var(--text-body)}
+.box{width:20px;height:20px;border:1px solid var(--border-strong);border-radius:2px;display:grid;place-items:center;transition:var(--transition-control)}
+.box.on{background:var(--voltage-500);border-color:var(--voltage-500)}
+.box.on:after{content:"";width:11px;height:6px;border-left:2px solid var(--tar);border-bottom:2px solid var(--tar);transform:rotate(-45deg) translate(1px,-1px)}
+.dot{width:20px;height:20px;border:1px solid var(--border-strong);border-radius:50%;display:grid;place-items:center}
+.dot.on{border-color:var(--voltage-500)}
+.dot.on:after{content:"";width:10px;height:10px;border-radius:50%;background:var(--voltage-500)}
+.toggle{width:48px;height:26px;background:var(--surface-hover);border:1px solid var(--border-strong);border-radius:2px;position:relative;transition:var(--transition-control)}
+.toggle.on{background:var(--voltage-500);border-color:var(--voltage-500)}
+.toggle i{position:absolute;top:2px;left:2px;width:20px;height:20px;background:var(--ink-300);transition:left var(--dur-fast) var(--ease-hit),background var(--dur-fast) var(--ease-hit)}
+.toggle.on i{left:24px;background:var(--tar)}
+.drop{border:1px dashed var(--border-strong);padding:26px;text-align:center;transition:var(--transition-control)}
+.drop.is-hover{border-color:var(--voltage-500);background:rgba(175,227,4,.04)}
+
+/* ── nav ────────────────────────────────────────────────── */
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-bottom:1px solid var(--border-subtle)}
+.navbar.scrolled{padding:12px 28px;background:rgba(10,10,11,.86);backdrop-filter:var(--blur-panel)}
+.navlinks{display:flex;gap:26px;font:500 11px/1 var(--font-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted)}
+.navlinks span{position:relative;cursor:pointer;padding-bottom:5px}
+.navlinks span:hover{color:var(--newsprint)}
+.navlinks span.on{color:var(--voltage-500)}
+.navlinks span.on:after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--voltage-500)}
+.lock{display:flex;align-items:center;gap:12px}
+.wm{font-family:var(--font-display);font-weight:900;letter-spacing:-.05em;text-transform:uppercase;color:var(--newsprint);line-height:.86}
+.mobileshell{width:100%;max-width:340px;border:1px solid var(--border-default);background:var(--tar);overflow:hidden}
+.msheet{padding:22px 20px;display:flex;flex-direction:column;gap:26px;min-height:440px}
+.mlink{font-family:var(--font-display);font-weight:900;font-size:38px;line-height:.9;letter-spacing:-.045em;text-transform:uppercase;color:var(--newsprint)}
+.mlink.on{color:var(--voltage-500)}
+
+/* ── cards ──────────────────────────────────────────────── */
+.card{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-2);overflow:hidden;position:relative;transition:var(--transition-control)}
+.card.hoverable:hover{border-color:var(--voltage-500);transform:translateY(-2px)}
+.card .pad{padding:22px 24px 26px}
+.thumb{height:170px;position:relative;overflow:hidden}
+.thumb .img{position:absolute;inset:0;transition:transform var(--dur-slow) var(--ease-expo)}
+.card.hoverable:hover .thumb .img{transform:scale(1.04)}
+.grainy:after{content:"";position:absolute;inset:0;background-image:var(--grain);opacity:var(--grain-opacity);mix-blend-mode:overlay;pointer-events:none}
+.tag{display:inline-flex;font:400 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;border:1px solid var(--border-strong);color:var(--text-body);border-radius:2px}
+.badge{display:inline-flex;font:500 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;background:var(--voltage-500);color:var(--tar);border-radius:2px}
+.ctitle{font-family:var(--font-display);font-weight:900;font-size:26px;letter-spacing:-.035em;text-transform:uppercase;color:var(--text-primary);margin:0}
+.result{margin-top:14px;font-family:var(--font-display);font-weight:900;font-size:15px;text-transform:uppercase;color:var(--voltage-500)}
+.body{font:400 15px/1.6 var(--font-body);color:var(--text-muted)}
+
+/* ── content blocks ─────────────────────────────────────── */
+.quote{font-family:var(--font-display);font-weight:900;font-size:clamp(26px,3.2vw,44px);line-height:1.02;letter-spacing:-.04em;text-transform:uppercase;color:var(--text-primary)}
+.step{display:grid;grid-template-columns:76px 1fr;gap:22px;padding:26px 0;border-top:1px solid var(--border-subtle)}
+.stepno{font-family:var(--font-display);font-weight:900;font-size:44px;line-height:.8;letter-spacing:-.05em;color:var(--tar-4)}
+.stat{position:relative;display:inline-block}
+.stat .u{position:absolute;left:-9px;top:-8px;font-family:var(--font-display);font-weight:900;letter-spacing:-.05em;color:var(--voltage-500);opacity:.34;transform:rotate(-3.5deg);transform-origin:left center}
+.stat .o{position:relative;font-family:var(--font-display);font-weight:900;letter-spacing:-.05em;color:var(--text-primary)}
+.logowall{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border-subtle)}
+.logowall div{background:var(--tar);height:78px;display:grid;place-items:center;font-family:var(--font-display);font-weight:900;font-size:15px;letter-spacing:-.02em;text-transform:uppercase;color:var(--ink-400);transition:var(--transition-control)}
+.logowall div:hover{color:var(--newsprint)}
+.faq{border-top:1px solid var(--border-subtle)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;font-family:var(--font-display);font-weight:900;font-size:19px;letter-spacing:-.025em;text-transform:uppercase;color:var(--text-primary)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";font-family:var(--font-mono);font-size:20px;color:var(--voltage-500)}
+.faq[open] summary:after{content:"–"}
+.faq p{padding:0 0 24px;max-width:62ch;font:400 15px/1.65 var(--font-body);color:var(--text-body)}
+.marq{overflow:hidden;white-space:nowrap;background:var(--voltage-500);color:var(--tar)}
+.marq div{display:inline-block;padding:12px 0;animation:slide 22s linear infinite;font-family:var(--font-display);font-weight:900;font-size:17px;text-transform:uppercase}
+.marq span{padding:0 20px}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ── media ──────────────────────────────────────────────── */
+.frame{position:relative}
+.frame .plate{position:absolute;inset:0;background:var(--voltage-500);transform:rotate(-3.5deg) translate(-9px,-8px)}
+.frame .pic{position:relative;height:190px;background:linear-gradient(126deg,#2A2A31,#101013);display:grid;place-items:center;overflow:hidden}
+.vid{position:relative;height:190px;background:linear-gradient(200deg,#1D1D22,#0E0E11);display:grid;place-items:center}
+.play{width:56px;height:56px;border:1px solid var(--border-strong);display:grid;place-items:center;background:rgba(10,10,11,.4);transition:var(--transition-control)}
+.vid:hover .play{background:var(--voltage-500);border-color:var(--voltage-500);color:var(--tar)}
+.ba{position:relative;height:210px;overflow:hidden;user-select:none}
+.ba .before{position:absolute;inset:0;background:repeating-linear-gradient(45deg,#1A1A1F 0 10px,#141418 10px 20px)}
+.ba .after{position:absolute;inset:0;background:var(--diagonal-split);clip-path:inset(0 50% 0 0)}
+.ba .handle{position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--voltage-500);cursor:ew-resize}
+.ba .handle:after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;background:var(--voltage-500)}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:96px;gap:2px}
+.gallery div{background:var(--tar-3);transition:var(--transition-control)}
+.gallery div:hover{background:var(--tar-4)}
+
+/* ── feedback ───────────────────────────────────────────── */
+.toast{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;background:var(--surface-raised);border:1px solid var(--border-subtle);border-left:4px solid var(--voltage-500)}
+.toast.err{border-left-color:var(--siren-500)}
+.toast b{display:block;font-family:var(--font-display);font-weight:900;font-size:14px;letter-spacing:-.02em;text-transform:uppercase;color:var(--text-primary)}
+.skel{background:linear-gradient(90deg,var(--tar-3) 0%,var(--tar-4) 40%,var(--tar-3) 80%);background-size:280% 100%;animation:shimmer 1.4s linear infinite}
+@keyframes shimmer{to{background-position:-180% 0}}
+.pre{height:230px;display:grid;place-items:center;background:var(--tar);position:relative;overflow:hidden}
+.pre .bar{position:absolute;left:0;bottom:0;height:3px;background:var(--voltage-500);width:0}
+.pre.run .u{animation:drift 1150ms var(--ease-expo) forwards}
+.pre.run .bar{animation:load 1150ms var(--ease-cut) forwards}
+@keyframes drift{0%,26%{transform:translate(0,0) rotate(0)}100%{transform:translate(-9px,-7.8px) rotate(-3.5deg)}}
+@keyframes load{to{width:100%}}
+.btnbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px}
+.foot{padding-block:34px 80px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;border-top:1px solid var(--border-subtle)}
+</style></head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="plate"><path fill-rule="evenodd" d="M14 10 H48 C74 10 88 26 88 50 C88 74 74 90 48 90 H14 Z M46 40 H54 C64 40 70 47 70 58 C70 69 64 76 54 76 H46 Z"/></g>
+</defs></svg>
+
+<div class="wrap mast">
+  <div class="eye">Drifted Marketing · Design system · Stage 2 — components</div>
+  <h1>Components</h1>
+  <p class="lede">Every component on Tar, in every state, built from the Stage 1 tokens only. No component invents a value; where you see a number here it exists in <code>tokens/</code> and in the Tailwind config. Motion behaviour is noted under each set, and the compact spec sheet at the end is the build reference.</p>
+</div>
+
+<!-- ══ BUTTONS ══ -->
+<section class="wrap sect">
+  <div class="eye">01</div><h2>Buttons</h2>
+  <p class="lede">Mono uppercase labels at +0.16em, 2px radius, hover lifts 2px, press snaps to 0.97. Labels are 2–4 words, imperative.</p>
+
+  <div class="sub">Primary — all states</div>
+  <div class="grid g6">
+    <div class="cell center"><span class="statelbl">Default</span><button class="btn btn-primary">Start a project</button></div>
+    <div class="cell center"><span class="statelbl">Hover</span><button class="btn btn-primary is-hover">Start a project</button></div>
+    <div class="cell center"><span class="statelbl">Active</span><button class="btn btn-primary is-active">Start a project</button></div>
+    <div class="cell center"><span class="statelbl">Focus</span><button class="btn btn-primary is-focus">Start a project</button></div>
+    <div class="cell center"><span class="statelbl">Disabled</span><button class="btn btn-primary is-disabled">Start a project</button></div>
+    <div class="cell center"><span class="statelbl">Loading</span><button class="btn btn-primary is-loading">Start a project</button></div>
+  </div>
+  <p class="spec"><b>tokens</b> bg voltage-500 · label tar · hover voltage-400 + translateY(−2px) · active voltage-600 + scale(.97) · focus 2px voltage-500 outline at 2px offset · disabled opacity .38 · loading 14px ring, 620ms linear<br><b>motion</b> 160ms ease-hit on every property</p>
+
+  <div class="sub">Secondary, ghost, siren</div>
+  <div class="grid g6">
+    <div class="cell center"><span class="statelbl">Secondary</span><button class="btn btn-secondary">See the work</button></div>
+    <div class="cell center"><span class="statelbl">Sec · hover</span><button class="btn btn-secondary is-hover">See the work</button></div>
+    <div class="cell center"><span class="statelbl">Sec · disabled</span><button class="btn btn-secondary is-disabled">See the work</button></div>
+    <div class="cell center"><span class="statelbl">Ghost</span><button class="btn btn-ghost">Read the case</button></div>
+    <div class="cell center"><span class="statelbl">Ghost · hover</span><button class="btn btn-ghost is-hover">Read the case</button></div>
+    <div class="cell center"><span class="statelbl">Siren · rare</span><button class="btn btn-siren">Book the call</button></div>
+  </div>
+  <p class="spec"><b>tokens</b> secondary 1px border-strong → voltage-500 on hover, label follows · ghost fill surface-hover on hover only · siren bg siren-500 with <b>tar</b> label (Newsprint on Siren is 3.4:1 and fails AA)<br><b>rule</b> one Siren button per page, maximum</p>
+
+  <div class="sub">Large CTA — the only control that carries misregistration</div>
+  <div class="grid g2">
+    <div class="cell center" style="padding:56px"><span class="cta"><span class="plate"></span><span class="face">Book the call <span class="ico" style="-webkit-mask-image:url(https://unpkg.com/lucide-static@0.469.0/icons/arrow-up-right.svg);mask-image:url(https://unpkg.com/lucide-static@0.469.0/icons/arrow-up-right.svg)"></span></span></span><span class="statelbl">Hover it — the Siren plate slips out behind</span></div>
+    <div class="cell">
+      <p class="lede" style="margin:0;font-size:15px"><b style="color:var(--text-primary)">Decision: yes, but only here.</b> The offset is a brand device, not a UI affordance — on small controls it reads as a rendering bug and hurts the hit target. On the page-level CTA (24/38px padding, 13px label) it earns its place: the plate rests in register and slips to <code>−9, −8 @ −3.5°</code> on hover in 160ms ease-hit, returning on leave. It never appears on primary, secondary, ghost, form controls or nav.</p>
+      <p class="spec" style="margin-top:18px"><b>tokens</b> face voltage-500 / tar label · plate siren-500 · offset --misreg-x/y/rotate<br><b>motion</b> transform 160ms ease-hit, in and out · press scales the face only, to .985</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FORMS ══ -->
+<section class="wrap sect">
+  <div class="eye">02</div><h2>Forms</h2>
+  <p class="lede">Labels are mono uppercase; the field itself is quiet until focused, then the border turns Voltage. No glows, no filled focus rings, no floating labels.</p>
+
+  <div class="sub">Text input — all states</div>
+  <div class="grid g3">
+    <div class="cell"><span class="statelbl">Default</span><div class="field"><span class="flabel">Work email</span><input class="ctrl" placeholder="you@company.com"></div></div>
+    <div class="cell"><span class="statelbl">Hover</span><div class="field"><span class="flabel">Work email</span><input class="ctrl is-hover" placeholder="you@company.com"></div></div>
+    <div class="cell"><span class="statelbl">Focus</span><div class="field"><span class="flabel">Work email</span><input class="ctrl is-focus" value="marcus@halcyon.co"></div></div>
+    <div class="cell"><span class="statelbl">Filled</span><div class="field"><span class="flabel">Work email</span><input class="ctrl" value="marcus@halcyon.co"></div></div>
+    <div class="cell"><span class="statelbl">Error</span><div class="field"><span class="flabel">Work email</span><input class="ctrl is-error" value="marcus@halcyon"><span class="err">✕ That address is missing a domain.</span></div></div>
+    <div class="cell"><span class="statelbl">Disabled</span><div class="field"><span class="flabel">Work email</span><input class="ctrl is-disabled" value="locked@drifted.co" disabled></div></div>
+  </div>
+  <p class="spec"><b>tokens</b> bg surface-raised · border 1px border-default → border-strong on hover → voltage-500 on focus → siren-500 on error · text 16px body · label 11px mono +.16em muted · error text siren-400 at 6.4:1<br><b>motion</b> border colour 160ms ease-hit</p>
+
+  <div class="sub">Textarea, select, file upload</div>
+  <div class="grid g3">
+    <div class="cell"><span class="statelbl">Textarea</span><div class="field"><span class="flabel">The number you need to hit</span><textarea class="ctrl" placeholder="$4M by December, from $1.6M now."></textarea><span class="hint">Be specific. Vague goals get vague plans.</span></div></div>
+    <div class="cell"><span class="statelbl">Select</span><div class="field"><span class="flabel">What do you need</span><select class="ctrl"><option>Performance media &amp; content</option><option>Creator growth &amp; monetization</option><option>AI app or PWA build</option></select></div></div>
+    <div class="cell"><span class="statelbl">File upload · hover</span><div class="field"><span class="flabel">Brief or deck</span><div class="drop is-hover"><div class="statelbl" style="color:var(--voltage-500)">Drop a file</div><div class="hint" style="margin-top:8px">PDF, KEY or DOCX · 25MB max</div></div></div></div>
+  </div>
+
+  <div class="sub">Checkbox, radio, toggle</div>
+  <div class="grid g3">
+    <div class="cell"><span class="statelbl">Checkbox — off / on / disabled</span><div class="row" style="gap:20px"><span class="check"><span class="box"></span>Paid social</span><span class="check"><span class="box on"></span>Content</span><span class="check" style="opacity:.4"><span class="box"></span>SEO</span></div></div>
+    <div class="cell"><span class="statelbl">Radio — off / on</span><div class="row" style="gap:20px"><span class="check"><span class="dot"></span>Under $10k</span><span class="check"><span class="dot on"></span>$10–25k</span></div></div>
+    <div class="cell"><span class="statelbl">Toggle — off / on</span><div class="row" style="gap:24px"><span class="check"><span class="toggle"><i></i></span>Digest</span><span class="check"><span class="toggle on"><i></i></span>Digest</span></div></div>
+  </div>
+  <p class="spec"><b>tokens</b> 20px box at 2px radius, Voltage fill when on · radio is the only circle in the system · toggle track 48×26 at 2px radius with a square 20px knob<br><b>motion</b> knob travels on left 160ms ease-hit; fills switch instantly at 90ms</p>
+
+  <div class="sub">Assembled — booking form</div>
+  <div class="grid g2">
+    <div class="cell" style="gap:22px">
+      <div class="row" style="gap:18px;align-items:flex-start"><div class="field" style="flex:1"><span class="flabel">Name</span><input class="ctrl" placeholder="Marcus Vale"></div><div class="field" style="flex:1"><span class="flabel">Work email</span><input class="ctrl" placeholder="you@company.com"></div></div>
+      <div class="field"><span class="flabel">What do you need</span><select class="ctrl"><option>Performance media &amp; content</option><option>Creator growth &amp; monetization</option><option>AI app or PWA build</option><option>Not sure yet</option></select></div>
+      <div class="field"><span class="flabel">Monthly budget</span><div class="row" style="gap:22px"><span class="check"><span class="dot"></span>Under $10k</span><span class="check"><span class="dot on"></span>$10–25k</span><span class="check"><span class="dot"></span>$25k+</span></div></div>
+      <div class="field"><span class="flabel">The number you need to hit</span><textarea class="ctrl" placeholder="$4M by December, from $1.6M now."></textarea></div>
+      <div class="row" style="gap:22px"><span class="check"><span class="box on"></span>Send the brief template</span><span class="check"><span class="box"></span>Add me to the teardown</span></div>
+      <div class="row"><button class="btn btn-primary">Send the brief</button><button class="btn btn-secondary">Book the call instead</button></div>
+      <span class="hint">One reply, from a person, within one working day.</span>
+    </div>
+    <div class="cell">
+      <span class="statelbl">Form rules</span>
+      <table style="margin-top:0">
+        <tr><td><b>Field stack</b></td><td>space-6 (32px) between fields, space-2 (8px) label-to-control.</td></tr>
+        <tr><td><b>Pairs</b></td><td>Two fields per row on desktop, one on mobile. Never three.</td></tr>
+        <tr><td><b>Validation</b></td><td>On blur, never on keystroke. Error text replaces hint text in place — the layout must not shift.</td></tr>
+        <tr><td><b>Submit</b></td><td>Primary enters <code>is-loading</code> and stays disabled until the response; success is a Toast, not a page change.</td></tr>
+        <tr><td><b>Required</b></td><td>Marked by absence — optional fields are labelled "optional". No asterisks.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NAVIGATION ══ -->
+<section class="wrap sect">
+  <div class="eye">03</div><h2>Navigation</h2>
+  <div class="sub">Desktop — top of page / scrolled</div>
+  <div class="grid" style="grid-template-columns:1fr">
+    <div class="cell" style="padding:0">
+      <div class="navbar"><span class="lock"><svg width="32" height="32" viewBox="0 0 100 100"><use href="#plate" fill="#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#plate" fill="#F2F0EA"/></svg><span class="wm" style="font-size:19px">Drifted</span></span>
+        <span class="navlinks"><span class="on">Work</span><span>Services</span><span>Studio</span><span>Journal</span></span>
+        <button class="btn btn-primary btn-sm">Book a call</button></div>
+      <div class="statelbl" style="padding:12px 28px">Top of page — 20px padding, transparent, hairline bottom</div>
+      <div class="navbar scrolled" style="border-top:1px solid var(--border-subtle)"><span class="lock"><svg width="26" height="26" viewBox="0 0 100 100"><use href="#plate" fill="#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#plate" fill="#F2F0EA"/></svg><span class="wm" style="font-size:16px">Drifted</span></span>
+        <span class="navlinks"><span class="on">Work</span><span>Services</span><span>Studio</span><span>Journal</span></span>
+        <button class="btn btn-primary btn-sm">Book a call</button></div>
+      <div class="statelbl" style="padding:12px 28px">Scrolled past 80px — 12px padding, Tar at 86% with blur, mark and wordmark step down 20%</div>
+    </div>
+  </div>
+  <p class="spec"><b>motion</b> height and background cross-fade over 280ms ease-cut, triggered once at 80px of scroll · nav hides on scroll-down past 400px and returns instantly on scroll-up (160ms ease-hit) · active link keeps a 2px Voltage rule, hover lifts the label to Newsprint at 90ms</p>
+
+  <div class="sub">Mobile — closed / open</div>
+  <div class="grid g2" style="background:transparent;gap:24px">
+    <div class="mobileshell">
+      <div class="navbar" style="padding:16px 18px"><span class="lock"><svg width="26" height="26" viewBox="0 0 100 100"><use href="#plate" fill="#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#plate" fill="#F2F0EA"/></svg><span class="wm" style="font-size:16px">Drifted</span></span><span class="statelbl" style="color:var(--newsprint)">Menu</span></div>
+      <div style="padding:24px 18px 40px"><div class="wm" style="font-size:34px">Look bigger<br>than you are</div><div class="body" style="margin-top:16px">Paid media, content and AI-built product for brands punching up.</div></div>
+      <div class="statelbl" style="padding:0 18px 20px">Closed — label "Menu", never a hamburger glyph</div>
+    </div>
+    <div class="mobileshell">
+      <div class="msheet">
+        <div class="navbar" style="padding:0 0 18px"><span class="lock"><svg width="26" height="26" viewBox="0 0 100 100"><use href="#plate" fill="#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#plate" fill="#F2F0EA"/></svg><span class="wm" style="font-size:16px">Drifted</span></span><span class="statelbl" style="color:var(--voltage-500)">Close</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span class="mlink on">Work</span><span class="mlink">Services</span><span class="mlink">Studio</span><span class="mlink">Journal</span><span class="mlink">Contact</span>
+        </div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:14px">
+          <button class="btn btn-primary" style="width:100%">Book a call</button>
+          <div class="statelbl">hello@drifted.co · Instagram ↗ · LinkedIn ↗</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="spec"><b>motion</b> full-screen sheet wipes down on clip-path over 280ms ease-cut (never a slide or fade) · links land in sequence, 40ms apart, from 12px with no overshoot · body scroll locks · Close reverses the wipe in 220ms</p>
+
+  <div class="sub">Footer</div>
+  <div class="grid" style="grid-template-columns:1fr">
+    <div class="cell" style="padding:0">
+      <div class="marq"><div><span>Performance media</span><span>·</span><span>Creator monetization</span><span>·</span><span>AI apps &amp; PWAs</span><span>·</span><span>Departure by design</span><span>·</span><span>Performance media</span><span>·</span><span>Creator monetization</span><span>·</span><span>AI apps &amp; PWAs</span><span>·</span><span>Departure by design</span><span>·</span></div></div>
+      <div style="display:flex;justify-content:space-between;gap:48px;flex-wrap:wrap;padding:44px 28px">
+        <div style="max-width:34ch"><span class="lock"><svg width="40" height="40" viewBox="0 0 100 100"><use href="#plate" fill="#AFE304" transform="rotate(-3.5 50 50) translate(-9 -7.8)"/><use href="#plate" fill="#F2F0EA"/></svg><span class="wm" style="font-size:26px">Drifted</span></span><p class="body" style="margin-top:16px">Remote studio. Eleven clients since 2021. We take two more a quarter.</p></div>
+        <div style="display:flex;gap:56px;flex-wrap:wrap">
+          <div><div class="statelbl">Studio</div><div class="body" style="display:flex;flex-direction:column;gap:9px;margin-top:14px;color:var(--text-body)"><span>About</span><span>Journal</span><span>Careers</span></div></div>
+          <div><div class="statelbl">Work</div><div class="body" style="display:flex;flex-direction:column;gap:9px;margin-top:14px;color:var(--text-body)"><span>Case studies</span><span>Results</span><span>Clients</span></div></div>
+          <div><div class="statelbl">Contact</div><div class="body" style="display:flex;flex-direction:column;gap:9px;margin-top:14px;color:var(--text-body)"><span>hello@drifted.co</span><span>Instagram ↗</span><span>LinkedIn ↗</span></div></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:0 28px 32px"><span class="statelbl">© 2026 Drifted Marketing</span><span class="statelbl">Departure, by design</span></div>
+    </div>
+  </div>
+  <p class="spec"><b>motion</b> marquee runs linear at 22s, pauses on hover · footer links underline from left on hover, 160ms ease-hit · the mark plays a 420ms drift once when the footer enters the viewport, then rests</p>
+</section>
+
+<!-- ══ CARDS ══ -->
+<section class="wrap sect">
+  <div class="eye">04</div><h2>Cards</h2>
+  <div class="grid g3">
+    <div class="cell" style="padding:0;background:transparent">
+      <div class="card hoverable grainy">
+        <div class="thumb"><div class="img" style="background:var(--diagonal-split)"></div></div>
+        <div class="pad"><h3 class="ctitle">Halcyon Labs</h3><div class="row" style="gap:8px;margin-top:12px"><span class="tag">Paid social</span><span class="tag">Creative</span></div><div class="result">↗ 5.2× ROAS in 90 days</div></div>
+      </div>
+      <div class="statelbl" style="padding:12px 4px">Case study — image scales 1.04 over 520ms ease-expo, border turns Voltage, card lifts 2px</div>
+    </div>
+    <div class="cell" style="padding:0;background:transparent">
+      <div class="card hoverable">
+        <div class="pad" style="padding:26px 24px 28px"><div class="stepno" style="font-size:38px">01</div><h3 class="ctitle" style="font-size:22px;margin-top:14px">Performance &amp; content</h3><p class="body" style="margin-top:12px">We run the account and make the work. Creative, buying and iteration on one loop.</p><div class="row" style="margin-top:18px"><span class="statelbl" style="color:var(--voltage-500)">Read more ↗</span></div></div>
+      </div>
+      <div class="statelbl" style="padding:12px 4px">Service — numeral is one shade off the background; hover lifts and turns the arrow Voltage</div>
+    </div>
+    <div class="cell" style="padding:0;background:transparent">
+      <div class="card"><div class="pad" style="padding:28px 24px"><div class="quote" style="font-size:22px">"They rebuilt our creative system in three weeks and the ROAS never dipped."</div><div class="row" style="margin-top:22px;gap:12px"><div style="width:38px;height:38px;background:var(--tar-4)"></div><div><div style="font:500 13px/1 var(--font-body);color:var(--text-primary)">Mara Ellis</div><div class="statelbl" style="margin-top:6px">CMO, Halcyon Labs</div></div></div></div></div>
+      <div class="statelbl" style="padding:12px 4px">Testimonial — no hover state; this card is never interactive</div>
+    </div>
+    <div class="cell" style="padding:0;background:transparent">
+      <div class="card hoverable"><div style="height:140px;background:var(--tar-4)"></div><div class="pad"><h3 class="ctitle" style="font-size:20px">Marcus Vale</h3><div class="statelbl" style="margin-top:8px">Founder · Performance</div></div></div>
+      <div class="statelbl" style="padding:12px 4px">Team — portrait desaturates to full colour on hover over 520ms</div>
+    </div>
+    <div class="cell" style="padding:0;background:transparent">
+      <div class="card" style="background:var(--voltage-500);border-color:var(--voltage-500)"><div class="pad" style="padding:30px 24px"><div style="font-family:var(--font-display);font-weight:900;font-size:58px;line-height:.86;letter-spacing:-.05em;color:var(--tar)">$180M</div><div class="statelbl" style="margin-top:12px;color:rgba(10,10,11,.62)">Client revenue driven</div></div></div>
+      <div class="statelbl" style="padding:12px 4px">Stat — accent fill, Tar figure, no hover. One per section</div>
+    </div>
+    <div class="cell" style="padding:0;background:transparent">
+      <div class="card hoverable"><div class="pad"><div class="statelbl">Journal · 6 min</div><h3 class="ctitle" style="font-size:22px;margin-top:12px">Why your CAC is a creative problem</h3><p class="body" style="margin-top:12px">Media buying stopped being the lever three years ago. Here is what replaced it.</p></div></div>
+      <div class="statelbl" style="padding:12px 4px">Blog — title shifts to Voltage on hover, 160ms</div>
+    </div>
+  </div>
+  <p class="spec"><b>tokens</b> surface-card bg · 1px border-subtle → voltage-500 on hover · radius-2 (4px) · pad 22–26px · thumb 170px<br><b>motion</b> lift −2px 160ms ease-hit · inner image 1.04 / 520ms ease-expo · never a shadow on hover, the border does the work</p>
+</section>
+
+<!-- ══ CONTENT BLOCKS ══ -->
+<section class="wrap sect">
+  <div class="eye">05</div><h2>Content blocks</h2>
+
+  <div class="sub">Section heading with eyebrow · pull quote</div>
+  <div class="grid g2">
+    <div class="cell"><span class="eye">Selected work</span><div class="wm" style="font-size:clamp(34px,4vw,58px);margin-top:14px">Receipts</div><div style="height:2px;background:var(--newsprint);margin-top:22px"></div><div style="height:2px;background:var(--voltage-500);opacity:.34;transform:translate(-9px,6px) rotate(-.6deg)"></div><span class="statelbl" style="margin-top:22px">Divider carries the misregistration</span></div>
+    <div class="cell"><div class="quote">"If we can't get you there,<br>we'll say so on the call."</div><div class="statelbl" style="margin-top:20px">Pull quote — display 900, no quotation marks in the type, attribution below in mono</div></div>
+  </div>
+
+  <div class="sub">Numbered process</div>
+  <div class="grid" style="grid-template-columns:1fr"><div class="cell" style="padding:8px 26px 26px">
+    <div class="step"><div class="stepno">01</div><div><h3 class="ctitle" style="font-size:22px">Diagnosis</h3><p class="body" style="margin-top:10px;max-width:62ch">Two weeks inside your accounts, your data and your creative. You get the findings whether or not you hire us.</p></div></div>
+    <div class="step"><div class="stepno">02</div><div><h3 class="ctitle" style="font-size:22px">Build</h3><p class="body" style="margin-top:10px;max-width:62ch">Creative system, offer, tracking and the first wave of production. One number agreed as the target.</p></div></div>
+    <div class="step"><div class="stepno">03</div><div><h3 class="ctitle" style="font-size:22px">Run</h3><p class="body" style="margin-top:10px;max-width:62ch">Weekly iteration against that number. Monthly written review, no dashboards you have to interpret.</p></div></div>
+  </div></div>
+  <p class="spec"><b>motion</b> each row slams in from 14px / 1.06 scale as it crosses 70% viewport height, 120ms ease-hit, 60ms stagger · numerals do not animate</p>
+
+  <div class="sub">Stat block · logo wall</div>
+  <div class="grid g2">
+    <div class="cell center" style="gap:34px;flex-direction:row;padding:44px"><span class="stat"><span class="u" style="font-size:56px">4.6×</span><span class="o" style="font-size:56px">4.6×</span></span><span class="stat"><span class="u" style="font-size:56px">$180M</span><span class="o" style="font-size:56px">$180M</span></span></div>
+    <div class="cell" style="padding:0"><div class="logowall"><div>Halcyon</div><div>Kade Ross</div><div>Tempo</div><div>Aster</div><div>Nine Yards</div><div>Vantage</div><div>Rill</div><div>Overtone</div><div>Bright Fold</div><div>Kestrel</div></div></div>
+  </div>
+  <p class="spec"><b>tokens</b> stat uses the misregistration at 34% tint behind the figure · logo wall is 1px hairline grid, marks sit at ink-400 and lift to Newsprint on hover, 160ms</p>
+
+  <div class="sub">FAQ accordion · marquee</div>
+  <div class="grid g2">
+    <div class="cell" style="padding:0 26px 8px">
+      <details class="faq" open><summary>How fast can you start?</summary><p>Two weeks from signature, and we will tell you on the first call if that slips. We only take two new clients a quarter so the answer is never "next month".</p></details>
+      <details class="faq"><summary>Do you work on retainer?</summary><p>Retainer, project, or performance-linked. Most clients start on a three-month build and move to a retainer once the number is moving.</p></details>
+      <details class="faq"><summary>What if it isn't working?</summary><p>You get a written review every month against the one number we agreed. If it stops moving for two months we either change the plan or end it — we do not run accounts on autopilot.</p></details>
+    </div>
+    <div class="cell" style="padding:0;justify-content:center"><div class="marq"><div><span>Now booking Q4</span><span>·</span><span>Two slots left</span><span>·</span><span>Departure by design</span><span>·</span><span>Now booking Q4</span><span>·</span><span>Two slots left</span><span>·</span><span>Departure by design</span><span>·</span></div></div><div class="statelbl" style="padding:20px 26px">Marquee ticker — one per page, linear 22s, pause on hover</div></div>
+  </div>
+  <p class="spec"><b>motion</b> accordion panel height animates 280ms ease-cut, the +/− swaps instantly at 90ms · only one panel open at a time on mobile, any number on desktop</p>
+</section>
+
+<!-- ══ MEDIA ══ -->
+<section class="wrap sect">
+  <div class="eye">06</div><h2>Media</h2>
+  <div class="grid g4">
+    <div class="cell" style="padding:26px"><span class="statelbl">Image frame</span><div class="frame" style="margin-top:6px"><div class="plate"></div><div class="pic grainy"><span class="statelbl">1600 × 1000</span></div></div><span class="statelbl" style="margin-top:14px">Voltage plate offset behind, grain 12% over the photo</span></div>
+    <div class="cell" style="padding:26px"><span class="statelbl">Video frame</span><div class="vid" style="margin-top:6px"><div class="play"><span class="ico" style="width:20px;height:20px;-webkit-mask-image:url(https://unpkg.com/lucide-static@0.469.0/icons/play.svg);mask-image:url(https://unpkg.com/lucide-static@0.469.0/icons/play.svg)"></span></div></div><span class="statelbl" style="margin-top:14px">Play target fills Voltage on hover, 160ms. Controls are mono, never rounded</span></div>
+    <div class="cell" style="padding:26px"><span class="statelbl">Before / after</span><div class="ba" id="ba" style="margin-top:6px"><div class="before"></div><div class="after" id="baAfter"></div><div class="handle" id="baHandle"></div></div><span class="statelbl" style="margin-top:14px">Drag the handle. Voltage 2px divider with a 34px square grip</span></div>
+    <div class="cell" style="padding:26px"><span class="statelbl">Gallery grid</span><div class="gallery" style="margin-top:6px"><div style="grid-column:span 2;grid-row:span 2"></div><div></div><div></div><div></div><div></div><div style="grid-column:span 2"></div></div><span class="statelbl" style="margin-top:14px">2px gutters, mixed spans, no captions inside cells</span></div>
+  </div>
+  <p class="spec"><b>rule</b> imagery is cool, high-contrast and grained; never warm-filtered, never a soft vignette · the misregistration plate appears on hero and case imagery only, not on gallery thumbnails</p>
+</section>
+
+<!-- ══ FEEDBACK ══ -->
+<section class="wrap sect">
+  <div class="eye">07</div><h2>Feedback</h2>
+  <div class="grid g2">
+    <div class="cell"><span class="statelbl">Toast — success / error</span>
+      <div class="toast"><span class="ico" style="color:var(--voltage-500);margin-top:2px;-webkit-mask-image:url(https://unpkg.com/lucide-static@0.469.0/icons/check.svg);mask-image:url(https://unpkg.com/lucide-static@0.469.0/icons/check.svg)"></span><div><b>Brief sent</b><div class="body" style="margin-top:6px;color:var(--text-body)">We reply within one working day.</div></div></div>
+      <div class="toast err"><span class="ico" style="color:var(--siren-400);margin-top:2px;-webkit-mask-image:url(https://unpkg.com/lucide-static@0.469.0/icons/triangle-alert.svg);mask-image:url(https://unpkg.com/lucide-static@0.469.0/icons/triangle-alert.svg)"></span><div><b>Upload failed</b><div class="body" style="margin-top:6px;color:var(--text-body)">That file is over 25MB.</div></div></div>
+      <p class="spec"><b>motion</b> enters bottom-left on a 160ms slam from 12px, auto-dismisses at 5s, exits with a 90ms cut — never a fade</p>
+    </div>
+    <div class="cell"><span class="statelbl">Inline validation · loading skeleton</span>
+      <div class="field"><span class="flabel">Work email</span><input class="ctrl is-error" value="marcus@halcyon"><span class="err">✕ That address is missing a domain.</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+        <div class="skel" style="height:26px;width:52%"></div><div class="skel" style="height:13px;width:88%"></div><div class="skel" style="height:13px;width:74%"></div><div class="skel" style="height:170px;width:100%"></div>
+      </div>
+      <p class="spec"><b>motion</b> skeleton shimmer 1.4s linear, tar-3 → tar-4 → tar-3 · blocks match the real content's box exactly so nothing shifts on load</p>
+    </div>
+  </div>
+
+  <div class="sub">Page preloader — Concept 1 motion logo</div>
+  <div class="grid" style="grid-template-columns:1fr">
+    <div class="cell" style="padding:0">
+      <div class="pre run" id="pre"><svg width="150" height="150" viewBox="0 0 100 100"><g class="u" style="transform:translate(-9px,-7.8px) rotate(-3.5deg);transform-origin:50% 50%"><use href="#plate" fill="#AFE304"/></g><use href="#plate" fill="#F2F0EA"/></svg><div class="bar"></div></div>
+      <div class="btnbar" style="padding:0 26px 26px"><button class="btn btn-secondary btn-sm" id="replay">Replay ▸</button><span class="statelbl">1,150ms total — hold 300ms in register, drift 850ms on ease-expo, dead stop. Progress rule runs the full width on ease-cut, then the page reveals with a hard cut wipe.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SPEC SHEET ══ -->
+<section class="wrap sect">
+  <div class="eye">08</div><h2>Spec sheet</h2>
+  <table>
+    <tr><th>Component</th><th>Key tokens</th><th>States</th><th>Motion</th></tr>
+    <tr><td><b>Button / primary</b></td><td>voltage-500, tar label, radius-xs</td><td>default · hover · active · focus · disabled · loading</td><td>160ms ease-hit; −2px lift, .97 press</td></tr>
+    <tr><td><b>Button / secondary</b></td><td>border-strong → accent</td><td>as above</td><td>160ms ease-hit</td></tr>
+    <tr><td><b>Button / ghost</b></td><td>surface-hover fill</td><td>default · hover · disabled</td><td>160ms ease-hit</td></tr>
+    <tr><td><b>Button / siren</b></td><td>siren-500 + <b>tar</b> label (AA)</td><td>default · hover · disabled</td><td>160ms ease-hit</td></tr>
+    <tr><td><b>Large CTA</b></td><td>voltage face, siren plate, --misreg-*</td><td>default · hover · press</td><td>plate offsets 160ms ease-hit, returns on leave</td></tr>
+    <tr><td><b>Input / textarea / select</b></td><td>surface-raised, border-default → accent</td><td>default · hover · focus · filled · error · disabled</td><td>border 160ms ease-hit</td></tr>
+    <tr><td><b>Checkbox / radio / toggle</b></td><td>voltage-500 fill, 20px box</td><td>off · on · disabled · focus</td><td>knob 160ms ease-hit, fill 90ms</td></tr>
+    <tr><td><b>File upload</b></td><td>dashed border-strong → accent</td><td>idle · hover · dragging · uploading · error</td><td>160ms ease-hit</td></tr>
+    <tr><td><b>Nav / desktop</b></td><td>tar 86% + blur, 2px accent rule</td><td>top · scrolled · hidden</td><td>280ms ease-cut; hide/show 160ms</td></tr>
+    <tr><td><b>Nav / mobile</b></td><td>full-screen tar sheet, display-scale links</td><td>closed · open</td><td>clip-path wipe 280ms ease-cut, 40ms link stagger</td></tr>
+    <tr><td><b>Footer</b></td><td>marquee accent band, hairline columns</td><td>static · link hover</td><td>marquee 22s linear; mark drifts once on enter</td></tr>
+    <tr><td><b>Cards (6)</b></td><td>surface-card, border-subtle, radius-sm</td><td>default · hover (except testimonial, stat)</td><td>lift 160ms; image 1.04 / 520ms ease-expo</td></tr>
+    <tr><td><b>Section heading</b></td><td>eyebrow mono accent, offset double rule</td><td>static</td><td>slam on scroll-in</td></tr>
+    <tr><td><b>Process step</b></td><td>tar-4 numeral, hairline rows</td><td>static</td><td>slam 120ms, 60ms stagger</td></tr>
+    <tr><td><b>Stat block</b></td><td>display 900 + 34% offset ghost</td><td>static</td><td>count-up 520ms ease-expo, optional</td></tr>
+    <tr><td><b>Logo wall</b></td><td>ink-400 marks on hairline grid</td><td>default · hover</td><td>160ms colour lift</td></tr>
+    <tr><td><b>FAQ</b></td><td>hairline rows, mono +/−</td><td>closed · open · hover</td><td>height 280ms ease-cut</td></tr>
+    <tr><td><b>Marquee</b></td><td>voltage-500 band, display 900</td><td>running · paused</td><td>22s linear, pause on hover</td></tr>
+    <tr><td><b>Image / video frame</b></td><td>misreg plate, grain 12%</td><td>default · hover · playing</td><td>scale 520ms ease-expo</td></tr>
+    <tr><td><b>Before / after</b></td><td>voltage divider, 34px grip</td><td>drag</td><td>direct manipulation, no easing</td></tr>
+    <tr><td><b>Toast</b></td><td>surface-raised, 4px accent edge</td><td>info · success · error</td><td>slam in 160ms, cut out 90ms, 5s dwell</td></tr>
+    <tr><td><b>Skeleton</b></td><td>tar-3 → tar-4 shimmer</td><td>loading</td><td>1.4s linear loop</td></tr>
+    <tr><td><b>Preloader</b></td><td>mark two-layer, voltage rule</td><td>running · complete</td><td>1,150ms drift + progress rule, hard cut reveal</td></tr>
+  </table>
+</section>
+
+<div class="wrap"><div class="foot"><span class="note">Drifted · components v1 · stage 2 of 7</span><span class="note">Next: homepage, desktop + mobile</span></div></div>
+
+<script>
+var pre=document.getElementById('pre'),rp=document.getElementById('replay');
+rp.addEventListener('click',function(){pre.classList.remove('run');void pre.offsetWidth;pre.classList.add('run');});
+var ba=document.getElementById('ba'),af=document.getElementById('baAfter'),hd=document.getElementById('baHandle'),drag=false;
+function set(e){var r=ba.getBoundingClientRect();var x=Math.min(Math.max((e.clientX-r.left)/r.width,0),1);af.style.clipPath='inset(0 '+((1-x)*100)+'% 0 0)';hd.style.left=(x*100)+'%';}
+ba.addEventListener('mousedown',function(e){drag=true;set(e);});
+window.addEventListener('mousemove',function(e){if(drag)set(e);});
+window.addEventListener('mouseup',function(){drag=false;});
+</script>
+</body></html>
