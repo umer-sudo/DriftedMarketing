@@ -1,0 +1,45 @@
+:root {
+  /* Display — set enormous, tracked tight. No mid-tier between display and body. */
+  --fs-mega: clamp(4rem, 13vw, 12rem);     /* @kind font */
+  --fs-display-1: clamp(3rem, 8.5vw, 8rem); /* @kind font */
+  --fs-display-2: clamp(2.5rem, 6vw, 5.5rem); /* @kind font */
+  --fs-display-3: clamp(2rem, 4vw, 3.5rem); /* @kind font */
+
+  --fs-h1: 3rem;     /* @kind font */
+  --fs-h2: 2.25rem;  /* @kind font */
+  --fs-h3: 1.5rem;   /* @kind font */
+  --fs-h4: 1.1875rem;/* @kind font */
+
+  --fs-lg: 1.25rem;    /* @kind font */
+  --fs-md: 1.0625rem;  /* @kind font */
+  --fs-sm: 0.9375rem;  /* @kind font */
+  --fs-xs: 0.8125rem;  /* @kind font */
+  --fs-2xs: 0.6875rem; /* @kind font */
+
+  --lh-tight: 0.82;   /* @kind font */
+  --lh-display: 0.88; /* @kind font */
+  --lh-snug: 1.15;    /* @kind font */
+  --lh-normal: 1.55;  /* @kind font */
+  --lh-loose: 1.65;   /* @kind font */
+
+  --ls-mega: -0.05em;    /* @kind font */
+  --ls-display: -0.045em;/* @kind font */
+  --ls-heading: -0.03em; /* @kind font */
+  --ls-body: -0.005em;   /* @kind font */
+  /* uppercase mono eyebrows */
+  --ls-label: 0.18em;    /* @kind font */
+
+  --wght-regular: 400;  /* @kind font */
+  --wght-medium: 500;   /* @kind font */
+  --wght-semibold: 600; /* @kind font */
+  --wght-bold: 700;     /* @kind font */
+  --wght-black: 900;    /* @kind font */
+
+  /* Composites */
+  --text-mega: var(--wght-black) var(--fs-mega) / var(--lh-tight) var(--font-display); /* @kind font */
+  --text-display-1: var(--wght-black) var(--fs-display-1) / var(--lh-display) var(--font-display); /* @kind font */
+  --text-display-2: var(--wght-black) var(--fs-display-2) / var(--lh-display) var(--font-display); /* @kind font */
+  --text-heading: var(--wght-black) var(--fs-h3) / var(--lh-snug) var(--font-display); /* @kind font */
+  --text-body-md: var(--wght-regular) var(--fs-md) / var(--lh-normal) var(--font-body); /* @kind font */
+  --text-label: var(--wght-medium) var(--fs-2xs) / 1 var(--font-mono); /* @kind font */
+}

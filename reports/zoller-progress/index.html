@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Zoller Auction Platform — Progress Report — Drifted</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--tar);color:var(--newsprint);
+    font-family:'Schibsted Grotesk',system-ui,sans-serif;
+    font-size:17px;line-height:1.55;letter-spacing:-.005em;
+    -webkit-font-smoothing:antialiased;
+  }
+  body:before{
+    content:"";position:fixed;inset:0;z-index:9;pointer-events:none;
+    background-image:var(--grain);opacity:.08;mix-blend-mode:overlay;
+  }
+  .wrap{max-width:1440px;margin:0 auto;padding-inline:clamp(20px,5vw,80px)}
+  .sect{padding-block:clamp(64px,9vw,140px);border-top:1px solid rgba(242,240,234,.14)}
+  .eye{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.18em;color:var(--voltage-500)}
+  .eye.mut{color:var(--ink-300)}
+  .disp{font-weight:900;letter-spacing:-.045em;line-height:.86;margin:0;text-transform:none}
+  .mega{font-size:clamp(3rem,10vw,8.5rem);letter-spacing:-.05em;line-height:.82}
+  h2.disp{font-size:clamp(2.2rem,5.2vw,4.6rem)}
+  h3.disp{font-size:19px;letter-spacing:-.03em;line-height:1.2}
+  p{margin:0 0 14px;max-width:62ch;color:var(--ink-100)}
+  .lede{font-size:20px;color:var(--newsprint);max-width:52ch}
+  .small{font-size:15px;color:var(--ink-200)}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--ink-300)}
+  .fill{background:var(--voltage-500);color:var(--tar);padding:0 .1em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .ol{color:transparent;-webkit-text-stroke:2px var(--newsprint)}
+  .volt{color:var(--voltage-500)}
+
+  /* ── header ───────────────────────────────── */
+  header.top{position:sticky;top:0;z-index:20;background:rgba(10,10,11,.86);
+    backdrop-filter:blur(10px);border-bottom:1px solid rgba(242,240,234,.14)}
+  header.top .wrap{display:flex;align-items:center;gap:20px;height:64px;justify-content:space-between}
+  header.top img{height:26px;display:block}
+  nav.doc{display:flex;gap:22px;flex-wrap:wrap}
+  nav.doc a{color:var(--ink-200);text-decoration:none;font-family:'JetBrains Mono',monospace;
+    font-size:11px;text-transform:uppercase;letter-spacing:.18em;transition:color 160ms cubic-bezier(.2,.9,.1,1)}
+  nav.doc a:hover{color:var(--voltage-500)}
+  @media(max-width:860px){nav.doc{display:none}}
+
+  /* ── hero ─────────────────────────────────── */
+  .hero{position:relative;overflow:hidden;padding-block:clamp(56px,8vw,120px)}
+  .hero .mark{position:absolute;right:-6vw;top:-4vw;width:44vw;opacity:.06;transform:rotate(-8deg);pointer-events:none}
+  .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;
+    background:rgba(242,240,234,.14);border:1px solid rgba(242,240,234,.14);margin-top:44px}
+  .kv div{background:var(--tar-2);padding:20px 22px}
+  .kv b{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink-300);font-weight:500;margin-bottom:8px}
+  .kv span{font-weight:900;letter-spacing:-.03em;font-size:19px}
+
+  /* ── stat grid ────────────────────────────── */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;
+    background:rgba(242,240,234,.14);border:1px solid rgba(242,240,234,.14)}
+  .stat{background:var(--tar-2);padding:30px 24px}
+  .stat .n{font-weight:900;letter-spacing:-.045em;font-size:clamp(2.4rem,4.4vw,3.4rem);line-height:.9}
+  .stat.accent .n{color:var(--voltage-500)}
+  .stat.pending .n{font-size:16px;color:var(--ink-300);letter-spacing:-.01em;
+    font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+  .stat .l{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink-200)}
+  .stat.pending .l{color:var(--ink-400)}
+
+  /* ── phases / timeline ────────────────────── */
+  .phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;
+    background:rgba(242,240,234,.14);border:1px solid rgba(242,240,234,.14);margin-top:44px}
+  .phase{background:var(--tar-2);padding:28px 24px;position:relative}
+  .phase .no{position:absolute;right:16px;top:14px;font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.18em;color:var(--ink-400)}
+  .phase .st{display:inline-block;margin-bottom:14px;font-family:'JetBrains Mono',monospace;
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 8px;border-radius:2px}
+  .st.done{background:var(--voltage-500);color:var(--tar)}
+  .st.live{background:var(--siren-500);color:var(--tar)}
+  .st.next{border:1px solid rgba(242,240,234,.3);color:var(--ink-200)}
+  .phase p{font-size:15px;margin:10px 0 0;color:var(--ink-200)}
+
+  /* ── two-col ─────────────────────────────── */
+  .two{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(28px,5vw,80px);align-items:start}
+  @media(max-width:840px){.two{grid-template-columns:1fr}}
+
+  /* ── build log ───────────────────────────── */
+  .log{border:1px solid rgba(242,240,234,.14);margin-top:36px}
+  .row{display:grid;grid-template-columns:130px 1fr 128px;gap:20px;padding:18px 22px;
+    border-bottom:1px solid rgba(242,240,234,.1);align-items:baseline;background:var(--tar-2)}
+  .row:last-child{border-bottom:0}
+  .row .d{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-300)}
+  .row .t{font-weight:600}
+  .row .t em{display:block;font-style:normal;font-weight:400;font-size:15px;color:var(--ink-200);margin-top:4px}
+  .row .s{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;
+    text-transform:uppercase;text-align:right;color:var(--voltage-500)}
+  .row .s.pend{color:var(--ink-400)}
+  @media(max-width:720px){.row{grid-template-columns:1fr;gap:6px}.row .s{text-align:left}}
+
+  /* ── terminal ────────────────────────────── */
+  .term{border:1px solid rgba(242,240,234,.14);background:#0C0C0E;border-radius:4px;overflow:hidden}
+  .term .bar{display:flex;gap:6px;align-items:center;padding:10px 14px;
+    border-bottom:1px solid rgba(242,240,234,.1);background:var(--tar-3)}
+  .term .bar i{width:8px;height:8px;border-radius:999px;background:var(--ink-500);display:block}
+  .term .out{padding:20px;font-family:'JetBrains Mono',monospace;font-size:12.5px;
+    line-height:2;color:var(--ink-100);overflow-x:auto}
+  .term .out b{color:var(--voltage-500);font-weight:500}
+  .term .out .c{color:var(--ink-400)}
+
+  /* ── pipeline ────────────────────────────── */
+  .pipe{display:flex;flex-wrap:wrap;gap:1px;background:rgba(242,240,234,.14);
+    border:1px solid rgba(242,240,234,.14);margin-top:36px}
+  .pipe > div{background:var(--tar-2);padding:22px 20px;flex:1 1 190px}
+  .pipe .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--voltage-500)}
+  .pipe .v{font-weight:900;letter-spacing:-.03em;font-size:17px;margin-top:10px}
+  .pipe .x{font-size:14px;color:var(--ink-300);margin-top:6px;line-height:1.45}
+
+  /* ── vision cards ────────────────────────── */
+  .vis{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:44px}
+  .card{border:1px solid rgba(242,240,234,.14);background:#16161A;padding:28px 24px;border-radius:4px}
+  .card .h{font-weight:900;letter-spacing:-.03em;font-size:22px;line-height:1.05}
+  .card p{font-size:15px;color:var(--ink-200);margin-top:12px}
+  .card .tag{display:inline-block;margin-top:16px;font-family:'JetBrains Mono',monospace;
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--tar);
+    background:var(--voltage-500);padding:3px 8px;border-radius:2px}
+
+  /* ── risk ────────────────────────────────── */
+  .risk{border-left:3px solid var(--siren-500);padding:4px 0 4px 20px;margin-top:26px}
+  .risk .h{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--siren-400)}
+
+  /* ── countdown band ──────────────────────── */
+  .band{background:var(--voltage-500);color:var(--tar);position:relative;overflow:hidden}
+  .band:after{content:"";position:absolute;inset:0;background-image:var(--grain);
+    opacity:.26;mix-blend-mode:multiply;pointer-events:none}
+  .band .wrap{padding-block:clamp(56px,8vw,110px);position:relative;z-index:1}
+  .band p{color:rgba(10,10,11,.78);max-width:48ch}
+  .band .eye{color:rgba(10,10,11,.62)}
+  .cd{display:flex;gap:1px;background:rgba(10,10,11,.22);border:1px solid rgba(10,10,11,.22);
+    margin-top:32px;width:fit-content;max-width:100%;flex-wrap:wrap}
+  .cd div{background:var(--voltage-500);padding:16px 24px;min-width:96px;text-align:center}
+  .cd .n{font-weight:900;font-size:34px;letter-spacing:-.04em;line-height:1}
+  .cd .l{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;margin-top:6px;color:rgba(10,10,11,.62)}
+
+  footer{padding-block:56px;border-top:1px solid rgba(242,240,234,.14)}
+  footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  .note{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-400);line-height:2}
+
+  @media print{
+    header.top{position:static}
+    body:before{display:none}
+    .sect{page-break-inside:avoid}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <img src="./logo.svg" alt="Drifted Marketing" />
+    <nav class="doc">
+      <a href="#brief">Brief</a>
+      <a href="#built">What we built</a>
+      <a href="#log">Build log</a>
+      <a href="#numbers">Numbers</a>
+      <a href="#next">What's next</a>
+      <a href="#vision">Vision</a>
+    </nav>
+    <span class="mono" style="color:var(--voltage-500)">Progress report · 28 Jul 2026</span>
+  </div>
+</header>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <img class="mark" src="./logo-plain.svg" alt="" aria-hidden="true" />
+  <div class="wrap">
+    <div class="eye">Client report · Valkyrie LLC · Frank Zoller Authentic History</div>
+    <h1 class="disp mega" style="margin-top:24px">
+      <span class="fill">1,250 lots.</span><br />
+      <span class="ol">Typed</span> by hand.
+    </h1>
+    <p class="lede" style="margin-top:34px">
+      Not any more. The auction platform fills them from photographs — and takes
+      <span class="volt">400+ hours a year</span> off your desk. This is everything built to date,
+      what is live on 16 August, and where it goes after that.
+    </p>
+
+    <div class="kv">
+      <div><b>Client</b><span>Valkyrie LLC</span></div>
+      <div><b>Discipline</b><span>AI product · Hosted PWA</span></div>
+      <div><b>Status</b><span class="volt">Pre-launch · testing</span></div>
+      <div><b>Go live</b><span>16 August 2026</span></div>
+      <div><b>Builds to date</b><span>3, and counting</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BRIEF ══ -->
+<section class="sect" id="brief">
+  <div class="wrap two">
+    <div>
+      <div class="eye mut">01 — The brief</div>
+      <h2 class="disp" style="margin-top:16px">Weeks of typing<br />before a single<br />item went live.</h2>
+    </div>
+    <div>
+      <p>Every auction meant 1,250 lots entered by hand. Photograph, edit, renumber, then type
+      a title, a description, a start price and an estimate range — one lot at a time, to lot 1,250.</p>
+      <p>The work was not hard. It was long, and it happened before anything could be sold,
+      on every single auction.</p>
+      <p class="small" style="margin-top:24px;color:var(--ink-300)">
+        The job we took: remove the typing, not the judgement. The platform drafts every row;
+        a human still signs off on anything the model is not sure about.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHAT WE BUILT ══ -->
+<section class="sect" id="built">
+  <div class="wrap">
+    <div class="eye">02 — What we built</div>
+    <h2 class="disp" style="margin-top:16px">Photographs in.<br />Listings out.</h2>
+    <p style="margin-top:24px">Four stages, one hosted PWA. Nothing to install, nothing to maintain on your side.</p>
+
+    <div class="phases">
+      <div class="phase">
+        <div class="no">01</div>
+        <span class="st done">Complete</span>
+        <h3 class="disp">Ingestion</h3>
+        <p>32,000 past items — titles, descriptions, estimates and realized prices — ingested
+        into a hosted backend as the model's reference set.</p>
+      </div>
+      <div class="phase">
+        <div class="no">02</div>
+        <span class="st done">Complete</span>
+        <h3 class="disp">The engine</h3>
+        <p>Photographs in, complete listing rows out. Repeat items pull their own history;
+        new items get identified and described from the image.</p>
+      </div>
+      <div class="phase">
+        <div class="no">03</div>
+        <span class="st done">Complete</span>
+        <h3 class="disp">Review triage</h3>
+        <p>Confidence-scored output. Only uncertain items are flagged for a human;
+        everything else passes straight through.</p>
+      </div>
+      <div class="phase">
+        <div class="no">04</div>
+        <span class="st live">In testing</span>
+        <h3 class="disp">The handoff</h3>
+        <p>The filled template uploads straight to LiveAuctioneers, and existing automation
+        cross-posts to BidSpirit and the direct bidding site.</p>
+      </div>
+    </div>
+
+    <div class="pipe">
+      <div><div class="k">Input</div><div class="v">Lot photographs</div><div class="x">Shot, edited and renumbered as you already do.</div></div>
+      <div><div class="k">Match</div><div class="v">32,000-item corpus</div><div class="x">Repeat items recognised against their own sale history.</div></div>
+      <div><div class="k">Draft</div><div class="v">Title · description<br />start · estimate</div><div class="x">Every column of the listing template, filled.</div></div>
+      <div><div class="k">Triage</div><div class="v">Confidence score</div><div class="x">Uncertain lots flagged. Everything else passes through.</div></div>
+      <div><div class="k">Output</div><div class="v">LiveAuctioneers</div><div class="x">Cross-posted to BidSpirit and the direct bidding site.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BUILD LOG ══ -->
+<section class="sect" id="log">
+  <div class="wrap">
+    <div class="eye">03 — Build log</div>
+    <h2 class="disp" style="margin-top:16px">Start to date.</h2>
+    <p style="margin-top:24px">Three builds for this client. Each one shipped before the next was scoped.</p>
+
+    <div class="log">
+      <div class="row">
+        <div class="d">Build 01</div>
+        <div class="t">The listing engine<em>Photograph-to-listing for 1,250 lots an auction. The core of the platform.</em></div>
+        <div class="s">Shipped</div>
+      </div>
+      <div class="row">
+        <div class="d">Build 02</div>
+        <div class="t">Inventory Watch<em>21 dealer sites monitored for acquisition opportunities, continuously.</em></div>
+        <div class="s">Shipped</div>
+      </div>
+      <div class="row">
+        <div class="d">Build 03</div>
+        <div class="t">Hosted PWA + review console<em>Confidence triage, human sign-off, and the LiveAuctioneers handoff in one place.</em></div>
+        <div class="s">In testing</div>
+      </div>
+      <div class="row">
+        <div class="d">Corpus</div>
+        <div class="t">32,000 historical items ingested<em>Titles, descriptions, estimates and realized prices — one queryable set for the first time.</em></div>
+        <div class="s">Complete</div>
+      </div>
+      <div class="row">
+        <div class="d">16 Aug 2026</div>
+        <div class="t">First live auction on the platform<em>The date the platform was scoped, built and tested against. It has not moved.</em></div>
+        <div class="s pend">Scheduled</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE FINDING ══ -->
+<section class="sect">
+  <div class="wrap two">
+    <div>
+      <div class="eye mut">04 — What the data showed</div>
+      <h2 class="disp" style="margin-top:16px">Estimates<br />were high.</h2>
+    </div>
+    <div>
+      <p style="font-size:20px;color:var(--newsprint)">
+        Realized prices sat consistently below estimates across the historical set — systematic
+        estimate inflation, invisible until 32,000 records were in one place.
+      </p>
+      <p class="small" style="margin-top:20px;color:var(--ink-300)">
+        This was not in the brief. It surfaced because the corpus exists, and it is worth more
+        than the time saving: an estimate range that tracks reality changes what bidders do
+        before the hammer.
+      </p>
+      <div class="term" style="margin-top:30px">
+        <div class="bar"><i></i><i></i><i></i>
+          <span style="margin-left:8px;color:var(--ink-400);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em">corpus · 32,000 records</span>
+        </div>
+        <div class="out">
+          <div><b>01</b> ingested &nbsp;→ 32,000 items · titles · descriptions</div>
+          <div><b>02</b> priced &nbsp;&nbsp;&nbsp;→ estimate range vs realized price</div>
+          <div><b>03</b> signal &nbsp;&nbsp;&nbsp;→ realized consistently below estimate</div>
+          <div><b>04</b> action &nbsp;&nbsp;&nbsp;→ estimates now drafted from realized history</div>
+          <div class="c">— quantified impact reported after 16 Aug —</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NUMBERS ══ -->
+<section class="sect" id="numbers">
+  <div class="wrap">
+    <div class="eye">05 — The numbers</div>
+    <h2 class="disp" style="margin-top:16px">Published,<br />or marked pending.</h2>
+    <p style="margin-top:24px">Nothing on this page is an estimate dressed as a result.
+    Figures we cannot yet measure are shown as pending, and stay pending until the auction runs.</p>
+
+    <div class="stats" style="margin-top:44px">
+      <div class="stat accent"><div class="n">400+</div><div class="l">Hours saved per year</div></div>
+      <div class="stat"><div class="n">32,000</div><div class="l">Items in the reference corpus</div></div>
+      <div class="stat"><div class="n">1,250</div><div class="l">Lots per auction, previously by hand</div></div>
+      <div class="stat"><div class="n">21</div><div class="l">Dealer sites watched by Inventory Watch</div></div>
+      <div class="stat"><div class="n">3</div><div class="l">Builds for this client, and counting</div></div>
+      <div class="stat pending"><div class="n">[Lots processed pending]</div><div class="l">First live auction, 16 Aug</div></div>
+      <div class="stat pending"><div class="n">[Review rate pending]</div><div class="l">Share of lots flagged for a human</div></div>
+      <div class="stat pending"><div class="n">[Estimate accuracy pending]</div><div class="l">Realized vs estimate, post-correction</div></div>
+    </div>
+    <p class="small" style="margin-top:22px;color:var(--ink-400)">Figures last confirmed with the client 1 July 2026.</p>
+  </div>
+</section>
+
+<!-- ══ COUNTDOWN BAND ══ -->
+<section class="band">
+  <div class="wrap">
+    <div class="eye">Next milestone</div>
+    <h2 class="disp" style="margin-top:16px;font-size:clamp(2.4rem,6.5vw,5.5rem)">First live auction.</h2>
+    <p style="margin-top:20px">16 August 2026, Asia/Karachi. The date the platform was built against.
+    Every stage below is scheduled backwards from it.</p>
+    <div class="cd" id="cd">
+      <div><div class="n" id="cd-d">—</div><div class="l">Days</div></div>
+      <div><div class="n" id="cd-h">—</div><div class="l">Hours</div></div>
+      <div><div class="n" id="cd-m">—</div><div class="l">Minutes</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NEXT ══ -->
+<section class="sect" id="next">
+  <div class="wrap">
+    <div class="eye">06 — What's next</div>
+    <h2 class="disp" style="margin-top:16px">Between here<br />and 16 August.</h2>
+
+    <div class="phases">
+      <div class="phase"><div class="no">01</div><span class="st next">Scheduled</span>
+        <h3 class="disp">Full-auction dry run</h3>
+        <p>A complete 1,250-lot pass end to end — photographs to uploaded template — timed,
+        so the hours saved figure is measured rather than projected.</p></div>
+      <div class="phase"><div class="no">02</div><span class="st next">Scheduled</span>
+        <h3 class="disp">Estimate correction, live</h3>
+        <p>Estimates drafted from realized history rather than prior estimates, applied to
+        the 16 August catalogue and reported against outcome.</p></div>
+      <div class="phase"><div class="no">03</div><span class="st next">Scheduled</span>
+        <h3 class="disp">Review threshold tuning</h3>
+        <p>Set the confidence cut-off where the flag rate is low enough to be worth it and
+        high enough to be safe. Tuned against the dry run, not guessed.</p></div>
+      <div class="phase"><div class="no">04</div><span class="st next">Scheduled</span>
+        <h3 class="disp">Post-auction report</h3>
+        <p>Lots processed, review rate and estimate accuracy published. The pending figures
+        on this page get filled in — or flagged again.</p></div>
+    </div>
+
+    <div class="risk">
+      <div class="h">Open, and worth saying</div>
+      <p class="small" style="margin-top:8px">Three things are not yet proven and we will not
+      claim them until they are: the measured throughput on a full 1,250-lot auction, the
+      human review rate at production confidence settings, and the revenue effect of the
+      estimate correction. All three resolve on 16 August.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ VISION ══ -->
+<section class="sect" id="vision">
+  <div class="wrap">
+    <div class="eye">07 — The vision</div>
+    <h2 class="disp" style="margin-top:16px">Cataloguing was<br />the first job.</h2>
+    <p style="margin-top:24px">The corpus is the asset. Once 32,000 items with their realized
+    prices sit in one place, the listing engine is only the first thing you can build on top of it.</p>
+
+    <div class="vis">
+      <div class="card">
+        <div class="h">Acquisition, priced</div>
+        <p>Inventory Watch already sees 21 dealer sites. The next step is scoring what it finds
+        against realized prices — not "this is for sale", but "this is for sale below what it makes".</p>
+        <span class="tag">Built on: corpus + watch</span>
+      </div>
+      <div class="card">
+        <div class="h">Estimates as a discipline</div>
+        <p>Every auction feeds its results back in. Estimates stop being a judgement call
+        repeated from last time and start being a number that corrects itself.</p>
+        <span class="tag">Built on: corpus</span>
+      </div>
+      <div class="card">
+        <div class="h">Catalogue on the day</div>
+        <p>When cataloguing costs hours instead of weeks, the constraint on how often you run
+        an auction stops being data entry. That is the real unlock, and it is a business
+        decision, not a build one.</p>
+        <span class="tag">Built on: the engine</span>
+      </div>
+      <div class="card">
+        <div class="h">One platform, not three tools</div>
+        <p>Listing, review and cross-posting already live in one hosted PWA. Inventory and
+        estimate intelligence join it rather than becoming another login.</p>
+        <span class="tag">Direction</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CLOSE ══ -->
+<section class="sect">
+  <div class="wrap two">
+    <div>
+      <div class="eye mut">How we report</div>
+      <h2 class="disp" style="margin-top:16px">The number,<br />weekly.</h2>
+    </div>
+    <div>
+      <p style="font-size:20px;color:var(--newsprint)">Every agency says growth. We say the number.</p>
+      <p>One metric, one date, written into the scope. For this build the metric is hours off
+      your desk and the date is 16 August. Both were agreed before the first commit and neither
+      has moved.</p>
+      <p class="small" style="color:var(--ink-300)">Published numbers or pending flags. Never estimates.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="note">
+      Drifted Marketing · Karachi<br />
+      Zoller auction platform — progress report · 28 July 2026
+    </div>
+    <div class="note" style="text-align:right">
+      Figures verified 1 July 2026<br />
+      Pending figures resolve 16 August 2026
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var target = new Date('2026-08-16T00:00:00+05:00').getTime();
+  function tick(){
+    var diff = target - Date.now();
+    if (diff < 0) diff = 0;
+    var d = Math.floor(diff/86400000),
+        h = Math.floor(diff/3600000)%24,
+        m = Math.floor(diff/60000)%60;
+    document.getElementById('cd-d').textContent = d;
+    document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 60000);
+})();
+</script>
+</body>
+</html>

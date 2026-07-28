@@ -1,0 +1,10 @@
+/* Webfonts — Google Fonts CDN. Schibsted Grotesk 900 is the display + lockup face
+   (its stem is 0.30 of cap, matching the D mark). Instrument Sans is the body
+   workhorse; JetBrains Mono carries labels, eyebrows and data. */
+@import url("https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+:root {
+  --font-display: "Schibsted Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif; /* @kind font */
+  --font-body: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; /* @kind font */
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; /* @kind font */
+}
