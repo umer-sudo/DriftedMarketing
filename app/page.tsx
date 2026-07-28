@@ -7,6 +7,7 @@ import ShipTicker from "@/components/ShipTicker";
 import ScrollJack from "@/components/ScrollJack";
 import WorkTile from "@/components/WorkTile";
 import CtaBand from "@/components/CtaBand";
+import MidCta from "@/components/MidCta";
 import ImageSlot from "@/components/ImageSlot";
 import { CASES, CLIENTS } from "@/content/cases";
 
@@ -366,40 +367,25 @@ export default function Home() {
         ))}
       </div>
 
-      {/* ── ACTION, mid-funnel ─────────────────────────────────────────────────
-          A reader who has got through the stat band, the argument and four cases is
-          the warmest they will be all page. Before this, the only CTA was the nav
-          and the band at the very bottom — roughly fourteen sections away. */}
-      <section className="wrap sect midcta">
-        <div className="two" style={{ alignItems: "center" }}>
-          <div>
-            <div className="eye">Still here</div>
-            <h2 className="disp" style={{ fontSize: "clamp(28px,4.2vw,64px)", marginTop: 14 }}>
-              You&rsquo;ve seen
-              <br />
-              the numbers.
-            </h2>
-          </div>
-          <div>
+      {/* ACTION, mid-funnel. See components/MidCta.tsx for why it's quieter than
+          the closing band. */}
+      <MidCta
+        eyebrow="Still here"
+        headline={["You’ve seen", "the numbers."]}
+        body={
+          <>
             <p className="body" style={{ maxWidth: "46ch" }}>
-              Most agencies would have asked for your email three scrolls ago. We&rsquo;d
-              rather you read the receipts first and then decide.
+              Most agencies would have asked for your email three scrolls ago. We’d rather
+              you read the receipts first and then decide.
             </p>
             <p className="body" style={{ maxWidth: "46ch", marginTop: 14 }}>
-              Thirty minutes. Bring the metric you need and the date you need it by.
-              We&rsquo;ll tell you on the call whether we can hit it.
+              Thirty minutes. Bring the metric you need and the date you need it by. We’ll
+              tell you on the call whether we can hit it.
             </p>
-            <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
-              <Link href="/contact" className="btn">
-                Tell us the number ↗
-              </Link>
-              <Link href="/work" className="btn sec">
-                Read another case
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+        secondary={{ href: "/work", label: "Read another case" }}
+      />
 
       {/* ── The part nobody else does ──────────────────────────────────────── */}
       <section className="appsec">

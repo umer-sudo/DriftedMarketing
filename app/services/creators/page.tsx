@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
+import MidCta from "@/components/MidCta";
 import ImageSlot from "@/components/ImageSlot";
 import Faq from "@/components/Faq";
 import JsonLd from "@/components/JsonLd";
@@ -187,6 +188,26 @@ export default function CreatorsPage() {
           </div>
         </div>
       </section>
+
+      {/* The proof figure above is this page's peak. Until now the next available
+          action was past the receipts grid and the FAQ. */}
+      <MidCta
+        eyebrow="Noted. did it"
+        headline={["3K a month,", "and a brand", "to sell to them."]}
+        body={
+          <>
+            <p className="body" style={{ maxWidth: "46ch" }}>
+              An audience is the hard part and you already have it. What&rsquo;s missing is
+              a product with a margin table behind it.
+            </p>
+            <p className="body" style={{ maxWidth: "46ch", marginTop: 14 }}>
+              Thirty minutes. Tell us the following you have and what you want it to earn.
+              If we don&rsquo;t think it will, we&rsquo;ll tell you before you order stock.
+            </p>
+          </>
+        }
+        secondary={{ href: "/work/noted", label: "Read the Noted. case" }}
+      />
 
       <section className="wrap sect">
         <div

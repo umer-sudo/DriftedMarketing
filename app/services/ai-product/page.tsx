@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
+import MidCta from "@/components/MidCta";
 import ImageSlot from "@/components/ImageSlot";
 import Faq from "@/components/Faq";
 import JsonLd from "@/components/JsonLd";
@@ -237,6 +238,26 @@ export default function AiProductPage() {
           </div>
         </div>
       </section>
+
+      {/* The proof figure above is this page's peak. Until now the next available
+          action was past the receipts grid and the FAQ. */}
+      <MidCta
+        eyebrow="Zoller did it"
+        headline={["400 hours,", "back on the", "client’s desk."]}
+        body={
+          <>
+            <p className="body" style={{ maxWidth: "46ch" }}>
+              That build started with a revenue model, not a wireframe. Everything after
+              it was cheaper because of that order.
+            </p>
+            <p className="body" style={{ maxWidth: "46ch", marginTop: 14 }}>
+              Bring the idea. We&rsquo;ll tell you how it earns, or that it doesn&rsquo;t —
+              and you keep the model either way.
+            </p>
+          </>
+        }
+        secondary={{ href: "/work/zoller", label: "Read the Zoller case" }}
+      />
 
       <section className="wrap sect">
         <div

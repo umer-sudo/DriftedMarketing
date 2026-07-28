@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import WorkGrid from "@/components/WorkGrid";
 import CtaBand from "@/components/CtaBand";
+import MidCta from "@/components/MidCta";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/structured-data";
 import { FORJWELL_CREDIT } from "@/content/cases";
@@ -31,6 +32,27 @@ export default function WorkPage() {
       <Suspense fallback={null}>
         <WorkGrid />
       </Suspense>
+      {/* The work index is the highest-intent page on the site — nobody lands here
+          by accident — and its first action used to sit 79% down the page, past the
+          grid and the credits. */}
+      <MidCta
+        eyebrow="Seen enough"
+        headline={["Six cases.", "One question."]}
+        body={
+          <>
+            <p className="body" style={{ maxWidth: "46ch" }}>
+              What number do you need, and by when? That is the entire brief. Everything
+              above started with someone answering it on a thirty-minute call.
+            </p>
+            <p className="body" style={{ maxWidth: "46ch", marginTop: 14 }}>
+              If we can&rsquo;t get you there, we&rsquo;ll say so on the same call and point
+              you at someone who can.
+            </p>
+          </>
+        }
+        secondary={{ href: "/about", label: "Who we are first" }}
+      />
+
       <div className="wrap" style={{ paddingTop: 34 }}>
         <p className="body" style={{ maxWidth: "62ch" }}>
           One of these you can inspect yourself rather than take our word for.{" "}

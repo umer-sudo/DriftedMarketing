@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CtaBand from "@/components/CtaBand";
+import MidCta from "@/components/MidCta";
 import { FORJWELL_CREDIT } from "@/content/cases";
 
 export const metadata: Metadata = {
@@ -47,8 +48,8 @@ export default function AboutPage() {
           on purpose.
         </h1>
         <p className="body" style={{ maxWidth: "56ch", marginTop: 28, fontSize: 19 }}>
-          Drifted means departure. Not lost, not floating — a deliberate leaving of the way this is
-          normally done.
+          Drifted means departure. Not lost, not adrift — a deliberate walking away from how
+          this is normally done, by people who did it that way long enough to know better.
         </p>
       </section>
 
@@ -98,7 +99,7 @@ export default function AboutPage() {
         </div>
 
         <div className="held" style={{ marginTop: 30 }}>
-          <div className="eye mut">The roster, in full</div>
+          <div className="eye mut">The roster, in full — all of it, not the flattering half</div>
           <p className="small" style={{ marginTop: 12, color: "var(--text-body)" }}>
             Ehsaan · Adam Lewis (Zoller listing platform, Inventory Watch, zollerhistory.com) ·
             Noted. · The Gallery · Seyr · a four-brand social operation.
@@ -165,6 +166,23 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
+
+      {/* About is a trust page, so its job is to route rather than close. Someone
+          who has read this far wants evidence next, not a booking form — the
+          closing band below still offers the call. */}
+      <MidCta
+        eyebrow="Enough about us"
+        headline={["Opinions are", "cheap. Look", "at the work."]}
+        body={
+          <p className="body" style={{ maxWidth: "46ch" }}>
+            Six cases, each with its figures attached and a date they were last confirmed.
+            Where something isn&rsquo;t measured yet, the page says pending rather than
+            guessing. You can tell a lot about an agency from what it refuses to claim.
+          </p>
+        }
+        primary={{ href: "/work", label: "See the work ↗" }}
+        secondary={{ href: "/contact", label: "Skip ahead, book the call" }}
+      />
 
       <CtaBand />
     </>

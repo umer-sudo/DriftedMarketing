@@ -46,8 +46,13 @@ export default function ContactPage() {
           number.
         </h1>
         <p className="body" style={{ maxWidth: "54ch", marginTop: 26, fontSize: 19 }}>
-          Thirty minutes. No deck, no discovery theatre. Tell us the metric and the date, and
-          we&rsquo;ll tell you whether we can hit it — or who can.
+          Thirty minutes. No deck, no discovery theatre, no account manager taking notes.
+          Tell us the metric and the date, and we&rsquo;ll tell you whether we can hit it —
+          or who can.
+        </p>
+        <p className="body" style={{ maxWidth: "54ch", marginTop: 16 }}>
+          Six fields. It takes about ninety seconds, and two of them are the only ones that
+          really matter.
         </p>
       </section>
 
@@ -59,7 +64,8 @@ export default function ContactPage() {
                 whether to spend two minutes filling this in needs to know what
                 happens next before they start, not after they scroll. */}
             <p className="body" style={{ marginTop: 14, maxWidth: "46ch" }}>
-              We answer within one business day — including when the answer is no.
+              We answer within one business day — including when the answer is no. There is
+              no sequence, no drip, no newsletter you didn&rsquo;t ask for.
             </p>
             <ContactForm />
           </div>
@@ -84,7 +90,8 @@ export default function ContactPage() {
             <div className="held" style={{ marginTop: 28 }}>
               <div className="eye mut">Or just DM</div>
               <p className="small" style={{ marginTop: 12 }}>
-                There is no inbox manager. A DM lands with the person who would run your account.
+                There is no inbox manager here. A DM lands with the person who would run
+                your account, which is also the person who would answer for it.
               </p>
               <div style={{ display: "flex", gap: 10, marginTop: 16, flexWrap: "wrap" }}>
                 <a

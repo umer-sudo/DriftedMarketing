@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
+import MidCta from "@/components/MidCta";
 import ImageSlot from "@/components/ImageSlot";
 import Faq from "@/components/Faq";
 import JsonLd from "@/components/JsonLd";
@@ -188,6 +189,27 @@ export default function PerformancePage() {
           </div>
         </div>
       </section>
+
+      {/* The proof figure above is this page's peak. Until now the next available
+          action was past the receipts grid and the FAQ. */}
+      <MidCta
+        eyebrow="The Gallery did it"
+        headline={["5.2–6× is", "the floor we", "work from."]}
+        body={
+          <>
+            <p className="body" style={{ maxWidth: "46ch" }}>
+              That number came from ten creatives and a campaign built for where the sale
+              actually closes. Yours will come from somewhere else — which is what the
+              call is for.
+            </p>
+            <p className="body" style={{ maxWidth: "46ch", marginTop: 14 }}>
+              Bring the return you need and the date. If your budget can&rsquo;t reach it,
+              we&rsquo;ll say so before you spend a month finding out.
+            </p>
+          </>
+        }
+        secondary={{ href: "/work/gallery", label: "Read The Gallery case" }}
+      />
 
       <section className="wrap sect">
         <div

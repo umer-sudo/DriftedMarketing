@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CtaBand from "@/components/CtaBand";
+import MidCta from "@/components/MidCta";
 import ImageSlot from "@/components/ImageSlot";
 import JsonLd from "@/components/JsonLd";
 import { caseSchema, breadcrumbSchema } from "@/lib/structured-data";
@@ -213,6 +214,28 @@ export default async function CasePage({ params }: Params) {
         </div>
       </section>
 
+      {/* A case page's warmest moment is the instant after the stat grid. Until now
+          the next thing a convinced reader could do was scroll past the proof grid,
+          a held quote and two nav cards to reach the closing band. */}
+      <MidCta
+        eyebrow="Want one of these"
+        headline={["Your number,", "on a page", "like this one."]}
+        body={
+          <>
+            <p className="body" style={{ maxWidth: "46ch" }}>
+              Every figure above traces to something we can show you. That is the whole
+              offer: pick a metric, pick a date, and we&rsquo;ll tell you on the call
+              whether it&rsquo;s reachable.
+            </p>
+            <p className="body" style={{ maxWidth: "46ch", marginTop: 14 }}>
+              If it isn&rsquo;t, you get that answer in thirty minutes instead of a
+              quarter.
+            </p>
+          </>
+        }
+        secondary={{ href: "/work", label: "See all six cases" }}
+      />
+
       {/* ── Receipts ───────────────────────────────────────────────────────── */}
       <section className="wrap sect">
         <div
@@ -261,7 +284,9 @@ export default async function CasePage({ params }: Params) {
             [Client quote pending]
           </p>
           <p className="small" style={{ marginTop: 14, maxWidth: "52ch" }}>
-            The quote goes up when the client writes one, and not before.
+            The quote goes up when the client writes one, and not before. Every agency
+            site has this section full. Ask yourself how many of those were written by
+            the client.
           </p>
         </div>
       </section>
