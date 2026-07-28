@@ -15,25 +15,29 @@ every PR (`.github/workflows/ci.yml`).
 
 ## Deploying
 
-Nothing about this app is Vercel-specific — it is a stock Next.js 15 app and will
-run anywhere that runs Node, including a plain `npm run build && npm run start`
-behind nginx. Vercel is simply the shortest path from repo to URL.
+**Full runbook: [`docs/DEPLOY.md`](docs/DEPLOY.md)** — covers the GoDaddy DNS cutover
+and replacing the site currently live at the domain.
 
-1. **https://vercel.com/new** → import `umer-sudo/DriftedMarketing-Revamp`
-2. Pick the branch. Framework, build command and output are auto-detected; there is
-   nothing to configure.
-3. Set `NEXT_PUBLIC_SITE_URL` to the URL Vercel gives you, then redeploy. Skipping
-   this leaves canonicals, sitemap and OG tags pointing at `driftedmarketing.com`.
-4. Everything else in `.env.example` is optional. Add `RESEND_API_KEY` and
-   `CONTACT_TO_EMAIL` when you want the form to actually deliver.
+The short version: the domain stays registered at GoDaddy and points at a host that
+can run Node. This app needs one — the contact form is a Server Action and OG cards
+render through `next/og`, neither of which survives GoDaddy's shared/cPanel hosting.
 
-`vercel.json` sets security headers (nosniff, DENY framing, strict referrer, and a
-Permissions-Policy that turns off camera, microphone, geolocation and FLoC). It
-does not pin a region or override the build — swap hosts freely.
+1. **https://vercel.com/new** → import `umer-sudo/DriftedMarketing-Revamp`. Nothing
+   to configure; everything is auto-detected.
+2. Add the domain in Vercel, then create the DNS records it shows you in GoDaddy.
+3. Set `NEXT_PUBLIC_SITE_URL` to the real origin and redeploy — otherwise canonicals,
+   sitemap and OG tags all claim `driftedmarketing.com`.
+4. Fill in `redirects()` in `next.config.ts` with the old site's URLs before cutover,
+   or their search history is discarded rather than transferred.
 
-> One caveat if you deploy serverless: `lib/rate-limit.ts` keeps its counters in
-> process memory, so each instance limits independently. See the note under
-> **Contact form**.
+Nothing here is Vercel-specific. `vercel.json` only sets security headers (nosniff,
+DENY framing, strict referrer, and a Permissions-Policy disabling camera, microphone,
+geolocation and FLoC) — no region pin, no build override. Netlify and Cloudflare
+Pages work the same way, and `npm run build && npm run start` behind nginx works on
+any VPS.
+
+> One caveat on serverless: `lib/rate-limit.ts` keeps its counters in process memory,
+> so each instance limits independently. See the note under **Contact form**.
 
 ## Routes
 
