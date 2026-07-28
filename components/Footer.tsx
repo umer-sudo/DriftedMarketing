@@ -38,16 +38,7 @@ export default function Footer() {
               type="button"
               data-copy-email={site.email}
               title="Click to copy"
-              style={{
-                background: "none",
-                border: 0,
-                padding: 0,
-                cursor: "pointer",
-                font: "inherit",
-                letterSpacing: "inherit",
-                textTransform: "inherit",
-                color: "inherit",
-              }}
+              className="copyemail"
             >
               {site.email}
             </button>

@@ -1,11 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import NotFoundHeading from "@/components/NotFoundHeading";
 
 /* Next renders not-found.tsx inside the root layout, so nav, footer and chrome all
    come along. Metadata for this route is set below; the title matches the handoff. */
 
-export const metadata = {
+/* The root layout sets a canonical, and a 404 inheriting it declares every mistyped
+   URL canonical to the homepage — an invitation to fold junk paths into `/`. Drop it,
+   and tell crawlers not to index the page at all. */
+export const metadata: Metadata = {
   title: "This one drifted too far — Drifted",
+  alternates: { canonical: null },
+  robots: { index: false, follow: true },
 };
 
 export default function NotFound() {

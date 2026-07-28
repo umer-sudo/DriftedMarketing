@@ -10,8 +10,14 @@ npm run build
 npm run typecheck
 ```
 
-CI runs typecheck, build, a high-severity audit and a shared-JS bundle budget on
-every PR (`.github/workflows/ci.yml`).
+CI runs typecheck, build, a high-severity audit and a bundle budget on every PR
+(`.github/workflows/ci.yml`). The budget is `scripts/bundle-budget.mjs`, which
+measures the gzipped First Load JS of the worst route — currently ~132 kB against
+a 150 kB ceiling. Run it yourself after any `npm run build`:
+
+```bash
+node scripts/bundle-budget.mjs        # defaults to a 130 kB budget
+```
 
 ## Deploying
 

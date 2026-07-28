@@ -480,7 +480,7 @@ export default function Chrome() {
           >
             A door, not a gate
           </div>
-          <h3>Still scrolling?</h3>
+          <h2>Still scrolling?</h2>
           <p>
             That’s usually the sign. Bring us the number you need to hit — the call is 30
             minutes, there’s no deck, and if we can’t get you there we’ll say so.

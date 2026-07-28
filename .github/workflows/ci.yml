@@ -40,15 +40,7 @@ jobs:
         run: npm audit --audit-level=high
 
       # A marketing site that ships 300kB of JS has stopped being a marketing site.
-      # The budget is deliberately close to current (~102kB shared) so a careless
-      # dependency shows up here rather than in someone's field data.
+      # The budget is deliberately close to current (worst route ~132kB gzipped)
+      # so a careless dependency shows up here rather than in someone's field data.
       - name: Bundle budget
-        run: |
-          BYTES=$(find .next/static/chunks -name '*.js' -not -path '*/app/*' -printf '%s\n' \
-            | awk '{t+=$1} END {print t}')
-          KB=$((BYTES / 1024))
-          echo "Shared client chunks: ${KB}kB"
-          if [ "$KB" -gt 400 ]; then
-            echo "::error::Shared JS is ${KB}kB, over the 400kB budget."
-            exit 1
-          fi
+        run: node scripts/bundle-budget.mjs 150

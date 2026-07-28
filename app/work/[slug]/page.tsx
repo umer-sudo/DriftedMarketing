@@ -18,11 +18,18 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const c = caseBySlug(slug);
   if (!c) return { title: "Case study — Drifted" };
+  /* `sub` alone runs short on some cases — a 60-character snippet wastes the half
+     of a search result that actually sells the click. Leading with the outcome and
+     the discipline fills it with the two things a reader is scanning for. */
+  /* Some `result` strings are authored with a full stop, some without. */
+  const result = c.result.replace(/[.]+$/, "");
+  const description = `${result}. ${c.sub} ${c.tags.join(" · ")}, Drifted Marketing.`;
+  const title = `${c.client} — ${result} — Drifted`;
   return {
-    title: `${c.client} — Drifted`,
-    description: c.sub,
+    title,
+    description,
     alternates: { canonical: `/work/${c.slug}` },
-    openGraph: { title: `${c.client} — Drifted`, description: c.sub, type: "article" },
+    openGraph: { title, description, type: "article" },
   };
 }
 

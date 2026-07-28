@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 import WorkTile from "./WorkTile";
 import { CASES, FILTERS, countFor, type CaseCategory } from "@/content/cases";
 
@@ -13,26 +12,45 @@ import { CASES, FILTERS, countFor, type CaseCategory } from "@/content/cases";
 
    The active filter lives in the URL (?filter=performance) rather than in component
    state alone, so a filtered view is shareable, survives reload, and the browser
-   back button steps through filters the way people expect. `scroll: false` keeps the
-   viewport still — re-deal is the feedback, a jump to the top would fight it. */
+   back button steps through filters the way people expect.
+
+   It is read from `location.search` on mount rather than through `useSearchParams`
+   on purpose. `useSearchParams` opts the whole subtree out of prerendering — which
+   on this page meant the h1, the intro and all six tiles were missing from the
+   served HTML, on the one page nobody reaches by accident. Reading the URL in an
+   effect renders the unfiltered grid on the server, then narrows it once mounted. */
 
 const isCategory = (v: string | null): v is CaseCategory =>
   v === "performance" || v === "creators" || v === "product" || v === "web";
 
+const fromLocation = (): "all" | CaseCategory => {
+  const v = new URLSearchParams(window.location.search).get("filter");
+  return isCategory(v) ? v : "all";
+};
+
 export default function WorkGrid() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
   const gridRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
+  const [filter, setFilterState] = useState<"all" | CaseCategory>("all");
 
-  const raw = params.get("filter");
-  const filter: "all" | CaseCategory = isCategory(raw) ? raw : "all";
+  /* Mount: adopt whatever the URL asks for. popstate: follow the back button. */
+  useEffect(() => {
+    const sync = () => setFilterState(fromLocation());
+    sync();
+    window.addEventListener("popstate", sync);
+    return () => window.removeEventListener("popstate", sync);
+  }, []);
 
-  const setFilter = (next: "all" | CaseCategory) => {
-    const qs = next === "all" ? "" : `?filter=${next}`;
-    router.replace(`${pathname}${qs}`, { scroll: false });
-  };
+  const setFilter = useCallback((next: "all" | CaseCategory) => {
+    setFilterState(next);
+    /* replaceState rather than a router navigation — the re-deal is the feedback,
+       and a scroll restoration on top of it would fight the animation. */
+    window.history.replaceState(
+      null,
+      "",
+      next === "all" ? window.location.pathname : `${window.location.pathname}?filter=${next}`,
+    );
+  }, []);
 
   const visible = CASES.filter((c) => filter === "all" || c.category === filter);
 
@@ -97,7 +115,7 @@ export default function WorkGrid() {
       {visible.length > 0 ? (
         <div className="work" ref={gridRef}>
           {visible.map((c) => (
-            <WorkTile key={c.slug} c={c} index={CASES.indexOf(c)} />
+            <WorkTile key={c.slug} c={c} index={CASES.indexOf(c)} headingLevel={2} />
           ))}
         </div>
       ) : (

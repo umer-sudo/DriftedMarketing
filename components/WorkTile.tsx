@@ -6,8 +6,20 @@ import type { CaseStudy } from "@/content/cases";
    div with role="link" and a keydown handler; a real anchor gets the same keyboard
    behaviour for free and is correct for assistive tech. */
 
-export default function WorkTile({ c, index }: { c: CaseStudy; index: number }) {
+export default function WorkTile({
+  c,
+  index,
+  /* On the home page the grid sits under a section h2, so the tiles are h3s. On
+     the work index the page h1 is the only heading above them, and an h3 there
+     skips a level. The caller knows which it is; the tile doesn't. */
+  headingLevel = 3,
+}: {
+  c: CaseStudy;
+  index: number;
+  headingLevel?: 2 | 3;
+}) {
   const span = c.span ? ` ${c.span}` : "";
+  const H = `h${headingLevel}` as "h2" | "h3";
   return (
     <div className={`item${span}`} data-cat={c.category}>
       <div className="shot">
@@ -25,12 +37,12 @@ export default function WorkTile({ c, index }: { c: CaseStudy; index: number }) 
       </div>
 
       <div className="meta">
-        <h3 className="disp" style={{ fontSize: "clamp(22px,2.4vw,34px)" }}>
+        <H className="disp" style={{ fontSize: "clamp(22px,2.4vw,34px)" }}>
           <Link href={`/work/${c.slug}`} className="tilelink">
             {c.client}
             <span className="sr-only"> — read the case study</span>
           </Link>
-        </h3>
+        </H>
 
         <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
           {c.tags.map((t) => (

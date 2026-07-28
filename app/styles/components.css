@@ -2376,3 +2376,56 @@ body {
     font-size: 10px;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Target size (WCAG 2.2 SC 2.5.8, AA — 24×24 CSS px minimum).
+
+   These controls are all set in small type, so their hit area was the height
+   of a line box: 11–14px in the footer and the breadcrumb, and 18px for the
+   bare icon links in the closing band. Fine with a mouse, a coin-toss with a
+   thumb. The fix is padding, not font size — the type stays where the design
+   put it and only the touch area grows.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* The footer column gap shrinks by what the padding adds, so the rhythm of the
+   list is unchanged while each row becomes tappable. */
+.footlinks {
+  gap: 0;
+}
+.footlinks a {
+  display: inline-block;
+  padding-block: 8px;
+}
+
+.crumbs a {
+  display: inline-block;
+  /* The crumb row is inside a fixed-height band; pull the extra height back out
+     so the bar doesn't grow, and let the hit area overhang instead. */
+  padding-block: 8px;
+  margin-block: -8px;
+}
+
+.copyemail {
+  display: inline-block;
+  padding-block: 7px;
+  margin-block: -7px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
+.iconlink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  min-height: 26px;
+  /* Padding grows the box inward from the icon; the negative margin keeps the
+     row of icons visually the same width it was. */
+  margin-inline: -4px;
+  color: var(--tar);
+}

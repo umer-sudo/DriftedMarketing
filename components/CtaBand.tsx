@@ -96,14 +96,14 @@ export default function CtaBand() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                style={{ color: "var(--tar)", display: "inline-flex" }}
+                className="iconlink"
               >
                 <Instagram className="lu" aria-hidden="true" />
               </a>
               <a
                 href="mailto:hello@driftedmarketing.com"
                 aria-label="Email us"
-                style={{ color: "var(--tar)", display: "inline-flex" }}
+                className="iconlink"
               >
                 <Mail className="lu" aria-hidden="true" />
               </a>
@@ -113,7 +113,7 @@ export default function CtaBand() {
                 <a
                   href={`tel:${phone.number.replace(/\s+/g, "")}`}
                   aria-label="Call us"
-                  style={{ color: "var(--tar)", display: "inline-flex" }}
+                  className="iconlink"
                 >
                   <Phone className="lu" aria-hidden="true" />
                 </a>

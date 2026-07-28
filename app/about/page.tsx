@@ -6,7 +6,7 @@ import { FORJWELL_CREDIT } from "@/content/cases";
 export const metadata: Metadata = {
   title: "We left on purpose — Drifted",
   description:
-    "We left agencies where a strategy team, a creative team and a media team were separated by an account layer. Founded 2026 in Karachi. Three clients, small on purpose.",
+    "We left agencies where strategy, creative and media were separated by an account layer. Founded 2026 in Karachi. Three clients, small on purpose.",
   alternates: { canonical: "/about" },
 };
 

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import WorkGrid from "@/components/WorkGrid";
 import CtaBand from "@/components/CtaBand";
 import MidCta from "@/components/MidCta";
@@ -26,12 +25,7 @@ export default function WorkPage() {
           { name: "Work", path: "/work" },
         ])}
       />
-      {/* WorkGrid reads the filter from the query string, so it needs a boundary for
-          the static build. The fallback is the unfiltered grid, which is what the
-          page shows anyway before hydration. */}
-      <Suspense fallback={null}>
-        <WorkGrid />
-      </Suspense>
+      <WorkGrid />
       {/* The work index is the highest-intent page on the site — nobody lands here
           by accident — and its first action used to sit 79% down the page, past the
           grid and the credits. */}
