@@ -49,33 +49,22 @@ const PROCESS = [
     n: "01",
     Icon: PhoneCall,
     title: "The call",
-    body: "30 minutes. You bring the number you need to hit and the date. No deck, no pitch theatre.",
+    body: "Thirty minutes with the people who would run the account. No deck, no discovery theatre, no account manager taking notes.",
   },
   {
     n: "02",
     Icon: Crosshair,
     title: "The number",
-    body: "We say yes or no on the call. Yes comes with a scope and a figure we report against weekly.",
+    body: "Yes or no on the call, not after a month of discovery. Yes comes with a scope, a date, and a figure we report against every week.",
   },
   {
     n: "03",
     Icon: Receipt,
     title: "The receipts",
-    body: "Published numbers or pending flags — never estimates. If it is not measured yet, it says so.",
+    body: "Measured against the number, not against impressions. Published figures or a pending flag — never an estimate dressed up as a result.",
   },
 ];
 
-const STEPS = [
-  { n: "01", title: "The number", body: "You tell us the metric and the date. We tell you if we can hit it." },
-  {
-    n: "02",
-    title: "The audit",
-    body: "We go through the account, the funnel, the data. Nothing starts before we know what’s broken.",
-  },
-  { n: "03", title: "The plan", body: "One page. The number, the route, the deadline." },
-  { n: "04", title: "The work", body: "The people who pitched you do the work. Every week, in your inbox." },
-  { n: "05", title: "The proof", body: "Measured against the number. Not against impressions." },
-];
 
 export default function Home() {
   return (
@@ -97,9 +86,9 @@ export default function Home() {
             <span className="ol">than</span> you are
           </h1>
           <p className="body" style={{ maxWidth: "44ch", marginTop: 34, fontSize: 19 }}>
-            5.2–6× ROAS, every campaign. 400+ hours a year off one client&rsquo;s desk. 2.2M
-            views from an 811-follower account. Three clients. No account layer. A number in
-            every contract.
+            Three clients. Six disciplines. No account manager to explain why the number
+            slipped — because the people who pitch you are the people doing the work.
+            5.2–6× ROAS every campaign. 400+ hours a year off one client&rsquo;s desk.
           </p>
           <div style={{ display: "flex", gap: 14, marginTop: 38, flexWrap: "wrap" }}>
             <Link href="/contact" className="btn">
@@ -123,7 +112,11 @@ export default function Home() {
 
       {/* ── The numbers ────────────────────────────────────────────────────── */}
       <section className="wrap" style={{ paddingBlock: "clamp(48px,6vw,88px)" }}>
-        <div className="eye">The numbers</div>
+        <div className="eye">Receipts, not adjectives</div>
+        <p className="body" style={{ maxWidth: "54ch", marginTop: 14, marginBottom: 4 }}>
+          Four figures we can name a client against. Everything else on this site is
+          either published or says pending — there is no third category.
+        </p>
         <div className="nums">
           <div className="rv">
             <div className="n acc" data-count="5.2" data-suffix="–6×">
@@ -373,6 +366,41 @@ export default function Home() {
         ))}
       </div>
 
+      {/* ── ACTION, mid-funnel ─────────────────────────────────────────────────
+          A reader who has got through the stat band, the argument and four cases is
+          the warmest they will be all page. Before this, the only CTA was the nav
+          and the band at the very bottom — roughly fourteen sections away. */}
+      <section className="wrap sect midcta">
+        <div className="two" style={{ alignItems: "center" }}>
+          <div>
+            <div className="eye">Still here</div>
+            <h2 className="disp" style={{ fontSize: "clamp(28px,4.2vw,64px)", marginTop: 14 }}>
+              You&rsquo;ve seen
+              <br />
+              the numbers.
+            </h2>
+          </div>
+          <div>
+            <p className="body" style={{ maxWidth: "46ch" }}>
+              Most agencies would have asked for your email three scrolls ago. We&rsquo;d
+              rather you read the receipts first and then decide.
+            </p>
+            <p className="body" style={{ maxWidth: "46ch", marginTop: 14 }}>
+              Thirty minutes. Bring the metric you need and the date you need it by.
+              We&rsquo;ll tell you on the call whether we can hit it.
+            </p>
+            <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
+              <Link href="/contact" className="btn">
+                Tell us the number ↗
+              </Link>
+              <Link href="/work" className="btn sec">
+                Read another case
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── The part nobody else does ──────────────────────────────────────── */}
       <section className="appsec">
         <div className="wire" aria-hidden="true" />
@@ -483,31 +511,11 @@ export default function Home() {
 
       <ScrollJack />
 
-      {/* ── No account managers ────────────────────────────────────────────── */}
-      <section className="wrap sect opwrap">
-        <span className="opnum" aria-hidden="true">
-          05
-        </span>
-        <div className="eye">Five steps, no surprises</div>
-        <h2 className="disp" style={{ fontSize: "clamp(34px,5.4vw,84px)", marginTop: 14 }}>
-          No account
-          <br />
-          managers.
-        </h2>
-        <div style={{ marginTop: 34 }}>
-          {STEPS.map((s) => (
-            <div className="step rv" key={s.n}>
-              <div className="stepno">{s.n}</div>
-              <h3 className="disp" style={{ fontSize: 22 }}>
-                {s.title}
-              </h3>
-              <p className="small" style={{ maxWidth: "58ch" }}>
-                {s.body}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* The five-step "No account managers" band used to sit here. It explained
+          the same engagement as "Three steps. No theatre." further down, in more
+          words and with weaker verbs — two process explanations on one page is one
+          too many, and the reader pays for both. The strongest lines from it now
+          live in the three-step band. */}
 
       {/* ── Proof ──────────────────────────────────────────────────────────── */}
       <section className="wrap sect">
@@ -558,8 +566,8 @@ export default function Home() {
             [Testimonials pending]
           </p>
           <p className="small" style={{ marginTop: 16, maxWidth: "52ch" }}>
-            Held until real clients write them. No placeholder praise ships. An invented
-            testimonial is the fastest way to become the agencies we left.
+            Held until real clients write them. We could fill this section in ten minutes
+            and nobody would check — which is exactly why it stays empty.
           </p>
         </div>
       </section>

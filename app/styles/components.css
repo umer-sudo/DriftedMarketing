@@ -2232,3 +2232,147 @@ a:hover {
   text-transform: uppercase;
   color: var(--text-muted);
 }
+
+/* ══ motion calm pass ═════════════════════════════════════════════════════════
+   The site read as twitchy. The fix is not "slow everything down" — BRIEF §6 bans
+   anything over 520ms in UI, and slowing hover or press makes an interface feel
+   broken rather than calm. What actually caused it was the decorative layer moving
+   at speeds tuned for a demo reel, plus scroll-velocity coupling that made display
+   type breathe on every wheel tick.
+
+   So: ambient motion slows a lot, UI response stays exactly as fast. */
+
+:root {
+  /* Marquee at 64s crossed the viewport fast enough to pull the eye off the
+     headline. At 96s it drifts. */
+  --dur-marquee-slow: 96s;
+}
+
+.shipbar > div {
+  animation-duration: 52s; /* was 34s */
+}
+.orbring {
+  animation-duration: 44s; /* was 26s */
+}
+.orb .ball {
+  animation-duration: 15s; /* was 9s */
+}
+.cue i {
+  animation-duration: 2.6s; /* was 1.8s */
+}
+.marq.dark div {
+  animation-duration: 110s;
+}
+
+/* Entrances: same 520ms arrival, gentler travel. 46px of lift on every heading
+   read as the page assembling itself in front of you. */
+[data-motion="on"] .rv2 {
+  transform: translateY(28px) skewY(1.2deg);
+}
+[data-motion="on"] .rv {
+  transform: translateY(12px);
+}
+
+/* The scroll-velocity coupling was the single twitchiest thing on the page —
+   display tracking shifted on every wheel tick. Halved, and the settle is longer
+   so it reads as drift rather than reaction. */
+.vel {
+  transition: letter-spacing 520ms var(--ease-expo), transform 520ms var(--ease-expo);
+}
+
+/* The CTA ring pulsed every 6s, which is often enough to register as nagging. */
+.navcta-alt {
+  animation-duration: 11s;
+}
+
+/* ══ mobile pass ══════════════════════════════════════════════════════════════ */
+@media (max-width: 700px) {
+  /* The hero reserved a full viewport minus nav, but with the orb hidden on mobile
+     there is nothing filling it — so the fold was mostly empty space above a
+     headline. Let it size to content with a floor. */
+  .hero {
+    min-height: auto;
+    padding-block: clamp(40px, 12vw, 72px) clamp(32px, 8vw, 56px);
+  }
+  .hero h1 {
+    font-size: clamp(44px, 13.5vw, 92px);
+  }
+
+  /* Section rhythm was tuned for desktop; at 390px it left long empty runs
+     between bands and made the page feel padded rather than composed. */
+  .sect {
+    padding-block: clamp(48px, 11vw, 72px);
+  }
+
+  /* Body copy at 19px with 1.62 leading is a lot of scrolling on a phone. */
+  .hero .body,
+  .body[style*="font-size: 19px"] {
+    font-size: 17px;
+  }
+
+  /* The overprint numerals are 26vw — on a phone they swamped the headline they
+     sit behind instead of ghosting it. */
+  .opnum {
+    font-size: clamp(120px, 34vw, 200px);
+    opacity: 0.6;
+  }
+
+  /* Two-column grids that had already collapsed still carried desktop gaps. */
+  .two {
+    gap: 28px;
+  }
+
+  /* The work tiles were 238px tall regardless of width, so on a phone they were
+     nearly square and the misregistration crop lost the subject. */
+  .shot {
+    height: 200px;
+  }
+
+  /* Stacked CTAs read better full-width than as two half-width buttons that
+     wrap awkwardly. */
+  .hero .btn,
+  .cta .btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  /* The fixed chrome stacked up in the bottom-right corner and covered content. */
+  #motionpause {
+    bottom: 64px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+  }
+  #top {
+    right: 12px;
+    bottom: 12px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* The availability banner sits over the bottom of the page; without this the last
+   line of the footer hides underneath it. */
+body {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Mid-funnel CTA. Visually quieter than the closing Voltage band — it should read
+   as an offer, not a second ending. Hairline top and bottom, Tar ground. */
+.midcta {
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--tar-2);
+}
+
+/* The hero footer's right-hand item ran under the fixed pause control at 390px.
+   Reserve the corner rather than moving the control, which is where people now
+   expect to find it. */
+@media (max-width: 700px) {
+  .herofoot {
+    padding-top: 36px;
+    padding-right: 56px;
+  }
+  .herofoot .eye {
+    font-size: 10px;
+  }
+}
