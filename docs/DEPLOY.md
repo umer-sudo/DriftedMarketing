@@ -86,8 +86,47 @@ work index and the call.
 - [ ] Email on the domain still works, if it did before
 - [ ] Submit the new sitemap in Google Search Console
 
+## If you can't or won't create a hosting account
+
+`npm run build:static` produces a plain `./out` folder that any file host serves —
+GoDaddy shared hosting over FTP, GitHub Pages, an S3 bucket, anything.
+
+```bash
+npm run build:static     # → ./out
+```
+
+Upload the contents of `out/` to the web root (`public_html` on cPanel). No Node,
+no build step on the server, no configuration.
+
+### What the static build gives up
+
+| | Node build | Static build |
+| --- | --- | --- |
+| All ten routes | ✓ | ✓ |
+| OG cards, sitemap, robots, RSS | ✓ | ✓ |
+| Contact form | Server Action | Client POST to an external endpoint |
+| Server-side validation | ✓ | ✗ — client only |
+| Per-IP rate limiting | ✓ | Whatever the form provider gives you |
+| Endpoint hidden from the browser | ✓ | ✗ — it ships in the JS |
+| Redirects from old URLs | `next.config.ts` | Host config (`.htaccess` on cPanel) |
+| Image optimisation | ✓ | ✗ — ship pre-sized AVIF |
+
+To wire the form, set `NEXT_PUBLIC_FORM_ENDPOINT` to a Formspree or Web3Forms URL
+before building. Both are free and need no backend. Leave it unset and the form
+says so honestly rather than pretending to send — same contract as the Node build.
+
+### GitHub Pages specifically
+
+Pages on a **private** repo needs a paid GitHub plan. `DriftedMarketing-Revamp` is
+private, so this route means either making it public or upgrading.
+
 ## Alternatives
 
-Netlify and Cloudflare Pages both run Next.js and take the same DNS approach. If you
-would rather stay entirely inside GoDaddy, you need their VPS or a plan with cPanel's
-"Setup Node.js App" — say the word and I'll write the PM2 and nginx config instead.
+Netlify and Cloudflare Pages both run Next.js properly and take the same DNS
+approach as Vercel — and both let you sign in with your existing GitHub account, no
+new password and no card. If Vercel blocked you at a payment or verification step,
+try one of those before settling for the static build.
+
+To stay entirely inside GoDaddy with the Node build intact, you need their VPS or a
+plan with cPanel's "Setup Node.js App" — say the word and I'll write the PM2 and
+nginx config.

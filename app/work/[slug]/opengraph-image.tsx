@@ -10,6 +10,7 @@ import { CASES, caseBySlug } from "@/content/cases";
    of sync with the page or invent a number: if a case has no accent stat, the card
    simply omits the figure. */
 
+export const dynamic = "force-static";
 export const alt = "Drifted case study";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

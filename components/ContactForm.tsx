@@ -3,7 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { submitBrief } from "@/app/contact/actions";
+import { submitBriefClient } from "@/lib/submit-brief-client";
 import Turnstile from "./Turnstile";
+
+/* The static export has no server, so the Server Action cannot run. This picks the
+   transport at build time — NEXT_PUBLIC_STATIC is set by `npm run build:static`.
+   Both paths return the same shape and both refuse to claim success when nothing
+   was actually sent. The Server Action is the better one; see the note in
+   lib/submit-brief-client.ts for exactly what the fallback gives up. */
+const SUBMIT =
+  process.env.NEXT_PUBLIC_STATIC === "1" ? submitBriefClient : submitBrief;
 
 /* The brief form.
 
@@ -85,7 +94,7 @@ export default function ContactForm() {
 
     setStatus("sending");
     setMessage(null);
-    const result = await submitBrief(data);
+    const result = await SUBMIT(data);
 
     if (result.ok) {
       router.push("/contact/thanks");

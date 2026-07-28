@@ -8,6 +8,7 @@ import { ImageResponse } from "next/og";
    Values are inlined as literals because Satori resolves neither CSS custom
    properties nor external stylesheets. */
 
+export const dynamic = "force-static";
 export const alt = "Drifted Marketing — Look bigger than you are";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

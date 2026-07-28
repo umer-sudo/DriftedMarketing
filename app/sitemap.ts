@@ -5,6 +5,8 @@ import { site } from "@/lib/config";
 /* Handoff gap 8. /contact/thanks is excluded — it is a post-submit confirmation and
    carries noindex. */
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     { path: "/", priority: 1 },
