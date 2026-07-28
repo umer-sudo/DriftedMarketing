@@ -2477,3 +2477,42 @@ body {
   margin-inline: -4px;
   color: var(--tar);
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Real case imagery.
+
+   The receipts grid was built for placeholder frames; a <figure> with a caption
+   is a different shape, so it gets its own rules rather than fighting the
+   `.proofgrid > div` padding reset. Aspect ratio is fixed at 4/3 to match the
+   placeholders, and the image covers it — the source files are square, portrait
+   and panoramic, and letterboxing three different shapes into one row looks like
+   a mistake rather than a decision.
+   ───────────────────────────────────────────────────────────────────────── */
+.proofshot {
+  background: var(--tar);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.proofshot img {
+  width: 100%;
+  /* next/image emits width/height attributes, which map to presentational
+     dimensions — and aspect-ratio only drives a box when one axis is auto. Without
+     this the attribute wins and every frame renders at its source ratio, so the
+     row heights come out ragged. */
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  background: var(--tar-3);
+}
+/* Not `.eye`: that class is what the behaviour layer scrambles on entrance, and a
+   caption decoding itself out of random glyphs reads as a rendering fault rather
+   than an effect. Same type, no hook. */
+.proofcap {
+  font: 500 10px/1.5 var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 14px 16px 16px;
+}

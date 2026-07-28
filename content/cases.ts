@@ -53,6 +53,25 @@ export type CaseStudy = {
   verified: string;
   /** Only Seyr is publicly inspectable. */
   externalUrl?: string;
+  /** Real work, taken from the studio's own delivery files. The first entry is the
+      tile image on the work index; all of them render as the case gallery.
+
+      Every asset here was looked at before it shipped. Two candidates were pulled:
+      a store photograph with identifiable faces and no model release on file, and a
+      social frame with a third-party stock watermark burned into it. Cases with no
+      entry keep the labelled placeholder — an empty frame is more honest than
+      someone else's picture. */
+  gallery?: CaseImage[];
+};
+
+export type CaseImage = {
+  src: string;
+  /** Written for someone who cannot see it, not stuffed with keywords. */
+  alt: string;
+  width: number;
+  height: number;
+  /** Sits under the frame. Says what the thing is, not what it looks like. */
+  caption: string;
 };
 
 export const CASES: CaseStudy[] = [
@@ -157,6 +176,36 @@ export const CASES: CaseStudy[] = [
     ],
     next: "gallery",
     verified: "2026-07-01",
+    gallery: [
+      {
+        src: "/work/noted/lookbook.webp",
+        alt: "Twenty-five Noted. products laid out in a grid \u2014 tees, hoodies, caps, mugs, notebooks and stickers, each carrying the red annotation mark.",
+        width: 1400,
+        height: 1241,
+        caption: "The product line, drawn from one annotation concept",
+      },
+      {
+        src: "/work/noted/crewneck.webp",
+        alt: "A black crewneck sweatshirt with the Noted. wordmark and its red asterisk across the chest.",
+        width: 900,
+        height: 800,
+        caption: "Crewneck",
+      },
+      {
+        src: "/work/noted/tote.webp",
+        alt: "A natural canvas tote printed with \u201cI keep the receipts.\u201d in red serif type, underlined.",
+        width: 900,
+        height: 800,
+        caption: "Tote \u2014 the line the range grew from",
+      },
+      {
+        src: "/work/noted/mug.webp",
+        alt: "An enamel mug printed with RECEIPTS in red capitals above EST. 2021.",
+        width: 900,
+        height: 800,
+        caption: "Enamel mug",
+      },
+    ],
   },
   {
     slug: "ehsaan",
@@ -202,6 +251,29 @@ export const CASES: CaseStudy[] = [
     ],
     next: "zoller",
     verified: "2026-07-01",
+    gallery: [
+      {
+        src: "/work/ehsaan/launch.webp",
+        alt: "The ehsaan launch card \u2014 the wordmark in a light serif on deep navy, over \u201cPakistan\u2019s first thrift marketplace\u201d and the line \u201cYour wardrobe is worth more than you think.\u201d",
+        width: 1080,
+        height: 1080,
+        caption: "Launch card",
+      },
+      {
+        src: "/work/ehsaan/origin.webp",
+        alt: "An origin-and-meaning card defining ehsaan: to do something beautifully, to give generously, to act with grace.",
+        width: 1080,
+        height: 1080,
+        caption: "Where the name comes from",
+      },
+      {
+        src: "/work/ehsaan/split.webp",
+        alt: "A card split cream against navy \u2014 \u201cFind your next obsession\u201d for buyers on one side, \u201cTurn your closet into cash\u201d for sellers on the other.",
+        width: 1080,
+        height: 1080,
+        caption: "Two-sided marketplace, said in one frame",
+      },
+    ],
   },
   {
     slug: "gallery",
@@ -329,6 +401,15 @@ export const CASES: CaseStudy[] = [
     ],
     next: "zoller",
     verified: "2026-07-01",
+    gallery: [
+      {
+        src: "/work/social/bambam.webp",
+        alt: "A BamBam campaign frame \u2014 the shop\u2019s stairwell shot at night, with \u201cbuilt for the night.\u201d set beneath the wordmark.",
+        width: 1080,
+        height: 1350,
+        caption: "BamBam \u2014 After Dark",
+      },
+    ],
   },
 ];
 

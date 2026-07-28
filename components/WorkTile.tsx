@@ -24,7 +24,13 @@ export default function WorkTile({
     <div className={`item${span}`} data-cat={c.category}>
       <div className="shot">
         <div className="img" style={{ background: c.bg }}>
-          <ImageSlot placeholder={`${c.client} visual`} background={c.bg} />
+          <ImageSlot
+            placeholder={`${c.client} visual`}
+            src={c.gallery?.[0]?.src}
+            alt={c.gallery?.[0]?.alt}
+            background={c.bg}
+            sizes="(max-width: 1000px) 100vw, 50vw"
+          />
         </div>
         <div className="veil" />
         <span className="tno" aria-hidden="true">

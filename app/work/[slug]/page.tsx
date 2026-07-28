@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import CtaBand from "@/components/CtaBand";
 import MidCta from "@/components/MidCta";
 import ImageSlot from "@/components/ImageSlot";
+import CaseGallery from "@/components/CaseGallery";
 import JsonLd from "@/components/JsonLd";
 import { caseSchema, breadcrumbSchema } from "@/lib/structured-data";
 import { CASES, caseBySlug } from "@/content/cases";
@@ -261,23 +262,7 @@ export default async function CasePage({ params }: Params) {
             </h2>
           </div>
         </div>
-        <div className="proofgrid">
-          <div>
-            <div className="slotframe">
-              <ImageSlot placeholder="Dashboard or results screenshot" />
-            </div>
-          </div>
-          <div>
-            <div className="slotframe">
-              <ImageSlot placeholder="Product or campaign still" />
-            </div>
-          </div>
-          <div>
-            <div className="slotframe">
-              <ImageSlot placeholder="Detail — UI, packaging, ad frame" />
-            </div>
-          </div>
-        </div>
+        <CaseGallery images={c.gallery} />
       </section>
 
       {/* ── Quote, held ────────────────────────────────────────────────────── */}
