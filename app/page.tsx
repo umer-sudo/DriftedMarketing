@@ -228,7 +228,7 @@ export default function Home() {
       </section>
 
       <div className="svc" style={{ marginTop: 44 }}>
-        <div className="rv" style={{ gridRow: "span 2", minHeight: 400 }}>
+        <div className="rv" style={{ gridRow: "span 2" }}>
           <div>
             <div style={{ marginBottom: 4 }}>
               <BarChart3 className="lu" style={{ width: 26, height: 26, color: "var(--voltage-500)" }} aria-hidden="true" />

@@ -16,6 +16,13 @@
 
 :root {
   --news: var(--newsprint);
+
+  /* The page gutter. Every section's first column has to start on this line —
+     .wrap gets there with padding, and the full-bleed grids (.beat, .svc) have
+     to reach it themselves, because their cells are the page edge. Three
+     sections used to invent their own clamp() and landed 24–32px inside
+     everything else, which reads as a broken column rather than a design. */
+  --gutter: clamp(20px, 5vw, 80px);
 }
 
 * {
@@ -33,7 +40,7 @@ img {
 .wrap {
   max-width: var(--max-w-content);
   margin: 0 auto;
-  padding-inline: clamp(20px, 5vw, 80px);
+  padding-inline: var(--gutter);
 }
 .disp {
   font-family: var(--font-display);
@@ -601,24 +608,39 @@ img {
   background: var(--tar);
   padding: clamp(24px, 3.4vw, 44px) clamp(20px, 3vw, 40px);
 }
+/* The outer edges of the row are the page edge, so they take the page gutter.
+   The two inner edges keep the tighter cell padding — pushing those out too
+   would open a canyon down the middle of the comparison. */
+.beat > div:first-child {
+  padding-left: var(--gutter);
+}
+.beat > div:last-child {
+  padding-right: var(--gutter);
+}
+/* Struck-through text.
+
+   This was an absolutely-positioned ::after at left:0/width:100%. On a single
+   line that draws a rule through the words; on the two- and three-line phrases
+   here it drew one bar anchored to the first line box and sized against the
+   whole paragraph, so the rule slashed across the middle of the second line and
+   stopped inside a word.
+
+   A background gradient is painted per line box instead, and
+   box-decoration-break:clone makes each fragment size its own background — so
+   every line gets a rule the width of that line. Animating background-size
+   keeps the same left-to-right draw the ::after had. */
 .strike {
-  position: relative;
   display: inline;
+  background-image: linear-gradient(var(--voltage-500), var(--voltage-500));
+  background-repeat: no-repeat;
+  background-position: 0 58%;
+  background-size: 0 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size var(--dur-base) var(--ease-cut);
 }
-.strike:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 54%;
-  height: 3px;
-  width: 100%;
-  background: var(--voltage-500);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--dur-base) var(--ease-cut);
-}
-.in .strike:after {
-  transform: scaleX(1);
+.in .strike {
+  background-size: 100% 3px;
 }
 .svc {
   display: grid;
@@ -632,7 +654,11 @@ img {
   padding: clamp(26px, 3.4vw, 48px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* The first card spans both rows, so its height is set by the two cards
+     beside it, not by its own content. space-between then threw its heading to
+     the top and its copy to the bottom with ~450px of dead space between them.
+     Stacked from the top, the card reads as one block at any height. */
+  justify-content: flex-start;
   gap: 22px;
   cursor: pointer;
   position: relative;
@@ -641,6 +667,18 @@ img {
 }
 .svc > div:hover {
   background: var(--tar-2);
+}
+/* Same page-gutter rule as .beat: outer edges align to the site's column. */
+.svc > div:first-child {
+  /* The feature card spans both rows, so it is taller than its own content by
+     however much the two cards beside it add up to. Centred, that surplus
+     splits evenly above and below and reads as a deliberately airy cell;
+     top-aligned it just looks like the card ran out of copy. */
+  justify-content: center;
+  padding-left: var(--gutter);
+}
+.svc > div:not(:first-child) {
+  padding-right: var(--gutter);
 }
 .svc > div:before {
   content: "";
@@ -1068,7 +1106,7 @@ body:after {
 }
 .opnum {
   position: absolute;
-  left: clamp(20px, 5vw, 80px);
+  left: var(--gutter);
   top: -0.18em;
   font-family: var(--font-display);
   font-weight: 900;
@@ -1616,6 +1654,16 @@ a:hover {
   .nums,
   .metabar {
     grid-template-columns: 1fr;
+  }
+  /* Stacked, every cell touches both page edges, so the single-side gutter
+     rules above have to become two-sided. */
+  .beat > div,
+  .svc > div {
+    padding-inline: var(--gutter);
+  }
+  /* A row span in a one-column grid just leaves an empty row behind it. */
+  .svc > div {
+    grid-row: auto !important;
   }
   .item,
   .item.wide,
