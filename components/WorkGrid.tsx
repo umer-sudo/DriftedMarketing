@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import WorkTile from "./WorkTile";
 import { CASES, FILTERS, countFor, type CaseCategory } from "@/content/cases";
 
@@ -8,12 +9,30 @@ import { CASES, FILTERS, countFor, type CaseCategory } from "@/content/cases";
 
    Filtering re-deals the visible tiles rather than showing and hiding them: each
    surviving tile replays `tilein` staggered 45ms per card. Skipped under reduced
-   motion, where the grid simply updates. */
+   motion, where the grid simply updates.
+
+   The active filter lives in the URL (?filter=performance) rather than in component
+   state alone, so a filtered view is shareable, survives reload, and the browser
+   back button steps through filters the way people expect. `scroll: false` keeps the
+   viewport still — re-deal is the feedback, a jump to the top would fight it. */
+
+const isCategory = (v: string | null): v is CaseCategory =>
+  v === "performance" || v === "creators" || v === "product" || v === "web";
 
 export default function WorkGrid() {
-  const [filter, setFilter] = useState<"all" | CaseCategory>("all");
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
   const gridRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
+
+  const raw = params.get("filter");
+  const filter: "all" | CaseCategory = isCategory(raw) ? raw : "all";
+
+  const setFilter = (next: "all" | CaseCategory) => {
+    const qs = next === "all" ? "" : `?filter=${next}`;
+    router.replace(`${pathname}${qs}`, { scroll: false });
+  };
 
   const visible = CASES.filter((c) => filter === "all" || c.category === filter);
 
@@ -75,11 +94,27 @@ export default function WorkGrid() {
         </div>
       </section>
 
-      <div className="work" ref={gridRef}>
-        {visible.map((c) => (
-          <WorkTile key={c.slug} c={c} index={CASES.indexOf(c)} />
-        ))}
-      </div>
+      {visible.length > 0 ? (
+        <div className="work" ref={gridRef}>
+          {visible.map((c) => (
+            <WorkTile key={c.slug} c={c} index={CASES.indexOf(c)} />
+          ))}
+        </div>
+      ) : (
+        /* Unreachable with the current six cases — every filter has at least one.
+           It exists so adding a category without work doesn't render a blank band. */
+        <div className="wrap" style={{ paddingBlock: 64 }}>
+          <div className="held">
+            <div className="eye mut">Nothing here yet</div>
+            <p className="body" style={{ marginTop: 12, maxWidth: "48ch" }}>
+              No published work in this discipline yet. The other filters have receipts.
+            </p>
+            <button className="btn sec" style={{ marginTop: 20 }} onClick={() => setFilter("all")}>
+              Show all work
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -66,7 +66,14 @@ export default function ContactForm() {
     <form id="brief" style={{ marginTop: 22 }} onSubmit={onSubmit} noValidate>
       <label className="fl">
         <span>Name</span>
-        <input className="ctrl" name="name" placeholder="First Last" required {...field("name")} />
+        <input
+          className="ctrl"
+          name="name"
+          autoComplete="name"
+          placeholder="First Last"
+          required
+          {...field("name")}
+        />
         {errors.name && (
           <em id="name-error" className="fielderr">
             {errors.name}
@@ -76,7 +83,12 @@ export default function ContactForm() {
 
       <label className="fl">
         <span>Company</span>
-        <input className="ctrl" name="company" placeholder="Company name" />
+        <input
+          className="ctrl"
+          name="company"
+          autoComplete="organization"
+          placeholder="Company name"
+        />
       </label>
 
       <label className="fl">
@@ -85,6 +97,8 @@ export default function ContactForm() {
           className="ctrl"
           name="email"
           type="email"
+          autoComplete="email"
+          inputMode="email"
           placeholder="you@company.com"
           required
           {...field("email")}
@@ -161,7 +175,11 @@ export default function ContactForm() {
       </button>
 
       {message && (
-        <div className={`formnote${status === "unwired" ? " unwired" : " error"}`} role="status">
+        <div
+          className={`formnote${status === "unwired" ? " unwired" : " error"}`}
+          role="alert"
+          aria-live="assertive"
+        >
           {message}
         </div>
       )}

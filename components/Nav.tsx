@@ -26,6 +26,7 @@ export default function Nav() {
   const [clock, setClock] = useState<string | null>(null);
   const [ctaLabel, setCtaLabel] = useState(CTA_LABEL);
   const hoveredRef = useRef(false);
+  const sheetRef = useRef<HTMLDivElement>(null);
 
   /* Hides on scroll down past 220px, returns immediately on scroll up. */
   useEffect(() => {
@@ -79,13 +80,51 @@ export default function Nav() {
     };
   }, []);
 
-  /* Close the sheet on navigation and on Escape. */
+  /* Close the sheet on navigation. */
   useEffect(() => setSheetOpen(false), [pathname]);
+
+  /* A full-screen overlay that leaves focus behind it is a keyboard trap in reverse:
+     tabbing walks invisibly through the page underneath. Escape closes, focus moves
+     in and is cycled, the page behind is locked, and focus returns to the trigger. */
   useEffect(() => {
     if (!sheetOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setSheetOpen(false);
+    const sheet = sheetRef.current;
+    const previous = document.activeElement as HTMLElement | null;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusables = () =>
+      Array.from(
+        sheet?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? [],
+      ).filter((el) => el.offsetParent !== null);
+
+    focusables()[0]?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSheetOpen(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const items = focusables();
+      if (!items.length) return;
+      const first = items[0]!;
+      const last = items[items.length - 1]!;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = overflow;
+      previous?.focus?.();
+    };
   }, [sheetOpen]);
 
   const current = (href: string) =>
@@ -109,7 +148,12 @@ export default function Nav() {
 
         <div style={{ display: "flex", gap: 10 }}>
           {clock && <span id="khi">{clock}</span>}
-          <button className="btn sec sm menubtn" onClick={() => setSheetOpen(true)}>
+          <button
+            className="btn sec sm menubtn"
+            onClick={() => setSheetOpen(true)}
+            aria-expanded={sheetOpen}
+            aria-haspopup="dialog"
+          >
             Menu
           </button>
           <Link
@@ -129,7 +173,14 @@ export default function Nav() {
         </div>
       </nav>
 
-      <div className={`sheet${sheetOpen ? " on" : ""}`}>
+      <div
+        className={`sheet${sheetOpen ? " on" : ""}`}
+        ref={sheetRef}
+        role="dialog"
+        aria-modal={sheetOpen || undefined}
+        aria-label="Menu"
+        aria-hidden={!sheetOpen || undefined}
+      >
         <button className="close" onClick={() => setSheetOpen(false)}>
           Close ✕
         </button>

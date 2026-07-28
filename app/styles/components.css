@@ -1861,3 +1861,48 @@ a:hover {
 .turnstile:not(:empty) {
   margin-bottom: 22px;
 }
+
+/* ── pause control for auto-animating content ─────────────────────────────────
+   WCAG 2.2.2: content that starts automatically and runs longer than five seconds
+   needs a mechanism to pause it. Hover-pause doesn't satisfy that — it's unusable
+   by keyboard and touch. This control sits beside back-to-top and stops the
+   marquee, the ticker, the orbit ring and the CTA pulse. */
+#motionpause {
+  position: fixed;
+  right: 18px;
+  bottom: 70px;
+  z-index: 70;
+  width: 44px;
+  height: 44px;
+  background: var(--tar-3);
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font: 500 11px/1 var(--font-mono);
+  transition: var(--transition-control);
+}
+#motionpause:hover {
+  color: var(--voltage-500);
+  border-color: var(--voltage-500);
+}
+#motionpause[aria-pressed="true"] {
+  color: var(--voltage-500);
+  border-color: var(--voltage-500);
+}
+@media print {
+  #motionpause {
+    display: none !important;
+  }
+}
+
+[data-motion-paused] .marq div,
+[data-motion-paused] .shipbar > div,
+[data-motion-paused] .orbring,
+[data-motion-paused] .orb .ball,
+[data-motion-paused] .navcta-alt,
+[data-motion-paused] .cue i {
+  animation-play-state: paused;
+}

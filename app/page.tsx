@@ -87,8 +87,9 @@ export default function Home() {
             <span className="ol">than</span> you are
           </h1>
           <p className="body" style={{ maxWidth: "44ch", marginTop: 34, fontSize: 19 }}>
-            5.2× ROAS. 400 hours saved. 2.2 million views on an 811-follower account. Three
-            clients, no account layer, and a number in every contract.
+            5.2–6× ROAS, every campaign. 400+ hours a year off one client&rsquo;s desk. 2.2M
+            views from an 811-follower account. Three clients. No account layer. A number in
+            every contract.
           </p>
           <div style={{ display: "flex", gap: 14, marginTop: 38, flexWrap: "wrap" }}>
             <Link href="/contact" className="btn">
@@ -231,16 +232,16 @@ export default function Home() {
             <div className="svcno">01</div>
             <h3 className="disp" style={{ fontSize: "clamp(28px,3.4vw,52px)", marginTop: 16 }}>
               <Link href="/services/performance" className="tilelink">
-                Views don&rsquo;t
+                Views don&rsquo;t pay
                 <br />
-                pay invoices
+                invoices. Stories do.
               </Link>
             </h3>
           </div>
           <div>
             <p className="body" style={{ maxWidth: "46ch" }}>
-              Paid social and search, plus the creative that feeds it. Built for DTC brands who
-              need the ad account and the content to stop arguing with each other.
+              Paid social and search, plus the creative that feeds it. For DTC brands whose ad
+              account and content have stopped speaking to each other.
             </p>
             <div className="eye" style={{ marginTop: 24 }}>
               Run the media →
@@ -261,16 +262,18 @@ export default function Home() {
             </div>
             <h3 className="disp" style={{ fontSize: "clamp(22px,2.6vw,36px)", marginTop: 12 }}>
               <Link href="/services/creators" className="tilelink">
-                An audience is
+                An audience without
                 <br />
-                not a business
+                a business model
+                <br />
+                is a hobby
               </Link>
             </h3>
           </div>
           <div>
             <p className="small" style={{ maxWidth: "44ch" }}>
-              Monetization, product, and the launch that turns followers into revenue. We built
-              Noted. from a red pen and a merch idea.
+              Monetization, product, and the launch that turns attention into revenue. We built
+              Noted. from a red pen and a margin table.
             </p>
             <div className="eye" style={{ marginTop: 18 }}>
               Build the business →
@@ -299,8 +302,8 @@ export default function Home() {
           </div>
           <div>
             <p className="small" style={{ maxWidth: "44ch" }}>
-              Apps and PWAs where the revenue model is written before the first commit. Shipped in
-              weeks. Priced like it.
+              Apps and PWAs where the revenue model is written before the first commit. Shipped
+              in weeks, not quarters.
             </p>
             <div className="eye" style={{ marginTop: 18 }}>
               Ship the product →
@@ -510,7 +513,7 @@ export default function Home() {
           <div>
             <div className="eye">Receipts</div>
             <h2 className="disp" style={{ fontSize: "clamp(28px,4vw,64px)", marginTop: 14 }}>
-              Proof you can look at.
+              Proof you can click.
             </h2>
           </div>
         </div>
@@ -545,8 +548,8 @@ export default function Home() {
             [Testimonials pending]
           </p>
           <p className="small" style={{ marginTop: 16, maxWidth: "52ch" }}>
-            Held until real client quotes exist. No placeholder praise ships — an invented
-            testimonial is the fastest way to look like the agencies we left.
+            Held until real clients write them. No placeholder praise ships. An invented
+            testimonial is the fastest way to become the agencies we left.
           </p>
         </div>
       </section>

@@ -34,6 +34,7 @@ export default function Chrome() {
   const [slotsOn, setSlotsOn] = useState(false);
   const [slotsDismissed, setSlotsDismissed] = useState(true);
   const [toast, setToast] = useState<string | null>(null);
+  const [paused, setPaused] = useState(false);
   const toastTimer = useRef<number | undefined>(undefined);
 
   /* Arm the entrance states only once JS is live. */
@@ -335,6 +336,21 @@ export default function Chrome() {
     setSlotsDismissed(Boolean(sessionStorage.getItem("drifted-slots")));
   }, []);
 
+  /* WCAG 2.2.2 — the marquee and the ticker start on their own and run far longer
+     than five seconds, so there has to be a way to stop them. Hover-pause doesn't
+     count: it isn't available to keyboard or touch users. The preference persists
+     for the session and is applied on <html> so the CSS can reach every animation. */
+  useEffect(() => {
+    const stored = localStorage.getItem("drifted-motion") === "paused";
+    setPaused(stored);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.toggleAttribute("data-motion-paused", paused);
+    if (paused) localStorage.setItem("drifted-motion", "paused");
+    else localStorage.removeItem("drifted-motion");
+  }, [paused]);
+
   function closePop() {
     setPopOpen(false);
     sessionStorage.setItem("drifted-pop", "1");
@@ -354,6 +370,18 @@ export default function Chrome() {
   return (
     <>
       <div id="prog" aria-hidden="true" />
+
+      <button
+        id="motionpause"
+        aria-pressed={paused}
+        onClick={() => setPaused((v) => !v)}
+        title={paused ? "Resume the marquee and ticker" : "Pause the marquee and ticker"}
+      >
+        <span aria-hidden="true">{paused ? "▶" : "❚❚"}</span>
+        <span className="sr-only">
+          {paused ? "Resume moving content" : "Pause moving content"}
+        </span>
+      </button>
 
       <button
         id="top"

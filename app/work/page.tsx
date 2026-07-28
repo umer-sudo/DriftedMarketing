@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import WorkGrid from "@/components/WorkGrid";
 import CtaBand from "@/components/CtaBand";
 import JsonLd from "@/components/JsonLd";
@@ -21,7 +22,12 @@ export default function WorkPage() {
           { name: "Work", path: "/work" },
         ])}
       />
-      <WorkGrid />
+      {/* WorkGrid reads the filter from the query string, so it needs a boundary for
+          the static build. The fallback is the unfiltered grid, which is what the
+          page shows anyway before hydration. */}
+      <Suspense fallback={null}>
+        <WorkGrid />
+      </Suspense>
       <div className="wrap" style={{ paddingTop: 34 }}>
         <p className="small" style={{ maxWidth: "78ch" }}>
           {FORJWELL_CREDIT}
