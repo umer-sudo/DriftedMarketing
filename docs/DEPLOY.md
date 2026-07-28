@@ -1,7 +1,8 @@
 # Deploying to a GoDaddy domain
 
 The domain is registered at GoDaddy; hosting is open. So GoDaddy does one job —
-DNS — and the app runs on a host that can execute Node.
+DNS — and the app runs on a host that can execute Node. **Netlify** is the chosen
+host; the steps below are written for it.
 
 **Why not GoDaddy hosting itself:** the contact form is a Next.js Server Action and
 OG cards render through `next/og`. Classic GoDaddy shared/cPanel hosting serves
@@ -12,26 +13,46 @@ pointing it elsewhere costs nothing and changes nothing about your registration.
 
 ## 1. Deploy the app
 
-**https://vercel.com/new** → import `umer-sudo/DriftedMarketing-Revamp`.
+**https://app.netlify.com/start** → *Deploy with GitHub* → authorise → pick
+`umer-sudo/DriftedMarketing-Revamp`.
 
-Framework, build command and output directory are all auto-detected. Nothing to
-configure. You get a `*.vercel.app` URL in about a minute.
+Netlify signs you in with your existing GitHub account: no new password, no card.
 
-Open it and click through all ten routes before touching DNS. Once the domain
-switches, any problem is visible to the public.
+- **Branch:** `claude/handoff-package-ready-styavn` (or `main` once it's merged)
+- **Build command / publish directory:** leave them. `netlify.toml` sets
+  `npm run build` and `.next`, and Netlify installs its Next.js runtime
+  automatically.
+
+Do **not** use `npm run build:static` here. Netlify runs Node, so the app deploys
+with the real Server Action form. The static build exists only for hosts that can't.
+
+You get a `*.netlify.app` URL in a minute or two. Open it and click through all ten
+routes before touching DNS — once the domain switches, every problem is public.
+
+Deploy previews and branch builds are set to `noindex` in `netlify.toml`, so they
+can't compete with the real domain in search results.
 
 ## 2. Point the domain
 
-In Vercel: **Project → Settings → Domains → Add**, enter the domain. Vercel then
-shows you the exact DNS records to create.
+In Netlify: **Site configuration → Domain management → Add a domain**, enter
+`driftedmarketing.com`. Netlify then shows the exact DNS records.
 
-**Use the values Vercel displays**, not values from a blog post — the apex IP has
-changed more than once. As of writing it is typically:
+**Use the values Netlify displays.** Netlify offers two routes:
+
+- **Keep DNS at GoDaddy** (simpler, less to unwind): create the A and CNAME records
+  Netlify gives you. The apex A record points at Netlify's load balancer; the value
+  is shown in the dashboard.
+- **Move nameservers to Netlify** (better apex handling, one more thing to migrate):
+  replace GoDaddy's nameservers with Netlify's four. This moves *all* DNS for the
+  domain, including MX — so if email runs on this domain, you must recreate those
+  records in Netlify or mail stops.
+
+Unless you have a reason to move nameservers, take the first option.
 
 | Type | Name | Value |
 | --- | --- | --- |
-| A | `@` | the IP Vercel shows |
-| CNAME | `www` | `cname.vercel-dns.com` |
+| A | `@` | the IP Netlify shows |
+| CNAME | `www` | `<your-site>.netlify.app` |
 
 In GoDaddy: **My Products → Domain → DNS → Manage Zones**.
 
@@ -42,12 +63,13 @@ In GoDaddy: **My Products → Domain → DNS → Manage Zones**.
 - Leave MX records alone. Deleting them breaks email on the domain, and that
   mistake is not obvious until someone tells you their message bounced.
 
-Propagation is usually minutes, occasionally up to 48 hours. Vercel issues the TLS
-certificate automatically once the records resolve.
+Propagation is usually minutes, occasionally up to 48 hours. Netlify provisions the
+Let's Encrypt certificate automatically once the records resolve — if HTTPS shows a
+warning immediately after the switch, give it a few minutes before assuming it broke.
 
 ## 3. Set the origin
 
-In Vercel: **Settings → Environment Variables**
+In Netlify: **Site configuration → Environment variables**
 
 ```
 NEXT_PUBLIC_SITE_URL = https://your-real-domain.com

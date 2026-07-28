@@ -22,19 +22,23 @@ The short version: the domain stays registered at GoDaddy and points at a host t
 can run Node. This app needs one — the contact form is a Server Action and OG cards
 render through `next/og`, neither of which survives GoDaddy's shared/cPanel hosting.
 
-1. **https://vercel.com/new** → import `umer-sudo/DriftedMarketing-Revamp`. Nothing
-   to configure; everything is auto-detected.
-2. Add the domain in Vercel, then create the DNS records it shows you in GoDaddy.
+1. **https://app.netlify.com/start** → Deploy with GitHub → import
+   `umer-sudo/DriftedMarketing-Revamp`. `netlify.toml` handles the rest.
+2. Add `driftedmarketing.com` in Netlify, then create the DNS records it shows you
+   in GoDaddy.
 3. Set `NEXT_PUBLIC_SITE_URL` to the real origin and redeploy — otherwise canonicals,
    sitemap and OG tags all claim `driftedmarketing.com`.
 4. Fill in `redirects()` in `next.config.ts` with the old site's URLs before cutover,
    or their search history is discarded rather than transferred.
 
-Nothing here is Vercel-specific. `vercel.json` only sets security headers (nosniff,
-DENY framing, strict referrer, and a Permissions-Policy disabling camera, microphone,
-geolocation and FLoC) — no region pin, no build override. Netlify and Cloudflare
-Pages work the same way, and `npm run build && npm run start` behind nginx works on
-any VPS.
+Host-agnostic. `netlify.toml` and `vercel.json` each carry the same security headers
+(nosniff, DENY framing, strict referrer, and a Permissions-Policy disabling camera,
+microphone, geolocation and FLoC) because neither host reads the other's config —
+**if you change one, change the other.** Cloudflare Pages works the same way, and
+`npm run build && npm run start` behind nginx works on any VPS.
+
+For a host that can't run Node at all, `npm run build:static` emits `./out` — see
+the tradeoff table in the runbook.
 
 > One caveat on serverless: `lib/rate-limit.ts` keeps its counters in process memory,
 > so each instance limits independently. See the note under **Contact form**.
