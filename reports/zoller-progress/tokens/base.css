@@ -1,0 +1,54 @@
+/* Element defaults so cards, kits and consumer pages inherit the brand. */
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+body {
+  margin: 0;
+  background: var(--surface-page);
+  color: var(--text-body);
+  font: var(--text-body-md);
+  letter-spacing: var(--ls-body);
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: var(--wght-black);
+  letter-spacing: var(--ls-heading);
+  line-height: var(--lh-snug);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-h1); letter-spacing: var(--ls-display); line-height: var(--lh-display); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); letter-spacing: var(--ls-heading); }
+
+p { margin: 0; }
+
+a { color: var(--link); text-decoration: none; text-underline-offset: 3px; transition: color var(--dur-fast) var(--ease-hit); }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+::selection { background: var(--voltage-500); color: var(--tar); }
+
+:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+/* Mono eyebrow — the only place letterspacing goes positive. */
+.drift-eyebrow {
+  font: var(--text-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Cap-tight knockout highlight: fill hugs the caps, never the line box. */
+.drift-fill {
+  display: inline-block;
+  line-height: 0.78;
+  padding: 0.1em 0.06em 0.04em;
+  background: var(--voltage-500);
+  color: var(--tar);
+  vertical-align: baseline;
+}

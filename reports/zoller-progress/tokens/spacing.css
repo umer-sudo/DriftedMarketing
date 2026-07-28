@@ -1,0 +1,32 @@
+:root {
+  --space-0: 0; /* @kind spacing */
+  --space-1: 4px; /* @kind spacing */
+  --space-2: 8px; /* @kind spacing */
+  --space-3: 12px; /* @kind spacing */
+  --space-4: 16px; /* @kind spacing */
+  --space-5: 24px; /* @kind spacing */
+  --space-6: 32px; /* @kind spacing */
+  --space-7: 48px; /* @kind spacing */
+  --space-8: 64px; /* @kind spacing */
+  --space-9: 96px; /* @kind spacing */
+  --space-10: 128px; /* @kind spacing */
+  --space-11: 176px; /* @kind spacing */
+  --space-12: 240px; /* @kind spacing */
+
+  /* Layout */
+  --gutter: var(--space-5); /* @kind spacing */
+  --page-pad-x: clamp(20px, 5vw, 80px); /* @kind spacing */
+  --section-y: clamp(80px, 12vw, 200px); /* @kind spacing */
+  --max-w-prose: 62ch; /* @kind spacing */
+  --max-w-content: 1440px; /* @kind spacing */
+  --grid-cols: 12; /* @kind other */
+
+  /* Radii — near-square. Big radii read cheap in this brand. */
+  --radius-0: 0px; /* @kind radius */
+  --radius-1: 2px; /* @kind radius */
+  --radius-2: 4px; /* @kind radius */
+  --radius-3: 8px; /* @kind radius */
+  --radius-pill: 999px; /* @kind radius */
+  --radius-card: var(--radius-2); /* @kind radius */
+  --radius-control: var(--radius-1); /* @kind radius */
+}

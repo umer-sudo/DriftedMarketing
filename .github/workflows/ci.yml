@@ -31,8 +31,13 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      # Output is kept so the bundle budget can read the shared first-load
+      # figure Next itself reports, rather than re-deriving it from disk.
+      # pipefail matters here: without it, tee's exit code masks a failed build.
       - name: Build
-        run: npm run build
+        run: |
+          set -o pipefail
+          npm run build | tee build.log
 
       # Fails on high or critical only. Moderate advisories in build-time
       # dependencies shouldn't block a marketing site's deploy at 3am.
@@ -42,12 +47,32 @@ jobs:
       # A marketing site that ships 300kB of JS has stopped being a marketing site.
       # The budget is deliberately close to current (~102kB shared) so a careless
       # dependency shows up here rather than in someone's field data.
+      #
+      # This reads Next's own "First Load JS shared by all" line — the bytes every
+      # visitor actually downloads. Summing .next/static/chunks instead counts
+      # per-route chunks, polyfills and framework chunks nobody loads in one visit,
+      # which reported 784kB against a real shared figure of 102kB.
       - name: Bundle budget
         run: |
-          BYTES=$(find .next/static/chunks -name '*.js' -not -path '*/app/*' -printf '%s\n' \
-            | awk '{t+=$1} END {print t}')
-          KB=$((BYTES / 1024))
-          echo "Shared client chunks: ${KB}kB"
+          LINE=$(grep -F 'First Load JS shared by all' build.log | tail -1)
+          if [ -z "$LINE" ]; then
+            echo "::error::Could not find the shared First Load JS line in the build output."
+            exit 1
+          fi
+
+          # e.g. "+ First Load JS shared by all   102 kB" -> KB, rounded down.
+          KB=$(printf '%s\n' "$LINE" | awk '
+            {
+              for (i = 1; i <= NF; i++) {
+                if ($i ~ /^[0-9]+(\.[0-9]+)?$/) { n = $(i); u = $(i + 1) }
+              }
+            }
+            END {
+              if (u ~ /^MB/) n = n * 1024
+              printf "%d", n
+            }')
+
+          echo "Shared first-load JS: ${KB}kB"
           if [ "$KB" -gt 400 ]; then
             echo "::error::Shared JS is ${KB}kB, over the 400kB budget."
             exit 1
