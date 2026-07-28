@@ -9,7 +9,7 @@ import { FORJWELL_CREDIT } from "@/content/cases";
 export const metadata: Metadata = {
   title: "Work, not decks — Drifted",
   description:
-    "Selected work: performance media, creator growth, AI product and web builds. Published numbers where they exist, pending flags where they don’t.",
+    "Six cases with the figures attached: 5.2–6× ROAS, 400+ hours saved, 2.2M views. Where a number isn’t measured yet, the page says pending instead of guessing.",
   alternates: { canonical: "/work" },
 };
 

@@ -1906,3 +1906,178 @@ a:hover {
 [data-motion-paused] .cue i {
   animation-play-state: paused;
 }
+
+/* ══ craft + performance pass ═════════════════════════════════════════════════ */
+
+/* 87 — Schibsted at 400 is a display grotesque doing body work: shorter x-height
+   relative to cap and tighter default fit than Instrument Sans. It needs a touch
+   more leading and neutral tracking at text sizes, or paragraphs read cramped.
+   Still inside the brief's 1.5–1.62 body range. */
+.body,
+.small,
+.faq p,
+.steps p {
+  letter-spacing: 0;
+}
+.body {
+  line-height: 1.62;
+}
+
+/* 89 — stats and countdowns change value in place; proportional digits make them
+   jitter as they count. Tabular figures hold the column. */
+.nums .n,
+.shipbar b,
+.metabar b,
+#khi,
+.tno,
+.jn,
+.opnum,
+.svcno,
+.stepno,
+.phaseno {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* 80 — the nav is fixed at 70px, so any in-page anchor would otherwise land with
+   its heading hidden underneath it. */
+:target,
+[id] {
+  scroll-margin-top: 90px;
+}
+
+/* 53 — WCAG 2.5.8 wants 24px minimum, Apple and Google both say 44px. The small
+   button and filter chips were under it on touch. */
+@media (pointer: coarse) {
+  .btn.sm,
+  .filt,
+  .footlinks a,
+  .sheet .close {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .footlinks {
+    gap: 4px;
+  }
+}
+
+/* 63 — below-the-fold bands don't need painting until they're near the viewport.
+   contain-intrinsic-size keeps the scrollbar honest so this doesn't cause jump. */
+.beat,
+.steps,
+.proofgrid,
+.clientstrip {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+
+/* 79 — visible breadcrumb on case pages. The schema already described the trail;
+   this makes it usable rather than only machine-readable. */
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.crumbs a {
+  color: var(--text-muted);
+  text-decoration: none;
+  background-image: none;
+}
+.crumbs a:hover {
+  color: var(--voltage-500);
+}
+.crumbs span[aria-current] {
+  color: var(--text-primary);
+}
+
+/* 94 — previous as well as next, so the case sequence reads both ways. */
+.casenav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border-subtle);
+  border-top: 1px solid var(--border-subtle);
+}
+@media (max-width: 700px) {
+  .casenav {
+    grid-template-columns: 1fr;
+  }
+}
+.casenav a {
+  background: var(--tar);
+  padding: clamp(24px, 3.4vw, 44px) clamp(20px, 3vw, 40px);
+  text-decoration: none;
+  background-image: none;
+  color: inherit;
+  transition: background-color var(--dur-fast) var(--ease-hit);
+}
+.casenav a:hover {
+  background: var(--tar-2);
+  color: inherit;
+}
+.casenav a.prev {
+  text-align: left;
+}
+.casenav a.next {
+  text-align: right;
+}
+@media (max-width: 700px) {
+  .casenav a.next {
+    text-align: left;
+  }
+}
+
+/* 50 — error summary. Red text beside four separate fields makes the reader hunt;
+   a summary that links to each one is the accessible pattern, and it gets focus
+   on failed submit. */
+.errsummary {
+  border: 1px solid var(--siren-500);
+  border-left-width: 3px;
+  background: var(--tar-2);
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  max-width: 56ch;
+}
+.errsummary:focus-visible {
+  outline: 2px solid var(--voltage-500);
+  outline-offset: 2px;
+}
+.errsummary strong {
+  display: block;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--siren-400);
+}
+.errsummary ul {
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+.errsummary li {
+  font: 400 14px/1.6 var(--font-body);
+  color: var(--text-body);
+}
+.errsummary a {
+  color: var(--text-body);
+}
+.errsummary a:hover {
+  color: var(--voltage-500);
+}
+
+/* Inline field errors appear on blur. Reserving their line stops the fields below
+   from jumping as you tab through — the same layout-shift problem the summary had,
+   at smaller scale. */
+.fl {
+  min-height: 0;
+}
+.fielderr {
+  display: block;
+  margin-top: -2px;
+  min-height: 1.5em;
+}

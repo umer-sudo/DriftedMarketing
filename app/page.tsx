@@ -12,7 +12,14 @@ import { CASES, CLIENTS } from "@/content/cases";
 
 export const metadata: Metadata = {
   title: "Drifted — Look bigger than you are",
+  description:
+    "5.2–6× ROAS every campaign. 400+ hours a year saved. 2.2M views from an 811-follower account. Boutique agency, Karachi. Tell us the number and the date.",
   alternates: { canonical: "/" },
+  openGraph: {
+    title: "Drifted — Look bigger than you are",
+    description:
+      "Every agency says growth. We say the number — one metric, one date, written into the contract.",
+  },
 };
 
 const BEATS = [

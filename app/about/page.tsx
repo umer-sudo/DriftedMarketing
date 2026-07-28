@@ -5,7 +5,7 @@ import { FORJWELL_CREDIT } from "@/content/cases";
 export const metadata: Metadata = {
   title: "We left on purpose — Drifted",
   description:
-    "Drifted means departure. Founded 2026 in Karachi. Three clients, six disciplines, small on purpose.",
+    "We left agencies where a strategy team, a creative team and a media team were separated by an account layer. Founded 2026 in Karachi. Three clients, small on purpose.",
   alternates: { canonical: "/about" },
 };
 
@@ -106,6 +106,34 @@ export default function AboutPage() {
           <p className="small" style={{ marginTop: 12 }}>
             {FORJWELL_CREDIT}
           </p>
+        </div>
+      </section>
+
+      <section className="wrap sect">
+        <div className="two">
+          <div>
+            <div className="eye">Who this isn&rsquo;t for</div>
+            <h2 className="disp" style={{ fontSize: "clamp(26px,3.4vw,50px)", marginTop: 14 }}>
+              We say no
+              <br />
+              in the first
+              <br />
+              thirty minutes.
+            </h2>
+          </div>
+          <div>
+            <p className="body">
+              If you want the cheapest quote, we&rsquo;re not it. If you want a team that agrees
+              with everything, we&rsquo;re not it either. If the number you need can&rsquo;t be hit
+              by the date you need it, we&rsquo;ll tell you on the call instead of taking a month
+              of retainer to arrive at the same answer.
+            </p>
+            <p className="body" style={{ marginTop: 14 }}>
+              We&rsquo;ve turned down builds where the revenue model didn&rsquo;t hold. That
+              isn&rsquo;t a policy we&rsquo;re proud of in the abstract — it&rsquo;s the only way
+              &ldquo;we say the number&rdquo; survives contact with a real client.
+            </p>
+          </div>
         </div>
       </section>
 

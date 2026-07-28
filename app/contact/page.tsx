@@ -5,7 +5,7 @@ import { site, instagram, linkedin } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Tell us the number — Drifted",
   description:
-    "Thirty minutes. No deck, no discovery theatre. Tell us the metric and the date, and we’ll tell you whether we can hit it — or who can.",
+    "Thirty minutes, no deck. Bring the metric and the date; we answer within one business day, including when the answer is no. Q4 — two client slots open.",
   alternates: { canonical: "/contact" },
 };
 

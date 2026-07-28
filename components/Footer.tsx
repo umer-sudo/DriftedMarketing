@@ -1,8 +1,16 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Mark } from "./Mark";
 import { site, instagram, linkedin } from "@/lib/config";
 
 export default function Footer() {
+  const pathname = usePathname();
+  /* Footer links duplicate the nav, so without aria-current a screen-reader user
+     tabbing the footer gets no signal about where they already are. */
+  const current = (href: string) => (pathname === href ? ("page" as const) : undefined);
+
   return (
     <>
       <footer className="wrap foot">
@@ -50,18 +58,18 @@ export default function Footer() {
           <div>
             <div className="eye mut">Services</div>
             <div className="footlinks">
-              <Link href="/services/performance">Performance media</Link>
-              <Link href="/services/creators">Creator growth</Link>
-              <Link href="/services/ai-product">AI product</Link>
+              <Link href="/services/performance" aria-current={current("/services/performance")}>Performance media</Link>
+              <Link href="/services/creators" aria-current={current("/services/creators")}>Creator growth</Link>
+              <Link href="/services/ai-product" aria-current={current("/services/ai-product")}>AI product</Link>
             </div>
           </div>
 
           <div>
             <div className="eye mut">Studio</div>
             <div className="footlinks">
-              <Link href="/work">Work</Link>
-              <Link href="/about">About</Link>
-              <Link href="/contact">Contact</Link>
+              <Link href="/work" aria-current={current("/work")}>Work</Link>
+              <Link href="/about" aria-current={current("/about")}>About</Link>
+              <Link href="/contact" aria-current={current("/contact")}>Contact</Link>
             </div>
           </div>
 

@@ -12,7 +12,7 @@ import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-dat
 export const metadata: Metadata = {
   title: "Creator growth — Drifted",
   description:
-    "Monetization, product, and the launch that converts followers into revenue. Noted.: 3,000 new followers a month, sustained.",
+    "115K followers and nothing to buy is a hobby. We built Noted. from a red pen and a margin table — 8 products, 3,000 new followers a month, sustained.",
   alternates: { canonical: "/services/creators" },
 };
 
@@ -160,6 +160,30 @@ export default function CreatorsPage() {
                 Read the case ↗
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="wrap sect">
+        <div className="two">
+          <div>
+            <div className="eye">What it costs to be wrong</div>
+            <h2 className="disp" style={{ fontSize: "clamp(24px,3.2vw,44px)", marginTop: 14 }}>
+              A launch you
+              <br />
+              can&rsquo;t take back.
+            </h2>
+          </div>
+          <div>
+            <p className="body">
+              Merch priced without a margin table sells out and loses money. A drop your audience
+              ignores teaches them the next one is skippable. Both are recoverable. Burning the
+              trust that took years to build is not.
+            </p>
+            <p className="body" style={{ marginTop: 14 }}>
+              Flat monthly retainer, losable at thirty days. If the audience isn&rsquo;t ready to
+              buy, we&rsquo;ll say so before you order stock.
+            </p>
           </div>
         </div>
       </section>

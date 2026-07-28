@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { submitBrief } from "@/app/contact/actions";
 import Turnstile from "./Turnstile";
@@ -20,29 +20,68 @@ type Errors = Partial<Record<"name" | "email" | "number" | "date", string>>;
 
 type Status = "idle" | "sending" | "unwired" | "error";
 
+/* One validator for both blur and submit, so the two can never disagree about
+   whether a field is valid — the classic source of "it says it's wrong but it
+   submits anyway". */
+const RULES: Record<keyof Errors, { label: string; test: (v: string) => boolean; msg: string }> = {
+  name: { label: "Name", test: (v) => v.trim().length > 0, msg: "We need a name." },
+  email: {
+    label: "Email",
+    test: (v) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim()),
+    msg: "We need a working email.",
+  },
+  number: {
+    label: "The number",
+    test: (v) => v.trim().length > 0,
+    msg: "The number is the point of the call.",
+  },
+  date: { label: "The date", test: (v) => v.trim().length > 0, msg: "And the date you need it by." },
+};
+
+const validate = (data: FormData): Errors => {
+  const out: Errors = {};
+  (Object.keys(RULES) as Array<keyof Errors>).forEach((key) => {
+    const value = String(data.get(key) ?? "");
+    if (!RULES[key].test(value)) out[key] = RULES[key].msg;
+  });
+  return out;
+};
+
 export default function ContactForm() {
   const router = useRouter();
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState<string | null>(null);
+  /* Only fields the visitor has already left get validated as they type. Marking a
+     field red before they have finished typing in it the first time is hostile. */
+  const [touched, setTouched] = useState<Partial<Record<keyof Errors, boolean>>>({});
+  const [showTurnstile, setShowTurnstile] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const summaryRef = useRef<HTMLDivElement>(null);
+  const [focusSummary, setFocusSummary] = useState(false);
+  /* The summary only appears after a submit attempt. Showing it on the first blur
+     inserts a block at the top of the form and pushes everything down — including
+     the submit button out from under the pointer, so the click that caused the blur
+     lands somewhere else. It's also premature: a summary of what you got wrong
+     before you've tried to send is nagging, not help. */
+  const [submitted, setSubmitted] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
 
-    const next: Errors = {};
-    const name = String(data.get("name") ?? "").trim();
-    const email = String(data.get("email") ?? "").trim();
-    const number = String(data.get("number") ?? "").trim();
-    const date = String(data.get("date") ?? "").trim();
-
-    if (!name) next.name = "We need a name.";
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) next.email = "We need a working email.";
-    if (!number) next.number = "The number is the point of the call.";
-    if (!date) next.date = "And the date you need it by.";
-
+    const next = validate(data);
     setErrors(next);
-    if (Object.keys(next).length) return;
+    setSubmitted(true);
+    setTouched({ name: true, email: true, number: true, date: true });
+
+    if (Object.keys(next).length) {
+      /* Focus moves in an effect, not here: the summary doesn't exist in the DOM
+         until React has re-rendered with the new errors, so focusing synchronously
+         (or in a rAF, which still beats the commit) lands on nothing. */
+      setFocusSummary(true);
+      return;
+    }
 
     setStatus("sending");
     setMessage(null);
@@ -59,11 +98,69 @@ export default function ContactForm() {
     setMessage(result.message);
   }
 
-  const field = (key: keyof Errors) =>
-    errors[key] ? { "aria-invalid": true as const, "aria-describedby": `${key}-error` } : {};
+  useEffect(() => {
+    if (!focusSummary) return;
+    summaryRef.current?.focus();
+    setFocusSummary(false);
+  }, [focusSummary]);
+
+  const revalidate = (key: keyof Errors) => {
+    if (!formRef.current) return;
+    const data = new FormData(formRef.current);
+    const value = String(data.get(key) ?? "");
+    setErrors((prev) => {
+      const nextErrors = { ...prev };
+      if (RULES[key].test(value)) delete nextErrors[key];
+      else nextErrors[key] = RULES[key].msg;
+      return nextErrors;
+    });
+  };
+
+  const field = (key: keyof Errors) => ({
+    id: key,
+    onBlur: () => {
+      setTouched((t) => ({ ...t, [key]: true }));
+      revalidate(key);
+    },
+    onChange: () => touched[key] && revalidate(key),
+    ...(errors[key]
+      ? { "aria-invalid": true as const, "aria-describedby": `${key}-error` }
+      : {}),
+  });
+
+  const errorList = (Object.keys(RULES) as Array<keyof Errors>).filter((k) => errors[k]);
 
   return (
-    <form id="brief" style={{ marginTop: 22 }} onSubmit={onSubmit} noValidate>
+    <form
+      id="brief"
+      ref={formRef}
+      style={{ marginTop: 22 }}
+      onSubmit={onSubmit}
+      noValidate
+      onFocusCapture={() => setShowTurnstile(true)}
+    >
+      {submitted && errorList.length > 0 && (
+        <div
+          className="errsummary"
+          ref={summaryRef}
+          tabIndex={-1}
+          role="alert"
+          aria-labelledby="errsummary-title"
+        >
+          <strong id="errsummary-title">
+            {errorList.length === 1 ? "One field needs fixing" : `${errorList.length} fields need fixing`}
+          </strong>
+          <ul>
+            {errorList.map((key) => (
+              <li key={key}>
+                <a href={`#${key}`}>
+                  {RULES[key].label} — {errors[key]}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <label className="fl">
         <span>Name</span>
         <input
@@ -168,7 +265,7 @@ export default function ContactForm() {
         </label>
       </div>
 
-      <Turnstile />
+      {showTurnstile && <Turnstile />}
 
       <button className="btn" type="submit" style={{ marginTop: 8 }} disabled={status === "sending"}>
         {status === "sending" ? "Sending…" : "Send it ↗"}

@@ -36,6 +36,7 @@ export default function Chrome() {
   const [toast, setToast] = useState<string | null>(null);
   const [paused, setPaused] = useState(false);
   const toastTimer = useRef<number | undefined>(undefined);
+  const popRef = useRef<HTMLDivElement>(null);
 
   /* Arm the entrance states only once JS is live. */
   useEffect(() => {
@@ -194,13 +195,23 @@ export default function Chrome() {
   /* ── cursor: 8px square, 52px with a label over targets ──────────────────── */
   useEffect(() => {
     if (isTouch() || prefersReduced()) return;
-    const dot = document.createElement("div");
-    dot.className = "dot";
-    const lbl = document.createElement("span");
-    dot.appendChild(lbl);
-    document.body.appendChild(dot);
+    /* Built lazily on first movement rather than on mount — a device that never
+       moves a pointer (and every prerender) then pays nothing for it. */
+    let dot: HTMLDivElement | null = null;
+    let lbl: HTMLSpanElement | null = null;
+
+    const build = () => {
+      if (dot) return;
+      dot = document.createElement("div");
+      dot.className = "dot";
+      lbl = document.createElement("span");
+      dot.appendChild(lbl);
+      document.body.appendChild(dot);
+    };
 
     const move = (e: MouseEvent) => {
+      build();
+      if (!dot || !lbl) return;
       dot.classList.add("on");
       dot.style.left = e.clientX + "px";
       dot.style.top = e.clientY + "px";
@@ -218,14 +229,14 @@ export default function Chrome() {
           ? "Open"
           : "Go";
     };
-    const leave = () => dot.classList.remove("on");
+    const leave = () => dot?.classList.remove("on");
 
     window.addEventListener("mousemove", move, { passive: true });
     window.addEventListener("mouseleave", leave);
     return () => {
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mouseleave", leave);
-      dot.remove();
+      dot?.remove();
     };
   }, []);
 
@@ -307,6 +318,10 @@ export default function Chrome() {
   /* ── exit-intent popup: once per session, on mouseleave or after 26s ─────── */
   useEffect(() => {
     if (sessionStorage.getItem("drifted-pop")) return;
+    /* Exit intent is a pointer concept. Without one, mouseleave never fires and the
+       26s timer would just ambush someone mid-read, so the popup doesn't run at all
+       on touch. Same for reduced motion, where an unrequested modal is hostile. */
+    if (isTouch() || prefersReduced()) return;
     const show = () => {
       if (sessionStorage.getItem("drifted-pop")) return;
       setPopOpen(true);
@@ -324,11 +339,41 @@ export default function Chrome() {
 
   useEffect(() => {
     if (!popOpen) return;
+    const box = popRef.current;
+    const previous = document.activeElement as HTMLElement | null;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusables = () =>
+      Array.from(box?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? []);
+
+    focusables()[0]?.focus();
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closePop();
+      if (e.key === "Escape") {
+        closePop();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const items = focusables();
+      if (!items.length) return;
+      const first = items[0]!;
+      const last = items[items.length - 1]!;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = overflow;
+      previous?.focus?.();
+    };
   }, [popOpen]);
 
   /* ── availability banner dismissal persists for the session ──────────────── */
@@ -420,7 +465,7 @@ export default function Chrome() {
         aria-modal={popOpen || undefined}
         aria-label="Book the call"
       >
-        <div className="box">
+        <div className="box" ref={popRef}>
           <button className="x" aria-label="Close" onClick={closePop}>
             ×
           </button>

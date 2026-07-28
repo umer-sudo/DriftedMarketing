@@ -12,7 +12,7 @@ import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-dat
 export const metadata: Metadata = {
   title: "Performance media — Drifted",
   description:
-    "Paid media and the creative that feeds it, run by the same people. The Gallery: 5.2–6× ROAS on every campaign.",
+    "The Gallery returned 5.2–6× on every campaign we ran — not an average across a good quarter. Paid media and the creative that feeds it, run by the same people.",
   alternates: { canonical: "/services/performance" },
 };
 

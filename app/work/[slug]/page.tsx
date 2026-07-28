@@ -29,7 +29,16 @@ export default async function CasePage({ params }: Params) {
   const { slug } = await params;
   const c = caseBySlug(slug);
   if (!c) notFound();
-  const next = caseBySlug(c.next) ?? CASES[0];
+  /* Traversal runs in array order, not off the authored `next` field.
+
+     That field doesn't form a ring: zoller→ehsaan→zoller and noted→gallery→noted
+     are two-cycles, so a reader clicking "next" repeatedly ping-pongs between a
+     pair and never reaches the other four cases. Index order guarantees all six
+     are reachable in both directions. The authored `next` is left in the data as
+     the editorial "read this one after" hint, but it no longer drives navigation. */
+  const i = CASES.indexOf(c);
+  const prev = CASES[(i - 1 + CASES.length) % CASES.length]!;
+  const next = CASES[(i + 1) % CASES.length]!;
 
   return (
     <>
@@ -68,7 +77,16 @@ export default async function CasePage({ params }: Params) {
           aria-hidden="true"
         />
         <div className="wrap" style={{ position: "relative", width: "100%", paddingBottom: 44 }}>
-          <div className="eye">{c.client}</div>
+          <nav className="crumbs" aria-label="Breadcrumb">
+            <Link href="/">Drifted</Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/work">Work</Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{c.client}</span>
+          </nav>
+          <div className="eye" style={{ marginTop: 18 }}>
+            {c.client}
+          </div>
           <h1 className="disp" style={{ fontSize: "clamp(36px,7vw,116px)", marginTop: 16 }}>
             {c.hero[0]}
             <br />
@@ -238,30 +256,27 @@ export default async function CasePage({ params }: Params) {
         </div>
       </section>
 
-      {/* ── Next case ──────────────────────────────────────────────────────── */}
-      <div className="wrap" style={{ paddingBottom: 20 }}>
-        <Link
-          href={`/work/${next.slug}`}
-          className="nextcase"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            gap: 24,
-            flexWrap: "wrap",
-            paddingTop: 30,
-            borderTop: "1px solid var(--border-subtle)",
-          }}
-        >
-          <div>
-            <span className="eye mut">Next project</span>
-            <h2 className="disp" style={{ fontSize: "clamp(26px,3.6vw,54px)", marginTop: 12 }}>
-              {next.client}
-            </h2>
-          </div>
-          <span className="btn sec">Next case ↗</span>
+      {/* ── Case navigation, both directions ──────────────────────────────── */}
+      <nav className="casenav" aria-label="More case studies">
+        <Link href={`/work/${prev.slug}`} className="prev">
+          <span className="eye mut">← Previous</span>
+          <h2 className="disp" style={{ fontSize: "clamp(22px,3vw,40px)", marginTop: 12 }}>
+            {prev.client}
+          </h2>
+          <p className="small" style={{ marginTop: 8 }}>
+            {prev.result}
+          </p>
         </Link>
-      </div>
+        <Link href={`/work/${next.slug}`} className="next">
+          <span className="eye mut">Next →</span>
+          <h2 className="disp" style={{ fontSize: "clamp(22px,3vw,40px)", marginTop: 12 }}>
+            {next.client}
+          </h2>
+          <p className="small" style={{ marginTop: 8 }}>
+            {next.result}
+          </p>
+        </Link>
+      </nav>
 
       <CtaBand />
     </>

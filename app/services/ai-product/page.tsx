@@ -13,7 +13,7 @@ import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-dat
 export const metadata: Metadata = {
   title: "AI product — Drifted",
   description:
-    "Apps and PWAs where the revenue model is written before the first commit. The Zoller platform: 400+ hours saved a year.",
+    "1,250 lots per auction used to be typed by hand. Now they’re filled from photographs — 400+ hours a year saved. We decide how it earns before we build it.",
   alternates: { canonical: "/services/ai-product" },
 };
 
@@ -207,6 +207,30 @@ export default function AiProductPage() {
                 Ehsaan ↗
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="wrap sect">
+        <div className="two">
+          <div>
+            <div className="eye">What it costs to be wrong</div>
+            <h2 className="disp" style={{ fontSize: "clamp(24px,3.2vw,44px)", marginTop: 14 }}>
+              Runway spent
+              <br />
+              finding out.
+            </h2>
+          </div>
+          <div>
+            <p className="body">
+              A build that can&rsquo;t earn doesn&rsquo;t fail on launch day. It fails eight months
+              later, after the budget is gone and the answer is the same one nobody asked at the
+              start. The code was never the expensive part.
+            </p>
+            <p className="body" style={{ marginTop: 14 }}>
+              So the model comes first, and we turn work down when it doesn&rsquo;t hold. You keep
+              the model either way.
+            </p>
           </div>
         </div>
       </section>

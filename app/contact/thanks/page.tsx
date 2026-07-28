@@ -26,8 +26,9 @@ export default function ThanksPage() {
       </h1>
 
       <p className="body" style={{ maxWidth: "54ch", marginTop: 26, fontSize: 19 }}>
-        Check your inbox for the invite. Before the call, have two things ready: the metric you care
-        about, and the date you want it by. That&rsquo;s the whole agenda.
+        We answer within one business day — including when the answer is no. Before the call,
+        have two things ready: the metric you care about, and the date you want it by.
+        That&rsquo;s the whole agenda. There is no deck on our side.
       </p>
 
       <div style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
