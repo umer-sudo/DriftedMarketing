@@ -53,7 +53,13 @@ export async function deliverBrief(brief: Brief): Promise<DeliveryResult> {
         }),
         signal: AbortSignal.timeout(10_000),
       });
-      if (res.ok) return { status: "sent", via: "email" };
+      if (res.ok) {
+        /* Fire-and-forget acknowledgement. Deliberately not awaited into the
+           result: if the brief reached us, the submit succeeded, and a failed
+           courtesy email must never tell the sender their brief didn't land. */
+        void sendAcknowledgement(brief, resendKey, from).catch(() => {});
+        return { status: "sent", via: "email" };
+      }
       failures.push(`email ${res.status}`);
     } catch (err) {
       failures.push(`email ${err instanceof Error ? err.name : "error"}`);
@@ -83,6 +89,36 @@ export async function deliverBrief(brief: Brief): Promise<DeliveryResult> {
   }
 
   return { status: "failed", detail: failures.join("; ") || "no transport succeeded" };
+}
+
+/* The sender gets the same promise the contact page makes, in writing, immediately.
+   Silence after a form submit is the most common reason people submit twice. */
+async function sendAcknowledgement(b: Brief, key: string, from: string) {
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
+    body: JSON.stringify({
+      from,
+      to: [b.email],
+      subject: "We have your brief — Drifted",
+      text: [
+        `${b.name},`,
+        "",
+        "Your brief is in. We answer within one business day, including when the",
+        "answer is no.",
+        "",
+        "What you sent us:",
+        `  The number:  ${b.number}`,
+        `  The date:    ${b.date}`,
+        "",
+        "That is the whole agenda for the call. Thirty minutes, no deck.",
+        "",
+        "— Drifted",
+        "Departure, by design.",
+      ].join("\n"),
+    }),
+    signal: AbortSignal.timeout(10_000),
+  });
 }
 
 /* Plain text, not HTML. The brief goes to a person, and the point of the page is the

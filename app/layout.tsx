@@ -31,7 +31,10 @@ export const metadata: Metadata = {
     title: "Drifted Marketing — Look bigger than you are",
     description: site.ogDescription,
   },
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": [{ url: "/work/rss.xml", title: "Drifted — Work" }] },
+  },
 };
 
 export const viewport: Viewport = {

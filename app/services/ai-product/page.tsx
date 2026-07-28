@@ -73,6 +73,9 @@ export default function AiProductPage() {
 
       <section className="appsec" style={{ borderTop: 0 }}>
         <div className="wire" aria-hidden="true" />
+        {/* Klein's one moment on this page. Graphic only — it never carries text,
+            which at 2.3:1 it could not do legibly. */}
+        <div className="kleinwedge" aria-hidden="true" />
         <div className="wrap" style={{ position: "relative", paddingBlock: "clamp(48px,7vw,104px)" }}>
           <div className="eye" style={{ color: "var(--klein-300)" }}>
             03 — AI product

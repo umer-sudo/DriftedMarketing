@@ -181,6 +181,16 @@ export default async function CasePage({ params }: Params) {
           <p className="body" style={{ maxWidth: "60ch", marginTop: 14 }}>
             Every figure here is published or pending. Nothing is estimated in advance.
           </p>
+          <p className="caseupdated" style={{ marginTop: 16 }}>
+            Figures last confirmed with the client{" "}
+            <time dateTime={c.verified}>
+              {new Date(c.verified).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </time>
+          </p>
         </div>
         <div className="nums" style={{ gridTemplateColumns: "repeat(3,minmax(0,1fr))", marginTop: 30 }}>
           {c.stats.map((s) => (

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
+import Faq from "@/components/Faq";
 import { site, instagram, linkedin } from "@/lib/config";
 
 export const metadata: Metadata = {
@@ -8,6 +9,25 @@ export const metadata: Metadata = {
     "Thirty minutes, no deck. Bring the metric and the date; we answer within one business day, including when the answer is no. Q4 — two client slots open.",
   alternates: { canonical: "/contact" },
 };
+
+const OBJECTIONS = [
+  {
+    q: "What if we’re too small?",
+    a: "Then we’ll say so on the call rather than after a month of retainer. We work with three clients at a time — if the number you need can’t justify the fee, that is a fast no, not a slow one.",
+  },
+  {
+    q: "What does it cost?",
+    a: "Retainers start where the work is worth doing, and they’re losable at thirty days’ notice. We’ll give you a range on the first call once we know the number and the date.",
+  },
+  {
+    q: "Do we have to sign anything to talk?",
+    a: "No. Thirty minutes, no deck, no NDA to start. You leave with a yes, a no, or a not yet — and the reason, in writing.",
+  },
+  {
+    q: "Who’s actually on the call?",
+    a: "The people who would run the account. There is no account layer here, which means there is nobody to hand you off to afterwards.",
+  },
+];
 
 const NEXT = [
   "We answer within one business day. If we’re not right for it, we’ll say so in the first reply.",
@@ -35,6 +55,12 @@ export default function ContactPage() {
         <div className="two" style={{ alignItems: "start" }}>
           <div>
             <div className="eye">The brief</div>
+            {/* The promise sits above the form, not beside it. A reader deciding
+                whether to spend two minutes filling this in needs to know what
+                happens next before they start, not after they scroll. */}
+            <p className="body" style={{ marginTop: 14, maxWidth: "46ch" }}>
+              We answer within one business day — including when the answer is no.
+            </p>
             <ContactForm />
           </div>
 
@@ -80,6 +106,8 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      <Faq items={OBJECTIONS} />
     </>
   );
 }

@@ -2081,3 +2081,154 @@ a:hover {
   margin-top: -2px;
   min-height: 1.5em;
 }
+
+/* ══ third pass ═══════════════════════════════════════════════════════════════ */
+
+/* 98/30 — case studies get printed and PDF'd by prospects sharing them internally.
+   The dark ground burns ink and the placeholders are meaningless on paper. This
+   turns a case page into a readable document without a separate export path. */
+@media print {
+  :root {
+    --tar: #fff;
+    --tar-2: #fff;
+    --tar-3: #fff;
+    --tar-4: #fff;
+    --text-primary: #000;
+    --text-body: #1a1a1a;
+    --text-muted: #555;
+    --border-subtle: #ccc;
+    --border-default: #999;
+    --border-strong: #666;
+  }
+  body,
+  body:after,
+  .grainy:before,
+  .cta:after {
+    background: #fff !important;
+    background-image: none !important;
+  }
+  .disp,
+  .eye {
+    color: #000 !important;
+  }
+  .imageslot,
+  .orb,
+  .wm-logo,
+  .wire,
+  .marq,
+  .clipmark,
+  .casenav,
+  .cta {
+    display: none !important;
+  }
+  .sect {
+    padding-block: 18pt;
+    break-inside: avoid;
+  }
+  .phase,
+  .beat,
+  .nums > div {
+    break-inside: avoid;
+  }
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+  }
+  .metabar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 55 — Windows high-contrast and forced-colours users lose the hairline borders
+   the whole layout is built from, because they're rgba over a dark ground. */
+@media (prefers-contrast: more) {
+  :root {
+    --border-subtle: rgba(242, 240, 234, 0.4);
+    --border-default: rgba(242, 240, 234, 0.6);
+    --border-strong: rgba(242, 240, 234, 0.85);
+    --text-muted: #c8c8d0;
+  }
+}
+@media (forced-colors: active) {
+  .btn,
+  .filt,
+  .tag,
+  .item {
+    border: 1px solid CanvasText;
+  }
+  .fill {
+    forced-color-adjust: none;
+  }
+}
+
+/* 96 — the grain is tuned as `overlay` on Tar. In the Newsprint scope that reads
+   as a grey wash rather than tooth; the brief specifies multiply on light. */
+.drift-paper.grainy:before,
+.paper.grainy:before {
+  mix-blend-mode: multiply;
+  opacity: 0.05;
+}
+
+/* 92 — :hover sticks after a tap on touch, leaving tiles veiled and glared until
+   you tap elsewhere. Gate the whole hover choreography behind a real pointer. */
+@media (hover: none) {
+  .item:hover .veil,
+  .item:hover .glare {
+    opacity: 0;
+  }
+  .item:hover .go {
+    opacity: 0;
+  }
+  .item:hover .shot > .img {
+    transform: translate(9px, 7.8px) rotate(-1.2deg) scale(1.06);
+  }
+  .svc:hover > div {
+    filter: none;
+  }
+}
+
+/* 95 — the marquee duplicates its list and translates -50%. If the two halves
+   don't total more than the viewport, the seam shows at wide sizes. */
+.marq div {
+  min-width: 200vw;
+}
+
+/* 93 — the case meta bar carries client, discipline, timeline and outcome. Keeping
+   it in view while reading the case means the outcome is never more than a glance
+   away. Only above 1000px, where there's vertical room to spare. */
+@media (min-width: 1001px) {
+  .metabar {
+    position: sticky;
+    top: 70px;
+    z-index: 40;
+    background: var(--tar);
+    backdrop-filter: var(--blur-panel);
+  }
+}
+
+/* 52 — the skip link moved focus but the target had no visible focus state, so
+   keyboard users had no confirmation it worked. */
+#main:focus-visible {
+  outline: 2px solid var(--voltage-500);
+  outline-offset: -2px;
+}
+
+/* 97 — Klein is the AI page's one rare moment and it was doing almost nothing at
+   300-step on an eyebrow. Give it a real graphic presence: a die-cut wedge behind
+   the hero. Still graphic-only, still never carrying text. */
+.kleinwedge {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(107deg, transparent 0 62%, var(--klein-500) 62%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* 33 — a case with a visible capture date is a case a prospect trusts. */
+.caseupdated {
+  font: 400 11px/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}

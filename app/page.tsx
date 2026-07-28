@@ -14,7 +14,10 @@ export const metadata: Metadata = {
   title: "Drifted — Look bigger than you are",
   description:
     "5.2–6× ROAS every campaign. 400+ hours a year saved. 2.2M views from an 811-follower account. Boutique agency, Karachi. Tell us the number and the date.",
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": [{ url: "/work/rss.xml", title: "Drifted — Work" }] },
+  },
   openGraph: {
     title: "Drifted — Look bigger than you are",
     description:
@@ -326,7 +329,7 @@ export default function Home() {
       <section style={{ paddingTop: 56 }}>
         <div className="wrap">
           <div className="eye mut" style={{ marginBottom: 16 }}>
-            On the books
+            On the books — every one a signed engagement, not a logo wall
           </div>
           <div className="clientstrip">
             {CLIENTS.map((name) => (

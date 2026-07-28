@@ -44,8 +44,13 @@ export type CaseStudy = {
   phases: CasePhase[];
   found: string;
   stats: CaseStat[];
-  /** Slug of the next case in the reading order. */
+  /** Editorial "read this next" hint. Not used for prev/next navigation — the
+      authored values form two-cycles; see app/work/[slug]/page.tsx. */
   next: string;
+  /** ISO date the figures on this page were last confirmed with the client. A case
+      with a visible capture date is one a prospect can weigh; one without could be
+      five years old. Update by hand when the numbers are re-checked. */
+  verified: string;
   /** Only Seyr is publicly inspectable. */
   externalUrl?: string;
 };
@@ -101,6 +106,7 @@ export const CASES: CaseStudy[] = [
       { value: "[Lots processed pending]", label: "First live auction, 16 Aug", pending: true },
     ],
     next: "ehsaan",
+    verified: "2026-07-01",
   },
   {
     slug: "noted",
@@ -150,6 +156,7 @@ export const CASES: CaseStudy[] = [
       { value: "[Revenue pending]", label: "Store still launching", pending: true },
     ],
     next: "gallery",
+    verified: "2026-07-01",
   },
   {
     slug: "ehsaan",
@@ -194,6 +201,7 @@ export const CASES: CaseStudy[] = [
       { value: "[Launch metrics pending]", label: "Signups, listings, GMV", pending: true },
     ],
     next: "zoller",
+    verified: "2026-07-01",
   },
   {
     slug: "gallery",
@@ -238,6 +246,7 @@ export const CASES: CaseStudy[] = [
       { value: "[Spend pending]", label: "Publishing spend alongside return", pending: true },
     ],
     next: "noted",
+    verified: "2026-07-01",
   },
   {
     slug: "seyr",
@@ -276,6 +285,7 @@ export const CASES: CaseStudy[] = [
       { value: "[Conversion pending]", label: "Before / after not yet measured", pending: true },
     ],
     next: "social",
+    verified: "2026-07-01",
     externalUrl: "https://seyr.shop",
   },
   {
@@ -318,6 +328,7 @@ export const CASES: CaseStudy[] = [
       { value: "$0.25", label: "Per landing page view — BamBam" },
     ],
     next: "zoller",
+    verified: "2026-07-01",
   },
 ];
 

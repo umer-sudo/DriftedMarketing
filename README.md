@@ -10,8 +10,30 @@ npm run build
 npm run typecheck
 ```
 
-CI runs typecheck, build and a high-severity audit on every PR
-(`.github/workflows/ci.yml`).
+CI runs typecheck, build, a high-severity audit and a shared-JS bundle budget on
+every PR (`.github/workflows/ci.yml`).
+
+## Deploying
+
+Nothing about this app is Vercel-specific — it is a stock Next.js 15 app and will
+run anywhere that runs Node, including a plain `npm run build && npm run start`
+behind nginx. Vercel is simply the shortest path from repo to URL.
+
+1. **https://vercel.com/new** → import `umer-sudo/DriftedMarketing-Revamp`
+2. Pick the branch. Framework, build command and output are auto-detected; there is
+   nothing to configure.
+3. Set `NEXT_PUBLIC_SITE_URL` to the URL Vercel gives you, then redeploy. Skipping
+   this leaves canonicals, sitemap and OG tags pointing at `driftedmarketing.com`.
+4. Everything else in `.env.example` is optional. Add `RESEND_API_KEY` and
+   `CONTACT_TO_EMAIL` when you want the form to actually deliver.
+
+`vercel.json` sets security headers (nosniff, DENY framing, strict referrer, and a
+Permissions-Policy that turns off camera, microphone, geolocation and FLoC). It
+does not pin a region or override the build — swap hosts freely.
+
+> One caveat if you deploy serverless: `lib/rate-limit.ts` keeps its counters in
+> process memory, so each instance limits independently. See the note under
+> **Contact form**.
 
 ## Routes
 
