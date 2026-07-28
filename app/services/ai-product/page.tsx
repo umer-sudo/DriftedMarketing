@@ -3,6 +3,8 @@ import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
 import ImageSlot from "@/components/ImageSlot";
 import Faq from "@/components/Faq";
+import JsonLd from "@/components/JsonLd";
+import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-data";
 
 /* AI product — dark, with Klein as its single rare accent moment. Klein is graphic
    only and never carries text at 2.3:1; here it appears as the eyebrow tint drawn
@@ -53,6 +55,22 @@ const FAQ = [
 export default function AiProductPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          serviceSchema({
+            name: "AI product",
+            description:
+              "Apps and PWAs where the revenue model is written before the first commit.",
+            path: "/services/ai-product",
+          }),
+          faqSchema(FAQ),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "AI product", path: "/services/ai-product" },
+          ]),
+        ]}
+      />
+
       <section className="appsec" style={{ borderTop: 0 }}>
         <div className="wire" aria-hidden="true" />
         <div className="wrap" style={{ position: "relative", paddingBlock: "clamp(48px,7vw,104px)" }}>

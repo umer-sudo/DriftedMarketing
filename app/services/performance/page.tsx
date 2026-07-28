@@ -3,6 +3,8 @@ import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
 import ImageSlot from "@/components/ImageSlot";
 import Faq from "@/components/Faq";
+import JsonLd from "@/components/JsonLd";
+import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-data";
 
 /* Performance media — the dark sibling with Voltage plates. The three service pages
    are identical in structure and choreography and differ only in surface treatment. */
@@ -44,6 +46,22 @@ const FAQ = [
 export default function PerformancePage() {
   return (
     <>
+      <JsonLd
+        data={[
+          serviceSchema({
+            name: "Performance media",
+            description:
+              "Paid media and the creative that feeds it, run by the same people.",
+            path: "/services/performance",
+          }),
+          faqSchema(FAQ),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Performance media", path: "/services/performance" },
+          ]),
+        ]}
+      />
+
       <section
         className="wrap grainy"
         style={{ paddingBlock: "clamp(48px,7vw,104px)", position: "relative", overflow: "hidden" }}

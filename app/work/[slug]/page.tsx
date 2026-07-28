@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import CtaBand from "@/components/CtaBand";
 import ImageSlot from "@/components/ImageSlot";
+import JsonLd from "@/components/JsonLd";
+import { caseSchema, breadcrumbSchema } from "@/lib/structured-data";
 import { CASES, caseBySlug } from "@/content/cases";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -31,6 +33,17 @@ export default async function CasePage({ params }: Params) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          caseSchema(c),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Work", path: "/work" },
+            { name: c.client, path: `/work/${c.slug}` },
+          ]),
+        ]}
+      />
+
       {/* ── Hero ───────────────────────────────────────────────────────────── */}
       <section
         className="grainy"

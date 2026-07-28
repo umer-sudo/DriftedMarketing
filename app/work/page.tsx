@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import WorkGrid from "@/components/WorkGrid";
 import CtaBand from "@/components/CtaBand";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/structured-data";
 import { FORJWELL_CREDIT } from "@/content/cases";
 
 export const metadata: Metadata = {
@@ -13,6 +15,12 @@ export const metadata: Metadata = {
 export default function WorkPage() {
   return (
     <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Work", path: "/work" },
+        ])}
+      />
       <WorkGrid />
       <div className="wrap" style={{ paddingTop: 34 }}>
         <p className="small" style={{ maxWidth: "78ch" }}>

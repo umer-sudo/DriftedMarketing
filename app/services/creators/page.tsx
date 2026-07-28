@@ -3,6 +3,8 @@ import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
 import ImageSlot from "@/components/ImageSlot";
 import Faq from "@/components/Faq";
+import JsonLd from "@/components/JsonLd";
+import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-data";
 
 /* Creator growth — the light sibling. Its hero runs in the Newsprint scope; the rest
    of the page returns to dark, exactly as the prototype does. */
@@ -44,6 +46,22 @@ const FAQ = [
 export default function CreatorsPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          serviceSchema({
+            name: "Creator growth",
+            description:
+              "Monetization, product, and the launch that converts followers into revenue.",
+            path: "/services/creators",
+          }),
+          faqSchema(FAQ),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Creator growth", path: "/services/creators" },
+          ]),
+        ]}
+      />
+
       <section className="wrap paper drift-paper" style={{ paddingBlock: "clamp(48px,7vw,104px)" }}>
         <div className="eye" style={{ color: "var(--siren-500)" }}>
           02 — Creator growth

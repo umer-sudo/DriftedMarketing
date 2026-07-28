@@ -1851,3 +1851,13 @@ a:hover {
 .cta .wrap > div > * {
   min-width: 0;
 }
+
+/* Turnstile widget. Renders only when configured; `interaction-only` appearance
+   means it stays invisible unless Cloudflare decides a challenge is warranted. */
+.turnstile {
+  margin: 0 0 18px;
+  min-height: 0;
+}
+.turnstile:not(:empty) {
+  margin-bottom: 22px;
+}

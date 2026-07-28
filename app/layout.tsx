@@ -6,6 +6,9 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Chrome from "@/components/Chrome";
 import RouteAnnouncer from "@/components/RouteAnnouncer";
+import Analytics from "@/components/Analytics";
+import JsonLd from "@/components/JsonLd";
+import { organizationSchema, websiteSchema } from "@/lib/structured-data";
 import { site } from "@/lib/config";
 
 export const metadata: Metadata = {
@@ -50,6 +53,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <Chrome />
         <RouteAnnouncer />
+        <Analytics />
+        <JsonLd data={[organizationSchema(), websiteSchema()]} />
       </body>
     </html>
   );

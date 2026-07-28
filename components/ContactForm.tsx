@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { submitBrief } from "@/app/contact/actions";
+import Turnstile from "./Turnstile";
 
 /* The brief form.
 
@@ -10,17 +11,19 @@ import { submitBrief } from "@/app/contact/actions";
    copy says why — that is a content decision from the handoff, not a validation
    preference.
 
-   Handoff gap 5: there is no backend. `submitBrief` validates on the server and then
-   has nowhere to send the brief; it returns an explicit "not wired" result rather
-   than pretending to succeed. Until an endpoint and spam protection exist, the form
-   reports that honestly instead of routing to the thank-you page on a lie. */
+   Handoff gap 5 is now wired: `submitBrief` rate-limits, verifies Turnstile when it
+   is configured, validates, and delivers by email and/or webhook. With no transport
+   configured it still refuses to lie — it reports that nothing was sent and points at
+   the email address, rather than routing to the thank-you page on a lie. */
 
 type Errors = Partial<Record<"name" | "email" | "number" | "date", string>>;
+
+type Status = "idle" | "sending" | "unwired" | "error";
 
 export default function ContactForm() {
   const router = useRouter();
   const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<"idle" | "sending" | "unwired" | "error">("idle");
+  const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -42,6 +45,7 @@ export default function ContactForm() {
     if (Object.keys(next).length) return;
 
     setStatus("sending");
+    setMessage(null);
     const result = await submitBrief(data);
 
     if (result.ok) {
@@ -49,6 +53,8 @@ export default function ContactForm() {
       return;
     }
 
+    /* "invalid" only fires if the server disagrees with the client checks above, so
+       surface it in the same place as a transport failure rather than silently. */
     setStatus(result.reason === "not-configured" ? "unwired" : "error");
     setMessage(result.message);
   }
@@ -147,6 +153,8 @@ export default function ContactForm() {
           <input name="company_url" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
+
+      <Turnstile />
 
       <button className="btn" type="submit" style={{ marginTop: 8 }} disabled={status === "sending"}>
         {status === "sending" ? "Sending…" : "Send it ↗"}
