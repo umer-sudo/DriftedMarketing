@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { site } from "@/lib/config";
+import { budgetBands, site } from "@/lib/config";
 import { rateLimit } from "@/lib/rate-limit";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { deliverBrief, type Brief } from "@/lib/deliver-brief";
@@ -37,6 +37,7 @@ export async function submitBrief(data: FormData): Promise<BriefResult> {
   const need = String(data.get("need") ?? "").trim();
   const number = String(data.get("number") ?? "").trim();
   const date = String(data.get("date") ?? "").trim();
+  const budget = String(data.get("budget") ?? "").trim();
   const honeypot = String(data.get("company_url") ?? "").trim();
   const token = (data.get("cf-turnstile-response") as string | null) ?? null;
 
@@ -84,6 +85,10 @@ export async function submitBrief(data: FormData): Promise<BriefResult> {
     need: need.slice(0, 4000),
     number: number.slice(0, 200),
     date: date.slice(0, 200),
+    /* Only a band we actually offer gets through. The field is a <select>, so
+       anything else arrived by hand-crafting the POST — and a free-text budget in
+       the inbox is worth less than an honest blank. */
+    budget: (budgetBands as readonly string[]).includes(budget) ? budget : "",
     submittedAt: new Date().toISOString(),
   };
 

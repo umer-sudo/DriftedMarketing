@@ -47,6 +47,7 @@ export async function submitBriefClient(data: FormData): Promise<ClientResult> {
     need: String(data.get("need") ?? "").slice(0, 4000),
     number: String(data.get("number") ?? "").slice(0, 200),
     date: String(data.get("date") ?? "").slice(0, 200),
+    budget: String(data.get("budget") ?? "").slice(0, 100),
     /* Formspree reads these; Web3Forms ignores them harmlessly. */
     _subject: `Brief — ${String(data.get("name") ?? "")}`,
     _replyto: String(data.get("email") ?? ""),

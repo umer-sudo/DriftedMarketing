@@ -47,6 +47,25 @@ export const zollerLaunch = {
   label: "16 August 2026",
 } as const;
 
+/* Budget bands for the brief form (handoff: "budget band").
+
+   These are the visitor's budget, not our rate card — but the lowest band still
+   signals a floor, because a band nobody would accept should not be on the list.
+   Confirm these against the pricing decision before launch; they are a placeholder
+   set chosen to be round and non-committal, not a published price.
+
+   "Not sure yet" stays last and stays selectable on purpose. A required budget with
+   no honest escape hatch is the fastest way to lose a good brief from someone who
+   genuinely does not know yet — and guessing is worse data than an admission. */
+export const budgetBands = [
+  "Under $2,000 / month",
+  "$2,000 – $5,000 / month",
+  "$5,000 – $10,000 / month",
+  "$10,000+ / month",
+  "One-off project, not a retainer",
+  "Not sure yet",
+] as const;
+
 export const availability = {
   quarter: "Q4",
   slots: 2,

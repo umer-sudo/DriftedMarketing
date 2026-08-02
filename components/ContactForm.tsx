@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { submitBrief } from "@/app/contact/actions";
 import { submitBriefClient } from "@/lib/submit-brief-client";
 import Turnstile from "./Turnstile";
+import { budgetBands } from "@/lib/config";
 
 /* The static export has no server, so the Server Action cannot run. This picks the
    transport at build time — NEXT_PUBLIC_STATIC is set by `npm run build:static`.
@@ -343,6 +344,24 @@ export default function ContactForm() {
           )}
         </label>
       </div>
+
+      {/* After the number and the date, not before. Those two are the point of the
+          page and the copy says so; asking what someone will spend before they have
+          said what they want reads as qualifying them rather than helping them.
+
+          Optional, and "Not sure yet" is a real answer rather than a dead end — a
+          required band mostly buys guesses, and a guess is worse data than a blank. */}
+      <label className="fl" style={{ marginTop: 14 }}>
+        <span>Budget band (optional)</span>
+        <select className="ctrl" name="budget" defaultValue="">
+          <option value="">Prefer not to say</option>
+          {budgetBands.map((band) => (
+            <option key={band} value={band}>
+              {band}
+            </option>
+          ))}
+        </select>
+      </label>
 
       <p className="small" style={{ margin: "2px 0 18px", maxWidth: "52ch" }}>
         The number and the date are required. They are the whole agenda for the call — without

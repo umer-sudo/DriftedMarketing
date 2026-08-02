@@ -2786,3 +2786,25 @@ body {
   display: inline-block;
   padding-block: 6px;
 }
+
+/* ── Select control ──────────────────────────────────────────────────────── */
+/* A native select inherits .ctrl's box but keeps the platform chrome, which on a
+   dark surface renders a light dropdown arrow on a light strip. Reset the appearance
+   and draw the caret ourselves so it matches every other control on the form. */
+select.ctrl {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 42px;
+  cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--voltage-500) 50%),
+    linear-gradient(135deg, var(--voltage-500) 50%, transparent 50%);
+  background-position: calc(100% - 22px) calc(50% + 2px), calc(100% - 16px) calc(50% + 2px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+/* The options list is drawn by the OS, so it does not inherit the dark surface —
+   naming the colours keeps it from flashing white on a dark form. */
+select.ctrl option {
+  background: var(--tar-2);
+  color: var(--text-primary);
+}

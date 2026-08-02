@@ -18,6 +18,8 @@ export type Brief = {
   need: string;
   number: string;
   date: string;
+  /** Optional. Empty when the visitor skipped it. */
+  budget: string;
   submittedAt: string;
 };
 
@@ -127,6 +129,8 @@ function asPlainText(b: Brief): string {
   return [
     `The number:  ${b.number}`,
     `The date:    ${b.date}`,
+    "",
+    `Budget:      ${b.budget || "not given"}`,
     "",
     `Name:        ${b.name}`,
     `Email:       ${b.email}`,
