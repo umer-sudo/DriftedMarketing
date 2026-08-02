@@ -41,7 +41,7 @@ export default function ContactPage() {
     <>
       <section className="wrap grainy" style={{ paddingBlock: "clamp(48px,7vw,96px)" }}>
         <div className="eye">Start here</div>
-        <h1 className="disp" style={{ fontSize: "clamp(44px,8.4vw,140px)", marginTop: 18 }}>
+        <h1 className="disp" style={{ fontSize: "clamp(44px, 8.4vw, 121px)", marginTop: 18 }}>
           Tell us the
           <br />
           number.

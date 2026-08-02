@@ -30,7 +30,7 @@ export default function MidCta({
       <div className="two" style={{ alignItems: "center" }}>
         <div>
           <div className="eye">{eyebrow}</div>
-          <h2 className="disp" style={{ fontSize: "clamp(28px,4.2vw,64px)", marginTop: 14 }}>
+          <h2 className="disp" style={{ fontSize: "clamp(28px, 4.2vw, 60.5px)", marginTop: 14 }}>
             {headline.map((line, i) => (
               <span key={i}>
                 {line}

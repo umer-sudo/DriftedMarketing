@@ -43,7 +43,7 @@ export default function AboutPage() {
     <>
       <section className="wrap grainy" style={{ paddingBlock: "clamp(48px,7vw,104px)" }}>
         <div className="eye">Studio</div>
-        <h1 className="disp" style={{ fontSize: "clamp(44px,8.4vw,140px)", marginTop: 20 }}>
+        <h1 className="disp" style={{ fontSize: "clamp(44px, 8.4vw, 121px)", marginTop: 20 }}>
           We left
           <br />
           on purpose.
@@ -84,7 +84,7 @@ export default function AboutPage() {
       <section className="wrap sect">
         <div className="eye">Who we are</div>
         <div className="two" style={{ marginTop: 16, alignItems: "end" }}>
-          <h2 className="disp" style={{ fontSize: "clamp(26px,3.4vw,50px)" }}>
+          <h2 className="disp" style={{ fontSize: "clamp(26px, 3.4vw, 49px)" }}>
             Founded 2026.
             <br />
             Karachi.
@@ -115,7 +115,7 @@ export default function AboutPage() {
         <div className="two">
           <div>
             <div className="eye">Who this isn&rsquo;t for</div>
-            <h2 className="disp" style={{ fontSize: "clamp(26px,3.4vw,50px)", marginTop: 14 }}>
+            <h2 className="disp" style={{ fontSize: "clamp(26px, 3.4vw, 49px)", marginTop: 14 }}>
               We say no
               <br />
               in the first
@@ -141,7 +141,7 @@ export default function AboutPage() {
 
       <section className="wrap sect">
         <div className="eye">What we believe</div>
-        <h2 className="disp" style={{ fontSize: "clamp(28px,3.6vw,54px)", marginTop: 14 }}>
+        <h2 className="disp" style={{ fontSize: "clamp(28px, 3.6vw, 51.8px)", marginTop: 14 }}>
           Opinions we&rsquo;d
           <br />
           defend in public.

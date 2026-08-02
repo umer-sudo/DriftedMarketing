@@ -82,7 +82,7 @@ export default function CreatorsPage() {
         <h1
           className="disp"
           style={{
-            fontSize: "clamp(40px,7.2vw,120px)",
+            fontSize: "clamp(40px, 7.2vw, 103.7px)",
             marginTop: 20,
             lineHeight: 0.86,
             color: "var(--tar)",
@@ -116,7 +116,7 @@ export default function CreatorsPage() {
         <div className="two">
           <div>
             <div className="eye mut">The problem</div>
-            <h2 className="disp" style={{ fontSize: "clamp(26px,3.4vw,50px)", marginTop: 14 }}>
+            <h2 className="disp" style={{ fontSize: "clamp(26px, 3.4vw, 49px)", marginTop: 14 }}>
               You have the
               <br />
               audience. It just
@@ -157,7 +157,7 @@ export default function CreatorsPage() {
             <div className="eye">The number we hit</div>
             <h2
               className="disp"
-              style={{ fontSize: "clamp(30px,4.4vw,70px)", marginTop: 14, color: "var(--voltage-500)" }}
+              style={{ fontSize: "clamp(30px, 4.4vw, 63.4px)", marginTop: 14, color: "var(--voltage-500)" }}
             >
               3K / month
             </h2>

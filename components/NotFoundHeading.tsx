@@ -28,7 +28,7 @@ export default function NotFoundHeading() {
     <h1
       className="disp"
       ref={ref}
-      style={{ fontSize: "clamp(40px,7.6vw,124px)", marginTop: 20 }}
+      style={{ fontSize: "clamp(40px, 7.6vw, 109.4px)", marginTop: 20 }}
     >
       This one
       <br />

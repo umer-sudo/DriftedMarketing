@@ -107,7 +107,7 @@ export default async function CasePage({ params }: Params) {
           <div className="eye" style={{ marginTop: 18 }}>
             {c.client}
           </div>
-          <h1 className="disp" style={{ fontSize: "clamp(36px,7vw,116px)", marginTop: 16 }}>
+          <h1 className="disp" style={{ fontSize: "clamp(36px, 7vw, 100.8px)", marginTop: 16 }}>
             {c.hero[0]}
             <br />
             {c.hero[1]}
@@ -155,7 +155,7 @@ export default async function CasePage({ params }: Params) {
       {/* ── What we did ────────────────────────────────────────────────────── */}
       <section className="wrap sect">
         <div className="eye">What we did</div>
-        <h2 className="disp" style={{ fontSize: "clamp(26px,3.6vw,54px)", marginTop: 14 }}>
+        <h2 className="disp" style={{ fontSize: "clamp(26px, 3.6vw, 51.8px)", marginTop: 14 }}>
           {c.phases.length} phases.
         </h2>
         <div style={{ marginTop: 26 }}>
@@ -202,7 +202,7 @@ export default async function CasePage({ params }: Params) {
       <section className="sect" style={{ paddingBottom: 0 }}>
         <div className="wrap">
           <div className="eye">Results</div>
-          <h2 className="disp" style={{ fontSize: "clamp(26px,3.6vw,54px)", marginTop: 14 }}>
+          <h2 className="disp" style={{ fontSize: "clamp(26px, 3.6vw, 51.8px)", marginTop: 14 }}>
             The numbers.
           </h2>
           <p className="body" style={{ maxWidth: "60ch", marginTop: 14 }}>
@@ -287,7 +287,7 @@ export default async function CasePage({ params }: Params) {
         >
           <div>
             <div className="eye">Receipts</div>
-            <h2 className="disp" style={{ fontSize: "clamp(26px,3.6vw,54px)", marginTop: 14 }}>
+            <h2 className="disp" style={{ fontSize: "clamp(26px, 3.6vw, 51.8px)", marginTop: 14 }}>
               Screens, not claims.
             </h2>
           </div>
@@ -301,7 +301,7 @@ export default async function CasePage({ params }: Params) {
           <div className="eye mut">Section held</div>
           <p
             className="disp"
-            style={{ fontSize: "clamp(22px,3vw,44px)", marginTop: 14, color: "var(--ink-300)" }}
+            style={{ fontSize: "clamp(22px, 3vw, 43.2px)", marginTop: 14, color: "var(--ink-300)" }}
           >
             [Client quote pending]
           </p>

@@ -92,7 +92,7 @@ export default function AiProductPage() {
           </div>
           <h1
             className="disp"
-            style={{ fontSize: "clamp(40px,7.2vw,120px)", marginTop: 20, lineHeight: 0.86 }}
+            style={{ fontSize: "clamp(40px, 7.2vw, 103.7px)", marginTop: 20, lineHeight: 0.86 }}
           >
             Software
             <br />
@@ -118,7 +118,7 @@ export default function AiProductPage() {
         <div className="two">
           <div>
             <div className="eye mut">The problem</div>
-            <h2 className="disp" style={{ fontSize: "clamp(26px,3.4vw,50px)", marginTop: 14 }}>
+            <h2 className="disp" style={{ fontSize: "clamp(26px, 3.4vw, 49px)", marginTop: 14 }}>
               A repo you
               <br />
               pay to host.
@@ -202,7 +202,7 @@ export default function AiProductPage() {
             <div className="eye">The number we hit</div>
             <h2
               className="disp"
-              style={{ fontSize: "clamp(30px,4.4vw,70px)", marginTop: 14, color: "var(--voltage-500)" }}
+              style={{ fontSize: "clamp(30px, 4.4vw, 63.4px)", marginTop: 14, color: "var(--voltage-500)" }}
             >
               400+ hrs
             </h2>

@@ -28,7 +28,7 @@ export default function ThanksPage() {
         <span className="eye">Booked</span>
       </div>
 
-      <h1 className="disp" style={{ fontSize: "clamp(44px,8.4vw,140px)", marginTop: 24 }}>
+      <h1 className="disp" style={{ fontSize: "clamp(44px, 8.4vw, 121px)", marginTop: 24 }}>
         Booked.
         <br />
         Now bring

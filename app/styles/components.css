@@ -483,7 +483,7 @@ textarea {
   }
 }
 .hero h1 {
-  font-size: clamp(52px, 10vw, 168px);
+  font-size: clamp(52px, 10vw, 144px);
   line-height: 0.8;
   letter-spacing: -0.05em;
 }
@@ -599,7 +599,7 @@ textarea {
 .nums .n {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(34px, 4.4vw, 64px);
+  font-size: clamp(34px, 4.4vw, 63.4px);
   line-height: 1;
   letter-spacing: -0.045em;
   color: var(--text-primary);
@@ -731,7 +731,7 @@ textarea {
 .svcno {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(44px, 5vw, 84px);
+  font-size: clamp(44px, 5vw, 72px);
   line-height: 1;
   color: var(--tar-4);
 }
@@ -975,7 +975,12 @@ textarea {
 }
 .cta h2 {
   color: var(--tar);
-  font-size: clamp(46px, 9vw, 152px);
+  /* 9vw put "number. We’ll tell" past the column at every width — by 19px at
+     1440 and 262px at 1920 — so the line wrapped and orphaned "tell", turning an
+     authored three-line headline into four. 8.6vw fits the longest line with room
+     to spare, and the max is the value it reaches at 1440, where the column stops
+     growing. */
+  font-size: clamp(46px, 8.6vw, 123.8px);
   line-height: 0.8;
   letter-spacing: -0.05em;
 }
@@ -1134,7 +1139,7 @@ body:after {
   top: -0.18em;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(180px, 26vw, 420px);
+  font-size: clamp(180px, 26vw, 374.4px);
   line-height: 0.8;
   letter-spacing: -0.05em;
   color: var(--tar-4);
@@ -1552,7 +1557,7 @@ a:hover {
   display: block;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(96px, 17vw, 260px);
+  font-size: clamp(96px, 17vw, 244.8px);
   line-height: 0.8;
   letter-spacing: -0.055em;
   text-transform: uppercase;
@@ -1650,7 +1655,7 @@ a:hover {
 .jack .jn {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(90px, 13vw, 200px);
+  font-size: clamp(90px, 13vw, 187.2px);
   line-height: 0.86;
   letter-spacing: -0.05em;
   color: transparent;

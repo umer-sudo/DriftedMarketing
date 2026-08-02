@@ -184,7 +184,7 @@ export default function Home() {
           01
         </span>
         <div className="eye">Why we left</div>
-        <h2 className="disp" style={{ fontSize: "clamp(34px,5.4vw,84px)", marginTop: 14 }}>
+        <h2 className="disp" style={{ fontSize: "clamp(34px, 5.4vw, 77.8px)", marginTop: 14 }}>
           Every agency
           <br />
           says growth.
@@ -221,7 +221,7 @@ export default function Home() {
       </div>
 
       <div className="wrap" style={{ paddingTop: 44 }}>
-        <p className="disp" style={{ fontSize: "clamp(20px,2.6vw,38px)" }}>
+        <p className="disp" style={{ fontSize: "clamp(20px, 2.6vw, 37.4px)" }}>
           We&rsquo;re not the cheap option and we don&rsquo;t pretend to be.
         </p>
       </div>
@@ -232,7 +232,7 @@ export default function Home() {
           02
         </span>
         <div className="eye">Three disciplines, one P&amp;L</div>
-        <h2 className="disp" style={{ fontSize: "clamp(34px,5.4vw,84px)", marginTop: 14 }}>
+        <h2 className="disp" style={{ fontSize: "clamp(34px, 5.4vw, 77.8px)", marginTop: 14 }}>
           Pick your
           <br />
           departure.
@@ -246,7 +246,7 @@ export default function Home() {
               <BarChart3 className="lu" style={{ width: 26, height: 26, color: "var(--voltage-500)" }} aria-hidden="true" />
             </div>
             <div className="svcno">01</div>
-            <h3 className="disp" style={{ fontSize: "clamp(28px,3.4vw,52px)", marginTop: 16 }}>
+            <h3 className="disp" style={{ fontSize: "clamp(28px, 3.4vw, 49px)", marginTop: 16 }}>
               <Link href="/services/performance" className="tilelink">
                 Views don&rsquo;t pay
                 <br />
@@ -273,7 +273,7 @@ export default function Home() {
             <div style={{ marginBottom: 4 }}>
               <Users className="lu" style={{ width: 26, height: 26, color: "var(--voltage-500)" }} aria-hidden="true" />
             </div>
-            <div className="svcno" style={{ fontSize: "clamp(36px,4vw,64px)" }}>
+            <div className="svcno" style={{ fontSize: "clamp(36px, 4vw, 57.6px)" }}>
               02
             </div>
             <h3 className="disp" style={{ fontSize: "clamp(22px,2.6vw,36px)", marginTop: 12 }}>
@@ -305,7 +305,7 @@ export default function Home() {
             <div style={{ marginBottom: 4 }}>
               <Cpu className="lu" style={{ width: 26, height: 26, color: "var(--voltage-500)" }} aria-hidden="true" />
             </div>
-            <div className="svcno" style={{ fontSize: "clamp(36px,4vw,64px)" }}>
+            <div className="svcno" style={{ fontSize: "clamp(36px, 4vw, 57.6px)" }}>
               03
             </div>
             <h3 className="disp" style={{ fontSize: "clamp(22px,2.6vw,36px)", marginTop: 12 }}>
@@ -362,7 +362,7 @@ export default function Home() {
         </span>
         <div>
           <div className="eye">The receipts</div>
-          <h2 className="disp" style={{ fontSize: "clamp(34px,5.4vw,84px)", marginTop: 14 }}>
+          <h2 className="disp" style={{ fontSize: "clamp(34px, 5.4vw, 77.8px)", marginTop: 14 }}>
             Work,
             <br />
             not decks.
@@ -410,7 +410,7 @@ export default function Home() {
             <div className="eye" style={{ color: "var(--klein-300)" }}>
               The part nobody else does
             </div>
-            <h2 className="disp" style={{ fontSize: "clamp(34px,5.4vw,86px)", marginTop: 18 }}>
+            <h2 className="disp" style={{ fontSize: "clamp(34px, 5.4vw, 77.8px)", marginTop: 18 }}>
               We decide
               <br />
               how it earns.
@@ -528,7 +528,7 @@ export default function Home() {
         >
           <div>
             <div className="eye">Receipts</div>
-            <h2 className="disp" style={{ fontSize: "clamp(28px,4vw,64px)", marginTop: 14 }}>
+            <h2 className="disp" style={{ fontSize: "clamp(28px, 4vw, 57.6px)", marginTop: 14 }}>
               Proof you can click.
             </h2>
           </div>
@@ -559,7 +559,7 @@ export default function Home() {
           <div className="eye mut">Section held</div>
           <p
             className="disp"
-            style={{ fontSize: "clamp(24px,3.4vw,52px)", marginTop: 16, color: "var(--ink-300)" }}
+            style={{ fontSize: "clamp(24px, 3.4vw, 49px)", marginTop: 16, color: "var(--ink-300)" }}
           >
             [Testimonials pending]
           </p>
@@ -573,7 +573,7 @@ export default function Home() {
       {/* ── Process ────────────────────────────────────────────────────────── */}
       <section className="wrap sect">
         <div className="eye">How it runs</div>
-        <h2 className="disp" style={{ fontSize: "clamp(26px,3.6vw,54px)", marginTop: 14 }}>
+        <h2 className="disp" style={{ fontSize: "clamp(26px, 3.6vw, 51.8px)", marginTop: 14 }}>
           Three steps. No theatre.
         </h2>
         <div className="steps" style={{ marginTop: 28 }}>

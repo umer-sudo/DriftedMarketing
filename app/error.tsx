@@ -19,7 +19,7 @@ export default function Error({
   return (
     <section className="wrap" style={{ paddingBlock: "clamp(56px,9vw,140px)", minHeight: "70vh" }}>
       <div className="eye">Error</div>
-      <h1 className="disp" style={{ fontSize: "clamp(40px,7.6vw,124px)", marginTop: 20 }}>
+      <h1 className="disp" style={{ fontSize: "clamp(40px, 7.6vw, 109.4px)", marginTop: 20 }}>
         That broke
         <br />
         on our side.

@@ -91,7 +91,7 @@ export default function WorkGrid() {
     <>
       <section className="wrap" style={{ paddingBlock: "clamp(48px,7vw,96px)" }}>
         <div className="eye">Selected work</div>
-        <h1 className="disp" style={{ fontSize: "clamp(44px,8.4vw,140px)", marginTop: 18 }}>
+        <h1 className="disp" style={{ fontSize: "clamp(44px, 8.4vw, 121px)", marginTop: 18 }}>
           Work,
           <br />
           not decks.

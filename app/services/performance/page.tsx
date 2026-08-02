@@ -89,7 +89,7 @@ export default function PerformancePage() {
           <div className="eye">01 — Performance media</div>
           <h1
             className="disp"
-            style={{ fontSize: "clamp(42px,7.6vw,128px)", marginTop: 20, lineHeight: 0.84 }}
+            style={{ fontSize: "clamp(42px, 7.6vw, 109.4px)", marginTop: 20, lineHeight: 0.84 }}
           >
             Views don&rsquo;t
             <br />
@@ -113,7 +113,7 @@ export default function PerformancePage() {
         <div className="two">
           <div>
             <div className="eye mut">The problem</div>
-            <h2 className="disp" style={{ fontSize: "clamp(26px,3.4vw,50px)", marginTop: 14 }}>
+            <h2 className="disp" style={{ fontSize: "clamp(26px, 3.4vw, 49px)", marginTop: 14 }}>
               Two reports
               <br />
               that never
@@ -154,7 +154,7 @@ export default function PerformancePage() {
             <div className="eye">The number we hit</div>
             <h2
               className="disp"
-              style={{ fontSize: "clamp(30px,4.4vw,70px)", marginTop: 14, color: "var(--voltage-500)" }}
+              style={{ fontSize: "clamp(30px, 4.4vw, 63.4px)", marginTop: 14, color: "var(--voltage-500)" }}
             >
               5.2–6×
             </h2>
