@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
 import MidCta from "@/components/MidCta";
@@ -11,12 +12,12 @@ import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-dat
    only and never carries text at 2.3:1; here it appears as the eyebrow tint drawn
    from the 300 step, which clears contrast, and nowhere in body copy. */
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "AI product — Drifted",
   description:
     "1,250 lots per auction used to be typed by hand. Now they’re filled from photographs — 400+ hours a year saved. We decide how it earns before we build it.",
-  alternates: { canonical: "/services/ai-product" },
-};
+  path: "/services/ai-product",
+});
 
 const METHOD = [
   {

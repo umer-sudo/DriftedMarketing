@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import WorkGrid from "@/components/WorkGrid";
 import CtaBand from "@/components/CtaBand";
 import MidCta from "@/components/MidCta";
@@ -6,15 +7,15 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/structured-data";
 import { FORJWELL_CREDIT } from "@/content/cases";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Work, not decks — Drifted",
   description:
     "Six cases with the figures attached: 5.2–6× ROAS, 400+ hours saved, 2.2M views. Where a number isn’t measured yet, the page says pending instead of guessing.",
+  path: "/work",
   alternates: {
-    canonical: "/work",
     types: { "application/rss+xml": [{ url: "/work/rss.xml", title: "Drifted — Work" }] },
   },
-};
+});
 
 export default function WorkPage() {
   return (

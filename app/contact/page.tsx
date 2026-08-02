@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import ContactForm from "@/components/ContactForm";
 import Faq from "@/components/Faq";
 import { site, instagram, linkedin } from "@/lib/config";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Tell us the number — Drifted",
   description:
     "Thirty minutes, no deck. Bring the metric and the date; we answer within one business day, including when the answer is no. Q4 — two client slots open.",
-  alternates: { canonical: "/contact" },
-};
+  path: "/contact",
+});
 
 const OBJECTIONS = [
   {

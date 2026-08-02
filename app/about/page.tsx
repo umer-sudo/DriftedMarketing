@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import CtaBand from "@/components/CtaBand";
 import MidCta from "@/components/MidCta";
 import { FORJWELL_CREDIT } from "@/content/cases";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "We left on purpose — Drifted",
   description:
     "We left agencies where strategy, creative and media were separated by an account layer. Founded 2026 in Karachi. Three clients, small on purpose.",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 const BELIEFS = [
   {

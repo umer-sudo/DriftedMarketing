@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
 import MidCta from "@/components/MidCta";
@@ -10,12 +11,12 @@ import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-dat
 /* Creator growth — the light sibling. Its hero runs in the Newsprint scope; the rest
    of the page returns to dark, exactly as the prototype does. */
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Creator growth — Drifted",
   description:
     "115K followers and nothing to buy is a hobby. We built Noted. from a red pen and a margin table — 8 products, 3,000 new followers a month, sustained.",
-  alternates: { canonical: "/services/creators" },
-};
+  path: "/services/creators",
+});
 
 const METHOD = [
   {

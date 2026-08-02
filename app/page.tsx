@@ -19,7 +19,19 @@ export const metadata: Metadata = {
     canonical: "/",
     types: { "application/rss+xml": [{ url: "/work/rss.xml", title: "Drifted — Work" }] },
   },
+  /* The home page keeps its own OG line — shorter and sharper than the meta
+     description, which has to carry the numbers for search. */
   openGraph: {
+    title: "Drifted — Look bigger than you are",
+    description:
+      "Every agency says growth. We say the number — one metric, one date, written into the contract.",
+    type: "website",
+    url: "/",
+    siteName: "Drifted Marketing",
+    locale: "en_GB",
+  },
+  twitter: {
+    card: "summary_large_image",
     title: "Drifted — Look bigger than you are",
     description:
       "Every agency says growth. We say the number — one metric, one date, written into the contract.",

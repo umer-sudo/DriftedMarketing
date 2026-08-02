@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
 import MidCta from "@/components/MidCta";
@@ -10,12 +11,12 @@ import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-dat
 /* Performance media — the dark sibling with Voltage plates. The three service pages
    are identical in structure and choreography and differ only in surface treatment. */
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Performance media — Drifted",
   description:
     "The Gallery returned 5.2–6× on every campaign we ran — not an average across a good quarter. Paid media and the creative that feeds it, run by the same people.",
-  alternates: { canonical: "/services/performance" },
-};
+  path: "/services/performance",
+});
 
 const METHOD = [
   { n: "01", title: "One team, both jobs", body: "The creative is built for the account it runs in." },

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CtaBand from "@/components/CtaBand";
@@ -26,12 +27,14 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const result = c.result.replace(/[.]+$/, "");
   const description = `${result}. ${c.sub} ${c.tags.join(" · ")}, Drifted Marketing.`;
   const title = `${c.client} — ${result} — Drifted`;
-  return {
+  return pageMetadata({
     title,
     description,
-    alternates: { canonical: `/work/${c.slug}` },
-    openGraph: { title, description, type: "article" },
-  };
+    path: `/work/${c.slug}`,
+    type: "article",
+    /* Each case generates its own card from its own numbers. */
+    ownOgImage: true,
+  });
 }
 
 export default async function CasePage({ params }: Params) {

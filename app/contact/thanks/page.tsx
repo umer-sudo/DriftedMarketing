@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import { Mark } from "@/components/Mark";
 
 export const metadata: Metadata = {
-  title: "Booked — Drifted",
-  description:
-    "Your brief is in. Check your inbox for the invite, and bring two things to the call: the number you need to hit, and the date you need it by.",
-  alternates: { canonical: "/contact/thanks" },
+  ...pageMetadata({
+    title: "Booked — Drifted",
+    description:
+      "Your brief is in. Check your inbox for the invite, and bring two things to the call: the number you need to hit, and the date you need it by.",
+    path: "/contact/thanks",
+  }),
+  /* Crawlable so this noindex can actually be read — see app/robots.ts. */
   robots: { index: false, follow: true },
 };
 
