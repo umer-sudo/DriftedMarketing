@@ -13,6 +13,8 @@ export default function Footer() {
 
   return (
     <>
+      {/* Three link groups, each a navigation region. Left unlabelled they announce
+          as three identical "navigation" landmarks with no way to tell them apart. */}
       <footer className="wrap foot">
         {/* min(…,100%) because this is a flex item: a bare ch max-width resolves
             wider than the column at small viewports and pushes the page sideways. */}
@@ -47,33 +49,33 @@ export default function Footer() {
 
         <div style={{ display: "flex", gap: 56, flexWrap: "wrap" }}>
           <div>
-            <div className="eye mut">Services</div>
-            <div className="footlinks">
+            <div className="eye mut" id="foot-services">Services</div>
+            <nav className="footlinks" aria-labelledby="foot-services">
               <Link href="/services/performance" aria-current={current("/services/performance")}>Performance media</Link>
               <Link href="/services/creators" aria-current={current("/services/creators")}>Creator growth</Link>
               <Link href="/services/ai-product" aria-current={current("/services/ai-product")}>AI product</Link>
-            </div>
+            </nav>
           </div>
 
           <div>
-            <div className="eye mut">Studio</div>
-            <div className="footlinks">
+            <div className="eye mut" id="foot-studio">Studio</div>
+            <nav className="footlinks" aria-labelledby="foot-studio">
               <Link href="/work" aria-current={current("/work")}>Work</Link>
               <Link href="/about" aria-current={current("/about")}>About</Link>
               <Link href="/contact" aria-current={current("/contact")}>Contact</Link>
-            </div>
+            </nav>
           </div>
 
           <div>
-            <div className="eye mut">Social</div>
-            <div className="footlinks">
+            <div className="eye mut" id="foot-social">Social</div>
+            <nav className="footlinks" aria-labelledby="foot-social">
               <a href={instagram.url} target="_blank" rel="noopener noreferrer">
                 Instagram ↗
               </a>
               <a href={linkedin.url} target="_blank" rel="noopener noreferrer">
                 LinkedIn ↗
               </a>
-            </div>
+            </nav>
           </div>
         </div>
       </footer>

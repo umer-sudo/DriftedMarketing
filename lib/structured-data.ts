@@ -76,6 +76,23 @@ export function caseSchema(c: CaseStudy) {
     creator: { "@id": abs("/#organization") },
     about: c.tags.join(", "),
     inLanguage: "en",
+    /* Only cases with real delivery files carry images. Declaring a placeholder
+       frame as an ImageObject would be telling a crawler there is work to look at
+       when there isn't. */
+    ...(c.gallery?.length
+      ? {
+          image: c.gallery.map((img) => ({
+            "@type": "ImageObject",
+            contentUrl: abs(img.src),
+            width: img.width,
+            height: img.height,
+            caption: img.caption,
+            /* The alt text is written for a screen reader; it is also the most
+               accurate description a crawler will get. */
+            description: img.alt,
+          })),
+        }
+      : {}),
   };
 }
 

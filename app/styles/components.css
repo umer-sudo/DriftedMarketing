@@ -1880,6 +1880,10 @@ a:hover {
    the clock and the wordmark are the affordances that give way. */
 .btn {
   white-space: nowrap;
+  /* nowrap keeps short labels from breaking mid-phrase, but a long one then pushes
+     the page wider than the viewport — a case-study button overflowed 390px by
+     94px. Below the phone breakpoint, let it wrap and centre instead. */
+  max-width: 100%;
 }
 @media (max-width: 900px) {
   #khi {
@@ -2696,4 +2700,89 @@ body {
   .proofopen {
     cursor: pointer;
   }
+}
+
+/* ── The finding, as a pull quote ────────────────────────────────────────── */
+.pullquote {
+  font: 400 clamp(20px, 2.4vw, 30px) / 1.4 var(--font-body);
+  color: var(--text-primary);
+  max-width: 24ch;
+  margin: 18px 0 0;
+  padding-left: clamp(16px, 2vw, 26px);
+  border-left: 2px solid var(--voltage-500);
+  /* Wider than 24ch and this stops reading as a quote and starts reading as another
+     paragraph that happens to have a rule next to it. */
+  max-width: 34ch;
+}
+
+/* ── Case-nav thumbnails ─────────────────────────────────────────────────── */
+.casenavshot {
+  display: block;
+  width: 96px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--tar-3);
+  margin-bottom: 14px;
+}
+.casenavshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.casenav .next .casenavshot {
+  margin-left: auto;
+}
+
+/* ── Craft badge ─────────────────────────────────────────────────────────── */
+.tag.craft {
+  border-color: var(--ink-400);
+  color: var(--ink-200);
+}
+
+/* ── What happens after you send ─────────────────────────────────────────── */
+.nextsteps {
+  list-style: none;
+  margin: 26px 0 22px;
+  padding: 0;
+  max-width: 52ch;
+  counter-reset: step;
+}
+.nextsteps li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 30px;
+  margin-top: 10px;
+  font: 400 15px/1.5 var(--font-body);
+  color: var(--text-body);
+}
+.nextsteps li:before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 2px;
+  font: 500 10px/1.5 var(--font-mono);
+  letter-spacing: 0.16em;
+  color: var(--voltage-500);
+}
+
+/* ── Marquee and ticker pause on keyboard focus, not just hover ──────────── */
+.marq:focus-within .marqin,
+.shipbar:focus-within .tickin {
+  animation-play-state: paused;
+}
+
+@media (max-width: 560px) {
+  .btn {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.35;
+  }
+}
+
+/* The discipline link sits alone on its line rather than inside a sentence, so the
+   2.5.8 inline exemption does not cover it. */
+.disciplinelink {
+  display: inline-block;
+  padding-block: 6px;
 }

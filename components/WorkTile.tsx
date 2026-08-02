@@ -66,6 +66,9 @@ export default function WorkTile({
         </p>
 
         <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
+          {/* Craft cases carry no headline metric by design. Saying so on the tile
+              stops the absence of a number reading as an omission. */}
+          {c.craft && <span className="tag craft">Craft</span>}
           {c.tags.map((t) => (
             <span className="tag" key={t}>
               {t}

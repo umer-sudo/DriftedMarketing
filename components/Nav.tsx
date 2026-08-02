@@ -132,7 +132,7 @@ export default function Nav() {
 
   return (
     <>
-      <nav className={`nav${hidden ? " hid" : ""}`}>
+      <nav className={`nav${hidden ? " hid" : ""}`} aria-label="Primary">
         <Link href="/" className="brand" aria-label={`${site.shortName} — home`}>
           <Mark size={30} />
           <span className="wm">Drifted</span>

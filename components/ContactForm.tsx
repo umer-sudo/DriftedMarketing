@@ -360,6 +360,14 @@ export default function ContactForm() {
 
       {showTurnstile && <Turnstile />}
 
+      {/* The reassurance was all at the top of the page, which is where it gets read
+          and not where it gets needed. This is the moment someone hesitates. */}
+      <ol className="nextsteps">
+        <li>We read it the same day.</li>
+        <li>You get a reply within one business day — including if the answer is no.</li>
+        <li>If it&rsquo;s a yes, we send two call times. Thirty minutes, no deck.</li>
+      </ol>
+
       <button className="btn" type="submit" style={{ marginTop: 8 }} disabled={status === "sending"}>
         {status === "sending" ? "Sending…" : "Send it ↗"}
       </button>

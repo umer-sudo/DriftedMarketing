@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import CtaBand from "@/components/CtaBand";
 import MidCta from "@/components/MidCta";
@@ -8,7 +9,7 @@ import ImageSlot from "@/components/ImageSlot";
 import CaseGallery from "@/components/CaseGallery";
 import JsonLd from "@/components/JsonLd";
 import { caseSchema, breadcrumbSchema } from "@/lib/structured-data";
-import { CASES, CASE_COUNT_WORD, caseBySlug } from "@/content/cases";
+import { CASES, CASE_COUNT_WORD, SERVICE_FOR, caseBySlug } from "@/content/cases";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -51,6 +52,7 @@ export default async function CasePage({ params }: Params) {
   const i = CASES.indexOf(c);
   const prev = CASES[(i - 1 + CASES.length) % CASES.length]!;
   const next = CASES[(i + 1) % CASES.length]!;
+  const service = SERVICE_FOR[c.category];
 
   return (
     <>
@@ -189,9 +191,10 @@ export default async function CasePage({ params }: Params) {
       {c.found && (
         <section className="wrap sect">
           <div className="eye">What we found</div>
-          <p className="body" style={{ maxWidth: "62ch", marginTop: 14, fontSize: 19 }}>
-            {c.found}
-          </p>
+          {/* This line is the case's argument in one sentence, and it was set at the
+              same weight as the body around it. A rule and display type give it the
+              standing the content already had. */}
+          <p className="pullquote">{c.found}</p>
         </section>
       )}
 
@@ -216,6 +219,18 @@ export default async function CasePage({ params }: Params) {
             </time>
           </p>
         </div>
+        {service && (
+          <div className="wrap" style={{ marginTop: 20 }}>
+            {/* Labels are not lowercased into the sentence — "AI product" became
+                "ai product", which reads like a typo. */}
+            <p className="small">
+              Discipline: {c.tags[0]}.{" "}
+              <Link href={service.href} className="disciplinelink">
+                How we run {service.label} →
+              </Link>
+            </p>
+          </div>
+        )}
         <div className="nums" style={{ gridTemplateColumns: "repeat(3,minmax(0,1fr))", marginTop: 30 }}>
           {c.stats.map((s) => (
             <div className="rv" key={s.label}>
@@ -301,6 +316,17 @@ export default async function CasePage({ params }: Params) {
       {/* ── Case navigation, both directions ──────────────────────────────── */}
       <nav className="casenav" aria-label="More case studies">
         <Link href={`/work/${prev.slug}`} className="prev">
+          {prev.gallery?.[0] && (
+            <span className="casenavshot" aria-hidden="true">
+              <Image
+                src={prev.gallery[0].src}
+                alt=""
+                width={prev.gallery[0].width}
+                height={prev.gallery[0].height}
+                sizes="120px"
+              />
+            </span>
+          )}
           <span className="eye mut">← Previous</span>
           <h2 className="disp" style={{ fontSize: "clamp(22px,3vw,40px)", marginTop: 12 }}>
             {prev.client}
@@ -310,6 +336,17 @@ export default async function CasePage({ params }: Params) {
           </p>
         </Link>
         <Link href={`/work/${next.slug}`} className="next">
+          {next.gallery?.[0] && (
+            <span className="casenavshot" aria-hidden="true">
+              <Image
+                src={next.gallery[0].src}
+                alt=""
+                width={next.gallery[0].width}
+                height={next.gallery[0].height}
+                sizes="120px"
+              />
+            </span>
+          )}
           <span className="eye mut">Next →</span>
           <h2 className="disp" style={{ fontSize: "clamp(22px,3vw,40px)", marginTop: 12 }}>
             {next.client}

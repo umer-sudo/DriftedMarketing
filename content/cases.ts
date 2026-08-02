@@ -579,6 +579,16 @@ export const FILTERS: Array<{ key: "all" | CaseCategory; label: string }> = [
   { key: "web", label: "Web & brand" },
 ];
 
+/* Where a discipline sends a reader who wants the service rather than the story.
+   `web` has no service page of its own — the three service pages are performance,
+   creators and AI product — so it deliberately maps to nothing rather than to a
+   near-miss. */
+export const SERVICE_FOR: Partial<Record<CaseCategory, { href: string; label: string }>> = {
+  performance: { href: "/services/performance", label: "Performance media" },
+  creators: { href: "/services/creators", label: "Creator growth" },
+  product: { href: "/services/ai-product", label: "AI product" },
+};
+
 export const countFor = (key: "all" | CaseCategory) =>
   key === "all" ? CASES.length : CASES.filter((c) => c.category === key).length;
 

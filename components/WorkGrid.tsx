@@ -52,6 +52,25 @@ export default function WorkGrid() {
     );
   }, []);
 
+  /* Number keys jump straight to a filter. Five options in a fixed order is exactly
+     where a shortcut earns its keep, and it costs nothing to anyone who never finds
+     it. Declared after setFilter so the effect closes over a defined binding, and
+     ignored while the visitor is typing. */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const t = e.target as HTMLElement | null;
+      if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+      if (t?.isContentEditable) return;
+      const n = Number(e.key);
+      if (!Number.isInteger(n) || n < 1 || n > FILTERS.length) return;
+      e.preventDefault();
+      setFilter(FILTERS[n - 1]!.key);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [setFilter]);
+
   const visible = CASES.filter((c) => filter === "all" || c.category === filter);
 
   useEffect(() => {
@@ -99,12 +118,14 @@ export default function WorkGrid() {
         </div>
 
         <div className="filters" role="group" aria-label="Filter work by discipline">
-          {FILTERS.map((f) => (
+          {FILTERS.map((f, n) => (
             <button
               key={f.key}
               className={`filt${filter === f.key ? " on" : ""}`}
               data-n={countFor(f.key)}
               aria-pressed={filter === f.key}
+              aria-keyshortcuts={String(n + 1)}
+              title={`${f.label} (press ${n + 1})`}
               onClick={() => setFilter(f.key)}
             >
               {f.label}
@@ -126,7 +147,8 @@ export default function WorkGrid() {
           <div className="held">
             <div className="eye mut">Nothing here yet</div>
             <p className="body" style={{ marginTop: 12, maxWidth: "48ch" }}>
-              No published work in this discipline yet. The other filters have receipts.
+              No published {FILTERS.find((f) => f.key === filter)?.label.toLowerCase()} work
+              on the site yet. The other filters have receipts.
             </p>
             <button className="btn sec" style={{ marginTop: 20 }} onClick={() => setFilter("all")}>
               Show all work

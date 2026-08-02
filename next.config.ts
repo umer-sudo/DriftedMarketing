@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
   /* Surfaced to the client bundle so ContactForm can pick its transport. */
   env: { NEXT_PUBLIC_STATIC: STATIC ? "1" : "0" },
 
+  /* Next negotiates WebP by default. AVIF is typically 20-30% smaller again at the
+     same quality, and the case galleries are the heaviest thing on the site. Order
+     matters: the first entry the browser accepts is the one it gets. */
+  images: { formats: ["image/avif", "image/webp"] },
+
   ...(STATIC
     ? {
         output: "export" as const,
