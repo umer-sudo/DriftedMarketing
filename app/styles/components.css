@@ -23,6 +23,20 @@
      sections used to invent their own clamp() and landed 24–32px inside
      everything else, which reads as a broken column rather than a design. */
   --gutter: clamp(20px, 5vw, 80px);
+
+  /* Where the shared text column starts, measured from a full-bleed section's own
+     left edge.
+
+     .wrap is capped at --max-w-content and centred, so past that width its text
+     stops tracking the viewport edge and starts tracking the centred box. The
+     full-bleed grids kept using --gutter alone and stayed pinned to the edge, so
+     above 1440px the two drifted apart — 40px at 1512, 240px at 1920. That is the
+     misalignment: not a wrong gutter, a gutter measured from the wrong origin.
+
+     cqw rather than vw because it resolves against the container's inline size,
+     which excludes the scrollbar; vw does not, and the columns would sit a
+     scrollbar-width apart on any platform that reserves one. */
+  --edge: max(var(--gutter), calc((100cqw - var(--max-w-content)) / 2 + var(--gutter)));
 }
 
 * {
@@ -606,6 +620,7 @@ textarea {
   }
 }
 .beat {
+  container-type: inline-size;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2px;
@@ -620,10 +635,10 @@ textarea {
    The two inner edges keep the tighter cell padding — pushing those out too
    would open a canyon down the middle of the comparison. */
 .beat > div:first-child {
-  padding-left: var(--gutter);
+  padding-left: var(--edge);
 }
 .beat > div:last-child {
-  padding-right: var(--gutter);
+  padding-right: var(--edge);
 }
 /* Struck-through text.
 
@@ -651,6 +666,7 @@ textarea {
   background-size: 100% 3px;
 }
 .svc {
+  container-type: inline-size;
   display: grid;
   grid-template-columns: 1.25fr 1fr;
   gap: 2px;
@@ -683,10 +699,10 @@ textarea {
      splits evenly above and below and reads as a deliberately airy cell;
      top-aligned it just looks like the card ran out of copy. */
   justify-content: center;
-  padding-left: var(--gutter);
+  padding-left: var(--edge);
 }
 .svc > div:not(:first-child) {
-  padding-right: var(--gutter);
+  padding-right: var(--edge);
 }
 .svc > div:before {
   content: "";
@@ -1600,8 +1616,19 @@ a:hover {
 .jack {
   position: relative;
   height: 240vh;
+  /* .appsec sets overflow:hidden, which makes it the scroll container for any
+     sticky descendant — so .pin stuck to a box that was itself scrolling away, and
+     the section slid off while the rail was still travelling. That is why the last
+     panel never got a settled moment. The rail is clipped by .pin's own overflow,
+     and .wire is inset:0 inside a positioned parent, so nothing here needs the
+     ancestor to clip. */
+  overflow: visible;
 }
 .jack .pin {
+  /* The container for the rail's --edge calc. Put on the sticky element itself
+     rather than on .jack: containment on a sticky element's ancestor is what broke
+     the pin in the first place. */
+  container-type: inline-size;
   position: sticky;
   top: 70px;
   height: calc(100vh - 70px);
@@ -1612,7 +1639,8 @@ a:hover {
 .jack .rail {
   display: flex;
   gap: clamp(24px, 4vw, 64px);
-  padding-inline: clamp(20px, 5vw, 80px);
+  /* The first panel starts on the same line as every other section's text. */
+  padding-inline: var(--edge);
   will-change: transform;
 }
 .jack .rail > div {
@@ -1667,7 +1695,7 @@ a:hover {
      rules above have to become two-sided. */
   .beat > div,
   .svc > div {
-    padding-inline: var(--gutter);
+    padding-inline: var(--edge);
   }
   /* A row span in a one-column grid just leaves an empty row behind it. */
   .svc > div {

@@ -33,6 +33,38 @@ export default function ScrollJack() {
 
   useEffect(() => {
     let ticking = false;
+
+    const travelFor = (r: HTMLDivElement) =>
+      Math.max(r.scrollWidth - window.innerWidth, 0);
+
+    /* How tall the pinned zone needs to be.
+
+       It used to be a flat 240vh in CSS, whatever the rail actually had to cover.
+       On a wide screen the rail has less distance to travel, so the last panel
+       settled a quarter of the way in and the remaining three-quarters of the
+       scroll moved nothing — a thousand pixels of dead scrolling. Deriving the
+       height from the travel keeps a constant relationship between how far you
+       scroll and how far the rail moves, at any width.
+
+       The dwell is deliberate: without it the final panel arrives at the exact
+       moment the section releases, which is what made it feel like the page
+       skipped past it. */
+    const resize = () => {
+      const z = zone.current;
+      const r = rail.current;
+      if (!z || !r) return;
+      if (window.innerWidth <= 1000) {
+        z.style.height = "";
+        r.style.transform = "";
+        return;
+      }
+      const pinH = window.innerHeight - 70;
+      const travel = travelFor(r);
+      const dwell = travel > 0 ? pinH * 0.45 : 0;
+      z.style.height = `${Math.round(pinH + travel + dwell)}px`;
+      tick();
+    };
+
     const tick = () => {
       ticking = false;
       const z = zone.current;
@@ -46,10 +78,14 @@ export default function ScrollJack() {
       const pinH = window.innerHeight - 70;
       const total = Math.max(rect.height - pinH, 1);
       const p = Math.min(Math.max((70 - rect.top) / total, 0), 1);
-      const travel = Math.max(r.scrollWidth - window.innerWidth + 80, 0);
-      r.style.transform = `translateX(${-p * travel}px)`;
+      const travel = travelFor(r);
+      /* Finish the travel before the zone does, so the last panel is readable for
+         the dwell rather than for an instant. */
+      const span = travel > 0 ? Math.min(p / 0.8, 1) : 0;
+      r.style.transform = `translateX(${-span * travel}px)`;
       if (prog.current) prog.current.style.width = p * 100 + "%";
     };
+
     const onScroll = () => {
       if (!ticking) {
         ticking = true;
@@ -57,11 +93,13 @@ export default function ScrollJack() {
       }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", tick);
-    tick();
+    window.addEventListener("resize", resize);
+    /* Fonts land after first paint and change the rail's width. */
+    document.fonts?.ready.then(resize).catch(() => {});
+    resize();
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", tick);
+      window.removeEventListener("resize", resize);
     };
   }, []);
 
