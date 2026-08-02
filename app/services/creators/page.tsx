@@ -68,6 +68,14 @@ export default function CreatorsPage() {
         {/* Siren 500 is a 5.1:1 accent rated for 18px and up; on this page the eyebrow
             is 11px mono on Newsprint, where it measured 3.44:1. Siren 700 is the same
             hue two stops darker and clears 4.5:1 at this size. */}
+        {/* The BreadcrumbList schema described this trail already; case pages
+            render it too. Service pages are a common search landing, so the one
+            audience most likely to arrive without context had the least. */}
+        <nav className="crumbs" aria-label="Breadcrumb">
+          <Link href="/">Drifted</Link>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Creator growth</span>
+        </nav>
         <div className="eye" style={{ color: "var(--siren-700)" }}>
           02 — Creator growth
         </div>

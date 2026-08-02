@@ -79,6 +79,14 @@ export default function AiProductPage() {
             which at 2.3:1 it could not do legibly. */}
         <div className="kleinwedge" aria-hidden="true" />
         <div className="wrap" style={{ position: "relative", paddingBlock: "clamp(48px,7vw,104px)" }}>
+          {/* The BreadcrumbList schema described this trail already; case pages
+              render it too. Service pages are a common search landing, so the one
+              audience most likely to arrive without context had the least. */}
+          <nav className="crumbs" aria-label="Breadcrumb">
+            <Link href="/">Drifted</Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">AI product</span>
+          </nav>
           <div className="eye" style={{ color: "var(--klein-300)" }}>
             03 — AI product
           </div>

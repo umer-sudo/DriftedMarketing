@@ -78,6 +78,14 @@ export default function PerformancePage() {
           }}
         />
         <div style={{ position: "relative", maxWidth: 1100 }}>
+          {/* The BreadcrumbList schema described this trail already; case pages
+              render it too. Service pages are a common search landing, so the one
+              audience most likely to arrive without context had the least. */}
+          <nav className="crumbs" aria-label="Breadcrumb">
+            <Link href="/">Drifted</Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">Performance media</span>
+          </nav>
           <div className="eye">01 — Performance media</div>
           <h1
             className="disp"
