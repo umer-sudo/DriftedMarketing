@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
 import CtaBand from "@/components/CtaBand";
 import MidCta from "@/components/MidCta";
-import { FORJWELL_CREDIT } from "@/content/cases";
+import { CASE_COUNT, FORJWELL_CREDIT } from "@/content/cases";
 
 export const metadata: Metadata = pageMetadata({
   title: "We left on purpose — Drifted",
@@ -176,7 +176,7 @@ export default function AboutPage() {
         headline={["Opinions are", "cheap. Look", "at the work."]}
         body={
           <p className="body" style={{ maxWidth: "46ch" }}>
-            Six cases, each with its figures attached and a date they were last confirmed.
+            {CASE_COUNT} cases, each with its figures attached and a date they were last confirmed.
             Where something isn&rsquo;t measured yet, the page says pending rather than
             guessing. You can tell a lot about an agency from what it refuses to claim.
           </p>

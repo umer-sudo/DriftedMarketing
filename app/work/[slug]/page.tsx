@@ -8,7 +8,7 @@ import ImageSlot from "@/components/ImageSlot";
 import CaseGallery from "@/components/CaseGallery";
 import JsonLd from "@/components/JsonLd";
 import { caseSchema, breadcrumbSchema } from "@/lib/structured-data";
-import { CASES, caseBySlug } from "@/content/cases";
+import { CASES, CASE_COUNT_WORD, caseBySlug } from "@/content/cases";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -244,7 +244,7 @@ export default async function CasePage({ params }: Params) {
             </p>
           </>
         }
-        secondary={{ href: "/work", label: "See all six cases" }}
+        secondary={{ href: "/work", label: `See all ${CASE_COUNT_WORD} cases` }}
       />
 
       {/* ── Receipts ───────────────────────────────────────────────────────── */}

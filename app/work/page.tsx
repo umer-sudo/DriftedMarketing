@@ -5,12 +5,12 @@ import CtaBand from "@/components/CtaBand";
 import MidCta from "@/components/MidCta";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/structured-data";
-import { FORJWELL_CREDIT } from "@/content/cases";
+import { CASE_COUNT, CASE_COUNT_WORD, FORJWELL_CREDIT } from "@/content/cases";
 
 export const metadata: Metadata = pageMetadata({
   title: "Work, not decks — Drifted",
   description:
-    "Six cases with the figures attached: 5.2–6× ROAS, 400+ hours saved, 2.2M views. Where a number isn’t measured yet, the page says pending instead of guessing.",
+    `${CASE_COUNT} cases with the figures attached: 5.2–6× ROAS, 400+ hours saved, 2.2M views. Where a number isn’t measured yet, the page says pending instead of guessing.`,
   path: "/work",
   alternates: {
     types: { "application/rss+xml": [{ url: "/work/rss.xml", title: "Drifted — Work" }] },
@@ -32,7 +32,7 @@ export default function WorkPage() {
           grid and the credits. */}
       <MidCta
         eyebrow="Seen enough"
-        headline={["Six cases.", "One question."]}
+        headline={[`${CASE_COUNT_WORD[0].toUpperCase()}${CASE_COUNT_WORD.slice(1)} cases.`, "One question."]}
         body={
           <>
             <p className="body" style={{ maxWidth: "46ch" }}>

@@ -89,8 +89,9 @@ export default function WorkGrid() {
           }}
         >
           <p className="body" style={{ maxWidth: "48ch" }}>
-            Three clients. Everything below shipped or ships this year. Some have a figure
-            attached, some are still measuring — we show which is which.
+            Client work and craft, current and earlier. Some carry a figure, some are
+            still measuring, and one or two were led before Drifted — we show which is
+            which rather than blurring the line.
           </p>
           <span className="eye mut" aria-live="polite">
             Showing {visible.length} of {CASES.length}
@@ -119,7 +120,7 @@ export default function WorkGrid() {
           ))}
         </div>
       ) : (
-        /* Unreachable with the current six cases — every filter has at least one.
+        /* Unreachable with the current case set — every filter has at least one.
            It exists so adding a category without work doesn't render a blank band. */
         <div className="wrap" style={{ paddingBlock: 64 }}>
           <div className="held">

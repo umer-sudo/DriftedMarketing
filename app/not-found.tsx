@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CASE_COUNT } from "@/content/cases";
 import NotFoundHeading from "@/components/NotFoundHeading";
 
 /* Next renders not-found.tsx inside the root layout, so nav, footer and chrome all
@@ -20,7 +21,7 @@ export default function NotFound() {
       <div className="eye">Error 404</div>
       <NotFoundHeading />
       <p className="body" style={{ maxWidth: "48ch", marginTop: 24, fontSize: 19 }}>
-        The page left. Everything else is still here — six cases with the numbers attached,
+        The page left. Everything else is still here — {CASE_COUNT} cases with the numbers attached,
         and a thirty-minute call that costs you nothing.
       </p>
       <div style={{ display: "flex", gap: 14, marginTop: 30, flexWrap: "wrap" }}>

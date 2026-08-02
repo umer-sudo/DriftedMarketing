@@ -185,6 +185,13 @@ export const CASES: CaseStudy[] = [
         caption: "The product line, drawn from one annotation concept",
       },
       {
+        src: "/work/noted/editorial.webp",
+        alt: "A Noted. editorial post \u2014 \u201c10 things I say that make Americans look at me weird\u201d set over a photograph of the creator on a ship\u2019s deck, captioned 32 years of Canadian vocabulary.",
+        width: 1100,
+        height: 1375,
+        caption: "Editorial post \u2014 the voice the range sells against",
+      },
+      {
         src: "/work/noted/crewneck.webp",
         alt: "A black crewneck sweatshirt with the Noted. wordmark and its red asterisk across the chest.",
         width: 900,
@@ -411,7 +418,156 @@ export const CASES: CaseStudy[] = [
       },
     ],
   },
+  {
+    /* Craft case. Every fact below is read off the delivered artefacts themselves —
+       the brand reference sheet, the flyer set and the B2B site design. No result is
+       claimed, because none has been measured or approved; the stats are pending.
+
+       Three of the eleven delivered pieces are on the site. The business cards and
+       the sales kit are not: they are staff names, mobile numbers and personal email
+       addresses end to end, and there is nothing left of them once redacted. The
+       three that are here are cropped above their contact bands for the same reason. */
+    slug: "gee",
+    client: "GEE Linens",
+    category: "web",
+    span: "half",
+    tags: ["Brand system", "Collateral"],
+    result: "One sheet every asset is built against",
+    craft: true,
+    bg: "linear-gradient(140deg,#12305B 0 55%,var(--tar-3) 55%)",
+    hero: ["We make the linen,", "not just supply it."],
+    sub: "Four divisions buying nothing alike, held together by one sheet.",
+    meta: [
+      ["Client", "GEE Linens Manufacturing Corp."],
+      ["Discipline", "Brand system · Collateral"],
+      ["Timeline", "V1.0, 2025"],
+      ["Scope", "Identity, flyer set, sales kit, B2B site"],
+    ],
+    challengeTitle: ["Four divisions.", "One factory.", "One sheet."],
+    challenge: [
+      "GEE sells bed, bath and table linen out of its own Carmona facility to four rooms that buy nothing like each other — hotels and resorts, medical and hospital, F&B and banquet, and a retail line under Cotton Countree. Four audiences is usually where an identity comes apart: each division commissions its own flyer, and within a year the company looks like four companies.",
+      "So the deliverable is not a logo. It is a reference sheet that every downstream asset is built against, with the rule stated on it in plain language: no token here may be substituted.",
+    ],
+    phases: [
+      {
+        title: "The reference sheet",
+        body: "Logo lockups, clear space and minimum sizes, the colour system, the type scale, and a misuse page that names the six ways the mark gets broken. Gold is specified as a hairline and an eyebrow, never a fill — the moment gold becomes a block, the brand reads budget.",
+      },
+      {
+        title: "The collateral set",
+        body: "A master flyer plus one per division, each built from the same grid and type scale so a hotel buyer and a hospital buyer are looking at the same company.",
+      },
+      {
+        title: "The B2B site",
+        body: "A specification-first storefront: what they make, who they supply, and an enquiry form — designed around a buyer who needs a quote, not a mood.",
+      },
+    ],
+    found:
+      "The sheet settles the voice as firmly as the colour. Retail sells the feeling; GEE sells the specification — thread count, blend, dimensions, facility — and the guidelines carry a write-this-not-that page so the rule survives the next person to write a caption.",
+    stats: [
+      { value: "4", label: "Divisions on one identity" },
+      { value: "11", label: "Pieces in the delivered set" },
+      { value: "[Enquiry lift pending]", label: "B2B site not yet measured", pending: true },
+      { value: "[Adoption pending]", label: "Rollout across divisions in progress", pending: true },
+    ],
+    next: "lafo40",
+    verified: "2026-07-28",
+    gallery: [
+      {
+        src: "/work/gee/identity.webp",
+        alt: "The GEE Linens brand reference sheet: logo lockups on light, dark and navy, clear-space and minimum-size diagrams, and the navy, blue and gold colour system with print values.",
+        width: 1400,
+        height: 2125,
+        caption: "The reference sheet \u2014 lockups, clear space, colour",
+      },
+      {
+        src: "/work/gee/flyer.webp",
+        alt: "The GEE Linens master flyer: the line \u201cWe make the linen, not just supply it\u201d over a product grid of bed linen, towels, pillows, duvets and banquet cloths.",
+        width: 1100,
+        height: 1299,
+        caption: "Master flyer \u2014 the range on one page",
+      },
+      {
+        src: "/work/gee/website.webp",
+        alt: "The GEE Linens B2B site design: a navy hero repeating the manufacturer line, above a band reading 200+ accounts, four divisions, since 2022, nationwide delivery.",
+        width: 1400,
+        height: 1462,
+        caption: "B2B site \u2014 specification before mood",
+      },
+    ],
+  },
+  {
+    /* ForjWell-era work, and named as such in the meta rather than implied to be
+       Drifted's — see FORJWELL_CREDIT at the foot of this file, which already lists
+       LAFO40 among the work led there.
+
+       One asset only. The identity system was delivered as a PDF whose artwork does
+       not survive export — every page past the cover renders empty — and the handoff
+       archive turned out to hold scripts rather than artwork. The cover is real, so
+       it ships; the rest of the frames stay placeholders until the source files turn
+       up. Its "confidential — internal & partner use" footer is cropped off. */
+    slug: "lafo40",
+    client: "LAFO40",
+    category: "creators",
+    span: "half",
+    tags: ["Brand identity", "ForjWell"],
+    result: "You\u2019re still going. That\u2019s the flex",
+    craft: true,
+    bg: "linear-gradient(140deg,#0A0A0A 0 60%,#FF4500 60%)",
+    hero: ["You\u2019re still going.", "That\u2019s the flex."],
+    sub: "A premium streetwear identity for lifting after forty \u2014 earned, not given.",
+    meta: [
+      ["Client", "LAFO40 \u00b7 Love & Fitness Over 40"],
+      ["Discipline", "Brand identity"],
+      ["Timeline", "V1.0, 2026"],
+      ["Credit", "Led while Creative Strategist at ForjWell"],
+    ],
+    challengeTitle: ["Forty isn\u2019t", "the wind-down.", "It\u2019s the warm-up."],
+    challenge: [
+      "Fitness brands aimed at people over forty almost all default to the same register \u2014 wellness, journeys, gentle encouragement. It is a register that tells the buyer they are managing a decline.",
+      "LAFO40 sells streetwear to people who are still lifting, so the identity had to sound like the gym and not like a clinic. The voice rule is written into the guidelines as a straight swap: we say \u201cGet up. It\u2019s gym time.\u201d We do not say \u201cBegin your wellness journey.\u201d",
+    ],
+    phases: [
+      {
+        title: "The marks",
+        body: "A primary wordmark that splits LAFO in cream from 40 in signal orange, a stacked secondary lockup, and two icon marks \u2014 the 40 pill and the LF monogram \u2014 for the sizes where the wordmark stops working.",
+      },
+      {
+        title: "The system",
+        body: "Barlow Condensed ExtraBold for display against DM Sans for body, on jet black, signal orange, cream, army olive and gold. Body copy stays plain and direct: no jargon, no journeys.",
+      },
+      {
+        title: "The print program",
+        body: "Nine graphics across the range in approved colourways, from box-logo pieces to a heritage athletic variant.",
+      },
+    ],
+    found: "",
+    stats: [
+      { value: "9", label: "Graphics in the print program" },
+      { value: "6", label: "Colours in the system" },
+      { value: "[Sell-through pending]", label: "Range performance not published", pending: true },
+    ],
+    next: "gee",
+    verified: "2026-07-28",
+    gallery: [
+      {
+        src: "/work/lafo40/identity.webp",
+        alt: "The LAFO40 brand identity cover: the wordmark set with LAFO in cream and 40 in signal orange on black, above \u201cLove & Fitness Over 40\u201d and the line \u201cYou\u2019re still going. That\u2019s the flex.\u201d",
+        width: 1100,
+        height: 1447,
+        caption: "Brand identity system, Vol. 01",
+      },
+    ],
+  },
 ];
+
+/* The prose quotes the number of cases in several places. Deriving it means adding a
+   case can never leave a page claiming there are six. */
+export const CASE_COUNT = CASES.length;
+export const CASE_COUNT_WORD =
+  ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][
+    CASES.length
+  ] ?? String(CASES.length);
 
 export const caseBySlug = (slug: string) => CASES.find((c) => c.slug === slug);
 
