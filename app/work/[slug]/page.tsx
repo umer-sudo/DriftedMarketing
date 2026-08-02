@@ -79,13 +79,19 @@ export default async function CasePage({ params }: Params) {
         <div style={{ position: "absolute", inset: 0, background: c.bg }}>
           <ImageSlot
             placeholder="Hero visual — product screen, campaign still, platform UI"
+            /* The lead gallery frame doubles as the hero. Cases with nothing to show
+               keep the coloured field and the labelled placeholder. */
+            src={c.gallery?.[0]?.src}
+            alt=""
             background={c.bg}
             priority
             sizes="100vw"
           />
         </div>
+        {/* The heavier scrim only goes down over photography. Over the flat colour
+            fields it would just mute the brand's own palette for no reason. */}
         <div
-          style={{ position: "absolute", inset: 0, background: "var(--scrim-bottom)", pointerEvents: "none" }}
+          className={c.gallery?.length ? "herescrim over-image" : "herescrim"}
           aria-hidden="true"
         />
         <div className="wrap" style={{ position: "relative", width: "100%", paddingBottom: 44 }}>
@@ -161,12 +167,18 @@ export default async function CasePage({ params }: Params) {
                 <p className="body" style={{ marginTop: 10, maxWidth: "60ch" }}>
                   {p.body}
                 </p>
-                <div
-                  className="shotbox"
-                  style={{ height: "clamp(190px,26vw,340px)", padding: 0, overflow: "hidden" }}
-                >
-                  <ImageSlot placeholder={`Still from phase ${String(i + 1).padStart(2, "0")}`} />
-                </div>
+                {/* A case with real imagery already shows it in the receipts grid.
+                    Repeating three empty frames underneath reads as unfinished rather
+                    than as a documented gap, so the placeholders only appear where
+                    there is genuinely nothing yet. */}
+                {!c.gallery?.length && (
+                  <div
+                    className="shotbox"
+                    style={{ height: "clamp(190px,26vw,340px)", padding: 0, overflow: "hidden" }}
+                  >
+                    <ImageSlot placeholder={`Still from phase ${String(i + 1).padStart(2, "0")}`} />
+                  </div>
+                )}
               </div>
             </div>
           ))}

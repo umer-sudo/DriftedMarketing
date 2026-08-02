@@ -1,5 +1,5 @@
-import Image from "next/image";
 import ImageSlot from "./ImageSlot";
+import Lightbox from "./Lightbox";
 import type { CaseImage } from "@/content/cases";
 
 /* The receipts grid on a case page.
@@ -33,23 +33,5 @@ export default function CaseGallery({ images }: { images?: CaseImage[] }) {
     );
   }
 
-  return (
-    <div className="proofgrid">
-      {images.map((img, i) => (
-        <figure key={img.src} className="proofshot">
-          <Image
-            src={img.src}
-            alt={img.alt}
-            width={img.width}
-            height={img.height}
-            sizes="(max-width: 1000px) 100vw, 33vw"
-            /* The first frame is usually the one in view when the section is
-               reached; the rest can wait. */
-            loading={i === 0 ? "eager" : "lazy"}
-          />
-          <figcaption className="proofcap">{img.caption}</figcaption>
-        </figure>
-      ))}
-    </div>
-  );
+  return <Lightbox images={images} />;
 }

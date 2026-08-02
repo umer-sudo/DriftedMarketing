@@ -65,7 +65,10 @@ export default function CreatorsPage() {
       />
 
       <section className="wrap paper drift-paper" style={{ paddingBlock: "clamp(48px,7vw,104px)" }}>
-        <div className="eye" style={{ color: "var(--siren-500)" }}>
+        {/* Siren 500 is a 5.1:1 accent rated for 18px and up; on this page the eyebrow
+            is 11px mono on Newsprint, where it measured 3.44:1. Siren 700 is the same
+            hue two stops darker and clears 4.5:1 at this size. */}
+        <div className="eye" style={{ color: "var(--siren-700)" }}>
           02 — Creator growth
         </div>
         <h1
