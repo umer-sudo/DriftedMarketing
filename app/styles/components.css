@@ -1,0 +1,2810 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Drifted — component layer.
+
+   Ported verbatim from the design bundle's prototype stylesheet
+   (.claude/skills/drifted-design/Drifted Website.html <style> block). Values are
+   deliberate per the handoff: radii stay 0–4px, tracking is not softened, nothing
+   bounces, nothing exceeds 520ms outside the logo resolve and the marquees.
+
+   Three deviations from the prototype, all structural rather than visual:
+     1. `.page` no longer toggles display — real routes replace hash routing.
+     2. Nav / footer / sheet link rules also target <a>, since Next uses <Link>.
+     3. `--news` is aliased below. The prototype references var(--news) in seven
+        places but the token layer only ever defined --newsprint, so those rules
+        resolved to nothing. Aliasing restores the intended colour.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --news: var(--newsprint);
+
+  /* The page gutter. Every section's first column has to start on this line —
+     .wrap gets there with padding, and the full-bleed grids (.beat, .svc) have
+     to reach it themselves, because their cells are the page edge. Three
+     sections used to invent their own clamp() and landed 24–32px inside
+     everything else, which reads as a broken column rather than a design. */
+  --gutter: clamp(20px, 5vw, 80px);
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--tar);
+  color: var(--text-body);
+  overflow-x: hidden;
+}
+img {
+  max-width: 100%;
+}
+/* Form controls do not inherit font by default, so any control without an explicit
+   class lands on the UA default — Arial here, which is off-system. */
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+}
+.wrap {
+  max-width: var(--max-w-content);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+.disp {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.045em;
+  line-height: 0.88;
+  margin: 0;
+  color: var(--text-primary);
+}
+.eye {
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--voltage-500);
+}
+.eye.mut {
+  color: var(--text-muted);
+}
+.body {
+  font: 400 17px/1.6 var(--font-body);
+  color: var(--text-body);
+}
+.small {
+  font: 400 15px/1.6 var(--font-body);
+  color: var(--text-muted);
+}
+.sect {
+  padding-block: clamp(64px, 9vw, 140px);
+  border-top: 1px solid var(--border-subtle);
+}
+.grainy {
+  position: relative;
+}
+.grainy:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+.fill {
+  display: inline-block;
+  line-height: 0.74;
+  padding: 0.1em 0.05em 0.03em;
+  background: var(--voltage-500);
+  color: var(--tar);
+  vertical-align: baseline;
+}
+.ol {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--newsprint);
+}
+.tag {
+  display: inline-flex;
+  font: 400 10px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-body);
+  transition: background-color var(--dur-fast) var(--ease-hit), color var(--dur-fast) var(--ease-hit);
+}
+.tag:hover {
+  background: var(--voltage-500);
+  color: var(--tar);
+  border-color: var(--voltage-500);
+}
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 19px 26px;
+  border: 0;
+  cursor: pointer;
+  background: var(--voltage-500);
+  color: var(--tar);
+  text-decoration: none;
+  will-change: transform;
+  transition: transform var(--dur-fast) var(--ease-hit), background-color var(--dur-fast) var(--ease-hit);
+}
+.btn:hover {
+  transform: translateY(-2px);
+  background: var(--voltage-400);
+  color: var(--tar);
+  text-decoration: none;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn.sec {
+  background: transparent;
+  color: var(--text-primary);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+.btn.sec:hover {
+  box-shadow: inset 0 0 0 1px var(--voltage-500);
+  color: var(--voltage-500);
+  background: transparent;
+}
+.btn.dark {
+  background: var(--tar);
+  color: var(--newsprint);
+}
+.btn.dark:hover {
+  background: var(--siren-500);
+  color: var(--tar);
+}
+.btn.sm {
+  padding: 12px 16px;
+  font-size: 10.5px;
+}
+
+/* nav */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px clamp(20px, 5vw, 80px);
+  background: rgba(8, 8, 10, 0.82);
+  backdrop-filter: var(--blur-panel);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: transform 280ms var(--ease-cut);
+}
+.nav.hid {
+  transform: translateY(-100%);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: none;
+}
+.brand:hover {
+  text-decoration: none;
+}
+.wm {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 19px;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.navlinks {
+  display: flex;
+  gap: 26px;
+}
+.navlinks a {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 6px 0;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-hit), letter-spacing var(--dur-fast) var(--ease-hit);
+}
+.navlinks a:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--voltage-500);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-fast) var(--ease-hit);
+}
+.navlinks a:hover,
+.navlinks a[aria-current="page"] {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.navlinks a:hover:after,
+.navlinks a[aria-current="page"]:after {
+  transform: scaleX(1);
+}
+.navlinks a:hover {
+  color: var(--news);
+  letter-spacing: 0.22em;
+}
+.navlinks a[aria-current="page"] {
+  color: var(--voltage-500);
+}
+.menubtn {
+  display: none;
+}
+@media (max-width: 900px) {
+  .navlinks {
+    display: none;
+  }
+  .menubtn {
+    display: inline-flex;
+  }
+}
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: var(--tar);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: clamp(20px, 5vw, 80px);
+}
+.sheet.on {
+  display: flex;
+}
+.sheet a {
+  background: none;
+  border: 0;
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(34px, 9vw, 64px);
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 6px 0;
+  text-decoration: none;
+}
+.sheet a:hover {
+  color: var(--voltage-500);
+  text-decoration: none;
+}
+.sheet .close {
+  position: absolute;
+  top: 18px;
+  right: clamp(20px, 5vw, 80px);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* preloader + route wipe */
+.pre {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--tar);
+  display: grid;
+  place-items: center;
+  gap: 20px;
+}
+.pre.done {
+  display: none;
+}
+.pre .mk {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+.pre .mk svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.pre .u {
+  animation: lock var(--dur-mark) var(--ease-hit) both;
+}
+@keyframes lock {
+  0% {
+    transform: translate(-58px, -38px) rotate(-13deg);
+    opacity: 0;
+  }
+  16% {
+    opacity: 1;
+  }
+  54%,
+  66% {
+    transform: none;
+  }
+  100% {
+    transform: rotate(-3.5deg) translate(-10.8%, -9.4%);
+  }
+}
+.pre .ct {
+  position: absolute;
+  bottom: clamp(24px, 6vw, 60px);
+  left: 0;
+  right: 0;
+  text-align: center;
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: 0.24em;
+  color: var(--voltage-500);
+}
+.wipe {
+  position: fixed;
+  inset: -10% -20%;
+  z-index: 80;
+  background: var(--voltage-500);
+  transform: translateX(-140%) skewX(-17deg);
+  pointer-events: none;
+}
+.wipe.run {
+  animation: wipe 560ms var(--ease-cut) both;
+}
+@keyframes wipe {
+  0% {
+    transform: translateX(-140%) skewX(-17deg);
+  }
+  50% {
+    transform: translateX(0) skewX(-17deg);
+  }
+  100% {
+    transform: translateX(140%) skewX(-17deg);
+  }
+}
+
+/* pages */
+.page {
+  padding-top: 70px;
+}
+[data-motion="on"] .rv {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--dur-base) var(--ease-expo), transform var(--dur-base) var(--ease-expo);
+}
+.rv.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* hero */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: calc(100vh - 70px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34%;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  column-gap: clamp(20px, 4vw, 64px);
+  padding-block: clamp(56px, 8vw, 110px);
+}
+.orb {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  width: min(34vw, 520px);
+  aspect-ratio: 1;
+  pointer-events: none;
+}
+.orb .ball {
+  position: absolute;
+  inset: 16%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 34% 26%,
+    #fff 0 2%,
+    var(--voltage-300) 7%,
+    var(--voltage-500) 28%,
+    var(--voltage-700) 66%,
+    #141b04 96%
+  );
+  box-shadow: 0 60px 90px -30px #000, inset -30px -34px 70px rgba(0, 0, 0, 0.6);
+  animation: bob 9s ease-in-out infinite;
+}
+.orb .ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(242, 240, 234, 0.1);
+  border-radius: 50%;
+}
+.orb .ring:nth-child(2) {
+  inset: 8%;
+}
+.orb .ring:nth-child(3) {
+  inset: 22%;
+}
+@keyframes bob {
+  50% {
+    transform: translateY(-20px);
+  }
+}
+.orbring {
+  position: absolute;
+  inset: -16%;
+  border: 1px dashed rgba(175, 227, 4, 0.3);
+  border-radius: 50%;
+  animation: orbspin 26s linear infinite;
+  pointer-events: none;
+}
+@keyframes orbspin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.hero h1 {
+  font-size: clamp(52px, 10vw, 168px);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+}
+.herofoot {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 26px;
+  flex-wrap: wrap;
+  padding-top: 56px;
+}
+.cue {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.cue i {
+  display: block;
+  width: 1px;
+  height: 26px;
+  background: var(--voltage-500);
+  animation: cue 1.8s var(--ease-expo) infinite;
+}
+@keyframes cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+.wm-logo {
+  position: absolute;
+  right: -4%;
+  top: 6%;
+  width: min(34vw, 420px);
+  opacity: 0.06;
+  transform: rotate(-8deg);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* marquee */
+.marq {
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--voltage-500);
+  color: var(--tar);
+  border-block: 1px solid var(--border-subtle);
+}
+.marq.dark {
+  background: var(--tar-2);
+  color: var(--text-muted);
+}
+.marq div {
+  display: inline-block;
+  padding: 13px 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  animation: slide var(--dur-marquee-slow) linear infinite;
+}
+.marq.dark div {
+  animation-duration: 75s;
+  animation-direction: reverse;
+}
+.marq span {
+  padding: 0 20px;
+}
+.marq:hover div {
+  animation-play-state: paused;
+}
+.marq div span:nth-child(4n + 1) {
+  color: transparent;
+  -webkit-text-stroke: 1px currentColor;
+}
+@keyframes slide {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* generic grids */
+.nums {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2px;
+  background: var(--border-subtle);
+  margin-top: 28px;
+}
+.nums > div {
+  background: var(--tar);
+  padding: 30px 26px 34px;
+}
+.nums .n {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(34px, 4.4vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: var(--text-primary);
+}
+.nums .n.acc {
+  color: var(--voltage-500);
+}
+.n.done {
+  animation: nflash 420ms var(--ease-hit);
+}
+@keyframes nflash {
+  0% {
+    color: var(--news);
+  }
+  35% {
+    color: var(--voltage-500);
+    text-shadow: 0 0 26px rgba(175, 227, 4, 0.55);
+  }
+}
+.beat {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border-subtle);
+  border-top: 1px solid var(--border-subtle);
+}
+.beat > div {
+  background: var(--tar);
+  padding: clamp(24px, 3.4vw, 44px) clamp(20px, 3vw, 40px);
+}
+/* The outer edges of the row are the page edge, so they take the page gutter.
+   The two inner edges keep the tighter cell padding — pushing those out too
+   would open a canyon down the middle of the comparison. */
+.beat > div:first-child {
+  padding-left: var(--gutter);
+}
+.beat > div:last-child {
+  padding-right: var(--gutter);
+}
+/* Struck-through text.
+
+   This was an absolutely-positioned ::after at left:0/width:100%. On a single
+   line that draws a rule through the words; on the two- and three-line phrases
+   here it drew one bar anchored to the first line box and sized against the
+   whole paragraph, so the rule slashed across the middle of the second line and
+   stopped inside a word.
+
+   A background gradient is painted per line box instead, and
+   box-decoration-break:clone makes each fragment size its own background — so
+   every line gets a rule the width of that line. Animating background-size
+   keeps the same left-to-right draw the ::after had. */
+.strike {
+  display: inline;
+  background-image: linear-gradient(var(--voltage-500), var(--voltage-500));
+  background-repeat: no-repeat;
+  background-position: 0 58%;
+  background-size: 0 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size var(--dur-base) var(--ease-cut);
+}
+.in .strike {
+  background-size: 100% 3px;
+}
+.svc {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 2px;
+  background: var(--border-subtle);
+  border-top: 1px solid var(--border-subtle);
+}
+.svc > div {
+  background: var(--tar);
+  padding: clamp(26px, 3.4vw, 48px);
+  display: flex;
+  flex-direction: column;
+  /* The first card spans both rows, so its height is set by the two cards
+     beside it, not by its own content. space-between then threw its heading to
+     the top and its copy to the bottom with ~450px of dead space between them.
+     Stacked from the top, the card reads as one block at any height. */
+  justify-content: flex-start;
+  gap: 22px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background-color var(--dur-fast) var(--ease-hit);
+}
+.svc > div:hover {
+  background: var(--tar-2);
+}
+/* Same page-gutter rule as .beat: outer edges align to the site's column. */
+.svc > div:first-child {
+  /* The feature card spans both rows, so it is taller than its own content by
+     however much the two cards beside it add up to. Centred, that surplus
+     splits evenly above and below and reads as a deliberately airy cell;
+     top-aligned it just looks like the card ran out of copy. */
+  justify-content: center;
+  padding-left: var(--gutter);
+}
+.svc > div:not(:first-child) {
+  padding-right: var(--gutter);
+}
+.svc > div:before {
+  content: "";
+  position: absolute;
+  inset: -20% -30%;
+  background: var(--voltage-500);
+  opacity: 0.14;
+  transform: translateX(-140%) skewX(-17deg);
+  transition: transform var(--dur-base) var(--ease-cut);
+}
+.svc > div:hover:before {
+  transform: translateX(0) skewX(-17deg);
+}
+.svc > div > * {
+  position: relative;
+}
+.svc:hover > div {
+  filter: brightness(0.4);
+  transition: filter var(--dur-fast) var(--ease-hit);
+}
+.svc:hover > div:hover {
+  filter: none;
+  box-shadow: inset 0 0 0 2px var(--voltage-500);
+  transform: translateY(-2px);
+}
+.svcno {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(44px, 5vw, 84px);
+  line-height: 1;
+  color: var(--tar-4);
+}
+.work {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  background: var(--border-subtle);
+  border-top: 1px solid var(--border-subtle);
+}
+.item {
+  background: var(--tar);
+  cursor: pointer;
+  grid-column: span 2;
+  perspective: 900px;
+}
+.item.wide {
+  grid-column: span 4;
+}
+.item.half {
+  grid-column: span 3;
+}
+.shot {
+  position: relative;
+  height: 238px;
+  overflow: hidden;
+  transition: transform 160ms var(--ease-hit);
+  transform-style: preserve-3d;
+}
+/* work images misregister by default, snap on hover */
+.shot > .img {
+  position: absolute;
+  inset: 0;
+  transform: translate(9px, 7.8px) rotate(-1.2deg) scale(1.06);
+  transition: transform var(--dur-slow) var(--ease-expo);
+}
+.item:hover .shot > .img {
+  transform: none;
+}
+.veil {
+  position: absolute;
+  inset: 0;
+  background: var(--tar);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-hit);
+}
+.item:hover .veil {
+  opacity: 0.5;
+}
+.go {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -42%);
+  opacity: 0;
+  pointer-events: none;
+  background: var(--voltage-500);
+  color: var(--tar);
+  font: 500 10.5px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 11px 15px;
+  transition: opacity var(--dur-fast) var(--ease-hit), transform var(--dur-fast) var(--ease-hit);
+}
+.item:hover .go {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+.glare {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 42%, rgba(242, 240, 234, 0.16) 50%, transparent 58%);
+  opacity: 0;
+  transition: opacity 160ms linear;
+  pointer-events: none;
+  z-index: 3;
+}
+.item:hover .glare {
+  opacity: 1;
+}
+.tno {
+  position: absolute;
+  right: 10px;
+  top: 2px;
+  z-index: 2;
+  font: 700 64px/1 var(--font-mono);
+  color: rgba(242, 240, 234, 0.13);
+  pointer-events: none;
+}
+.meta {
+  padding: 22px 24px 28px;
+  cursor: pointer;
+}
+.res {
+  margin-top: 16px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--voltage-500);
+}
+.res:before {
+  content: "\2197 ";
+  color: var(--voltage-500);
+}
+.res.craft {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+@keyframes tilein {
+  from {
+    opacity: 0;
+    transform: translateY(26px) skewY(1.5deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.step {
+  display: grid;
+  grid-template-columns: 80px 220px 1fr;
+  gap: 20px;
+  padding: 24px 0;
+  border-top: 1px solid var(--border-subtle);
+  align-items: baseline;
+}
+.stepno {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 26px;
+  color: var(--tar-4);
+}
+.metabar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2px;
+  background: var(--border-subtle);
+  border-block: 1px solid var(--border-subtle);
+}
+.metabar > div {
+  background: var(--tar);
+  padding: 20px 22px;
+}
+.metabar b {
+  display: block;
+  margin-top: 10px;
+  font: 500 15px/1.4 var(--font-body);
+  color: var(--text-primary);
+}
+.phase {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 22px;
+  padding: 30px 0;
+  border-top: 1px solid var(--border-subtle);
+}
+.phaseno {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--tar-4);
+  transition: color 280ms var(--ease-hit);
+}
+.phase.in .phaseno {
+  color: var(--voltage-500);
+}
+.shotbox {
+  margin-top: 20px;
+  height: 210px;
+  background: var(--tar-3);
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-subtle);
+}
+.held {
+  border: 1px dashed var(--border-default);
+  padding: clamp(24px, 4vw, 52px);
+}
+.appsec {
+  background: #07070a;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--border-subtle);
+}
+.wire {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(175, 227, 4, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(175, 227, 4, 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(80% 60% at 60% 40%, #000, transparent);
+}
+.term {
+  background: #0b0b0e;
+  border: 1px solid var(--border-default);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 2;
+}
+.term .bar {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.term .bar i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink-500);
+}
+.term .out {
+  padding: 18px 20px;
+  color: var(--ink-200);
+}
+.term .out b {
+  color: var(--voltage-500);
+  font-weight: 500;
+}
+.cta {
+  background: var(--voltage-500);
+  color: var(--tar);
+  position: relative;
+  overflow: hidden;
+}
+.cta:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  opacity: 0.26;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.cta h2 {
+  color: var(--tar);
+  font-size: clamp(46px, 9vw, 152px);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+}
+.cta .ko {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--tar);
+}
+.fl {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 18px;
+}
+.fl span {
+  font: 500 10.5px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.ctrl {
+  background: var(--tar-2);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  font: 400 15px/1.4 var(--font-body);
+  padding: 15px 16px;
+  width: 100%;
+  border-radius: var(--radius-control);
+}
+.ctrl:focus {
+  outline: 2px solid var(--voltage-500);
+  outline-offset: 2px;
+}
+.faq {
+  border-top: 1px solid var(--border-subtle);
+  padding: 18px 0;
+}
+.faq summary {
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 19px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  list-style: none;
+  transition: color var(--dur-fast) var(--ease-hit);
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq summary:hover {
+  color: var(--voltage-500);
+}
+.faq summary:after {
+  content: "+";
+  float: right;
+  font-family: var(--font-mono);
+  color: var(--voltage-500);
+  font-size: 15px;
+}
+.faq[open] summary:after {
+  content: "\2212";
+}
+.faq p {
+  margin: 12px 0 0;
+  font: 400 15px/1.65 var(--font-body);
+  color: var(--text-body);
+  max-width: 68ch;
+}
+.paper {
+  background: var(--newsprint);
+  color: var(--tar);
+}
+.foot {
+  border-top: 1px solid var(--border-subtle);
+  padding-block: 44px 60px;
+  display: flex;
+  justify-content: space-between;
+  gap: 44px;
+  flex-wrap: wrap;
+}
+.footlinks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+.footlinks a {
+  background: none;
+  border: 0;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+  font: 400 14px/1 var(--font-body);
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.footlinks a:hover {
+  color: var(--voltage-500);
+  text-decoration: none;
+}
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+.filt {
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 11px 15px;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-control);
+}
+.filt:hover {
+  color: var(--text-primary);
+}
+.filt.on {
+  background: var(--voltage-500);
+  border-color: var(--voltage-500);
+  color: var(--tar);
+}
+.filt[data-n]:after {
+  content: " " attr(data-n);
+  color: var(--voltage-500);
+  font-size: 9px;
+  vertical-align: super;
+}
+.filt.on[data-n]:after {
+  color: var(--tar);
+}
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: clamp(28px, 4vw, 60px);
+}
+
+/* ── persistent layers ── */
+body:after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 75;
+  pointer-events: none;
+  background-image: var(--grain);
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+}
+.opnum {
+  position: absolute;
+  left: var(--gutter);
+  top: -0.18em;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(180px, 26vw, 420px);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: var(--tar-4);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.opwrap {
+  position: relative;
+  overflow: hidden;
+}
+.opwrap > * {
+  position: relative;
+  z-index: 1;
+}
+.opwrap > .opnum {
+  z-index: 0;
+}
+
+/* image slots */
+.slotframe {
+  position: relative;
+  overflow: hidden;
+  background: var(--tar-3);
+  border: 1px solid var(--border-subtle);
+}
+.slotcap {
+  font: 400 10px/1.6 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+.proofgrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+  background: var(--border-subtle);
+  margin-top: 30px;
+}
+.proofgrid > div {
+  background: var(--tar);
+  padding: 0;
+}
+.proofgrid .slotframe {
+  border: 0;
+  aspect-ratio: 4/3;
+}
+.proofgrid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 1000px) {
+  .proofgrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* enhancements */
+#prog {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 2px;
+  background: var(--voltage-500);
+  width: 0;
+  z-index: 80;
+}
+::selection {
+  background: var(--voltage-500);
+  color: var(--tar);
+}
+:focus-visible {
+  outline: 2px solid var(--voltage-500);
+  outline-offset: 2px;
+}
+#top {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 70;
+  width: 44px;
+  height: 44px;
+  background: var(--tar-3);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+  display: none;
+  place-items: center;
+  padding: 0;
+}
+#top.on {
+  display: grid;
+}
+#top i {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: var(--voltage-500);
+  transform: rotate(-27deg);
+  transition: transform var(--dur-fast) var(--ease-hit);
+}
+#top:hover i {
+  transform: rotate(-27deg) translateY(-3px);
+}
+.skip {
+  position: fixed;
+  left: 12px;
+  top: -60px;
+  z-index: 99;
+  background: var(--voltage-500);
+  color: var(--tar);
+  padding: 12px 16px;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: top var(--dur-fast) var(--ease-hit);
+}
+.skip:focus {
+  top: 12px;
+  color: var(--tar);
+  text-decoration: none;
+}
+#khi {
+  font: 500 10px/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  align-self: center;
+}
+
+/* stimulation pass */
+[data-motion="on"] .rv2 {
+  opacity: 0;
+  transform: translateY(46px) skewY(2deg);
+}
+.rv2.in {
+  opacity: 1;
+  transform: none;
+  transition: transform 520ms var(--ease-expo), opacity 180ms linear;
+}
+#pop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: none;
+  place-items: center;
+  background: rgba(8, 8, 10, 0.74);
+  backdrop-filter: blur(6px);
+}
+#pop.on {
+  display: grid;
+}
+#pop .box {
+  background: var(--voltage-500);
+  color: var(--tar);
+  max-width: 540px;
+  width: calc(100% - 48px);
+  padding: 46px 42px;
+  position: relative;
+  transform: translateY(26px) skewY(1.6deg);
+  animation: popin 360ms var(--ease-expo) forwards;
+  box-shadow: 10px 10px 0 var(--siren-500);
+}
+#pop .box:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain, none);
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+@keyframes popin {
+  to {
+    transform: none;
+  }
+}
+#pop h3 {
+  font: 900 clamp(30px, 4.4vw, 46px) / 0.88 var(--font-display);
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--tar);
+}
+#pop p {
+  font: 400 15px/1.55 var(--font-body);
+  color: #1a1a08;
+  margin: 16px 0 26px;
+}
+#pop .x {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--tar);
+  color: var(--news);
+  border: 0;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font: 700 14px/1 var(--font-mono);
+  z-index: 1;
+}
+.shipbar {
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--tar-2);
+}
+.shipbar > div {
+  display: inline-block;
+  padding: 13px 0;
+  animation: shipslide 34s linear infinite;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.shipbar:hover > div {
+  animation-play-state: paused;
+}
+@keyframes shipslide {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.shipbar b {
+  color: var(--voltage-500);
+  font-weight: 500;
+}
+.shipbar span {
+  padding: 0 26px;
+}
+body.slip .disp,
+body.slip .btn,
+body.slip .shot,
+body.slip .tag {
+  transform: translate(7px, -5px) rotate(-0.7deg) !important;
+  transition: transform 120ms var(--ease-hit) !important;
+}
+#ftoast {
+  position: fixed;
+  left: 50%;
+  bottom: 84px;
+  transform: translateX(-50%);
+  background: var(--tar-3);
+  color: var(--voltage-500);
+  border: 1px solid var(--voltage-500);
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  z-index: 126;
+  opacity: 0;
+  transition: opacity 160ms linear;
+  pointer-events: none;
+}
+#ftoast.on {
+  opacity: 1;
+}
+
+/* richness pass */
+.lu {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.25;
+  vertical-align: -3px;
+}
+.clientstrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 34px;
+  align-items: center;
+  padding: 26px 0;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.clientstrip b {
+  font: 700 13px/1 var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+  transition: color var(--dur-fast) var(--ease-hit);
+  cursor: default;
+  white-space: nowrap;
+}
+.clientstrip b:hover {
+  color: var(--voltage-500);
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-subtle);
+}
+@media (max-width: 900px) {
+  .steps {
+    grid-template-columns: 1fr;
+  }
+}
+.steps > div {
+  background: var(--tar-2);
+  padding: 30px 28px;
+  position: relative;
+}
+.steps .lu {
+  width: 24px;
+  height: 24px;
+  color: var(--voltage-500);
+}
+.steps h3 {
+  font: 900 20px/1 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--news);
+  margin: 16px 0 10px;
+}
+.steps p {
+  font: 400 14px/1.55 var(--font-body);
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 38ch;
+}
+.steps .sno {
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  font: 500 11px/1 var(--font-mono);
+  color: var(--ink-400);
+}
+#slotsbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  background: var(--siren-500);
+  color: var(--news);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 11px 44px 11px 16px;
+  font: 500 11px/1.3 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transform: translateY(100%);
+  transition: transform 280ms var(--ease-expo);
+}
+#slotsbar.on {
+  display: flex;
+  transform: none;
+}
+#slotsbar .bk {
+  background: var(--tar);
+  color: var(--news);
+  border: 0;
+  padding: 9px 14px;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+#slotsbar .bk:hover {
+  color: var(--news);
+  text-decoration: none;
+}
+#slotsbar .xx {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: 0;
+  color: var(--news);
+  font: 700 15px/1 var(--font-mono);
+  cursor: pointer;
+}
+.navcta-alt {
+  animation: ctapulse 6s infinite;
+}
+@keyframes ctapulse {
+  0%,
+  88%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(175, 227, 4, 0);
+  }
+  92% {
+    box-shadow: 0 0 0 6px rgba(175, 227, 4, 0.28);
+  }
+}
+a {
+  background: linear-gradient(var(--voltage-500), var(--voltage-500)) left bottom / 0 1px no-repeat;
+  transition: background-size var(--dur-fast) var(--ease-hit);
+}
+a:hover {
+  background-size: 100% 1px;
+}
+.btn,
+.navlinks a,
+.footlinks a,
+.sheet a,
+.brand,
+.skip,
+#slotsbar .bk {
+  background-image: none;
+}
+.clipmark {
+  overflow: hidden;
+  height: clamp(80px, 11vw, 150px);
+  margin-top: 26px;
+}
+.clipmark span {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(96px, 17vw, 260px);
+  line-height: 0.8;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+  color: var(--tar-3);
+  transform: translateY(-4%);
+}
+.mr {
+  position: relative;
+}
+.mr .under {
+  display: none;
+}
+.mr .over {
+  position: relative;
+}
+
+/* cursor */
+.dot {
+  position: fixed;
+  z-index: 95;
+  width: 8px;
+  height: 8px;
+  background: var(--voltage-500);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  transition: width 90ms var(--ease-hit), height 90ms var(--ease-hit);
+  opacity: 0;
+}
+.dot.on {
+  opacity: 1;
+}
+.dot.big {
+  width: 52px;
+  height: 52px;
+}
+.dot span {
+  font: 500 9px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tar);
+  opacity: 0;
+  transition: opacity 90ms linear;
+  white-space: nowrap;
+}
+.dot.big span {
+  opacity: 1;
+}
+@media (hover: none) {
+  .dot {
+    display: none;
+  }
+}
+.vel {
+  transition: letter-spacing 320ms var(--ease-expo), transform 320ms var(--ease-expo);
+}
+
+/* pinned scroll-jack */
+.jack {
+  position: relative;
+  height: 240vh;
+}
+.jack .pin {
+  position: sticky;
+  top: 70px;
+  height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.jack .rail {
+  display: flex;
+  gap: clamp(24px, 4vw, 64px);
+  padding-inline: clamp(20px, 5vw, 80px);
+  will-change: transform;
+}
+.jack .rail > div {
+  flex: none;
+  width: min(78vw, 520px);
+}
+.jack .jn {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(90px, 13vw, 200px);
+  line-height: 0.86;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--voltage-500);
+}
+.jack .prog {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--voltage-500);
+  width: 0;
+}
+@media (max-width: 1000px) {
+  .jack {
+    height: auto;
+  }
+  .jack .pin {
+    position: static;
+    height: auto;
+    padding-block: 56px;
+  }
+  .jack .rail {
+    flex-direction: column;
+    transform: none !important;
+  }
+  .jack .rail > div {
+    width: auto;
+  }
+}
+
+@media (max-width: 1000px) {
+  .two,
+  .svc,
+  .beat,
+  .work,
+  .nums,
+  .metabar {
+    grid-template-columns: 1fr;
+  }
+  /* Stacked, every cell touches both page edges, so the single-side gutter
+     rules above have to become two-sided. */
+  .beat > div,
+  .svc > div {
+    padding-inline: var(--gutter);
+  }
+  /* A row span in a one-column grid just leaves an empty row behind it. */
+  .svc > div {
+    grid-row: auto !important;
+  }
+  .item,
+  .item.wide,
+  .item.half {
+    grid-column: span 1;
+  }
+  .step {
+    grid-template-columns: 1fr;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .orb {
+    display: none;
+  }
+  .herotext {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+  }
+}
+
+@media print {
+  #slotsbar,
+  #pop,
+  #top,
+  #prog,
+  .dot,
+  .shipbar,
+  .nav {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marq div,
+  .marquee div {
+    animation: none;
+  }
+  .orb * {
+    animation: none !important;
+  }
+  .orbring,
+  .navcta-alt {
+    animation: none;
+  }
+  /* Entrance-animated elements must render settled, never invisible. The
+     IntersectionObserver still runs, but anything below the fold would otherwise
+     sit at opacity 0 until scrolled to — which under reduced motion is just
+     missing content. */
+  [data-motion="on"] .rv,
+  [data-motion="on"] .rv2 {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  #pop .box {
+    animation: none;
+    transform: none;
+  }
+  .shipbar > div {
+    animation: none;
+  }
+  .cue i {
+    animation: none;
+  }
+}
+
+/* ── image slots ──────────────────────────────────────────────────────────────
+   Handoff gap 1 — real case photography is outstanding. The placeholder is
+   deliberately legible rather than a blank grey box, so an unfilled frame reads as
+   an open task in review instead of a finished design. */
+.imageslot {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  text-align: center;
+  background: var(--tar-3);
+}
+.imageslot:after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed rgba(242, 240, 234, 0.22);
+  pointer-events: none;
+}
+.imageslot span {
+  position: relative;
+  z-index: 1;
+  max-width: 30ch;
+  padding: 8px 12px;
+  font: 400 10px/1.7 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  /* Chip rather than blend mode — these frames sit over Voltage, Klein, Newsprint
+     and photographic gradients, and difference blending was unreadable on the light
+     halves. A Tar chip stays legible on every field the cases use. */
+  color: rgba(242, 240, 234, 0.82);
+  background: rgba(10, 10, 11, 0.72);
+  border: 1px solid rgba(242, 240, 234, 0.18);
+}
+.slotframe .imageslot,
+.shotbox .imageslot {
+  background: transparent;
+}
+.shotbox {
+  position: relative;
+}
+
+/* Tile link — the whole card is clickable via a stretched anchor, so the card keeps
+   its hover choreography while keyboard and assistive tech get a real link. */
+.tilelink {
+  color: inherit;
+  text-decoration: none;
+  background-image: none;
+}
+.tilelink:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.tilelink:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.item {
+  position: relative;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* form validation + status */
+.fielderr {
+  font: 400 12px/1.5 var(--font-mono);
+  letter-spacing: 0.04em;
+  font-style: normal;
+  color: var(--siren-400);
+}
+.ctrl[aria-invalid="true"] {
+  border-color: var(--siren-500);
+}
+.hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.formnote {
+  margin-top: 20px;
+  padding: 16px 18px;
+  font: 400 14px/1.6 var(--font-body);
+  border: 1px solid var(--border-default);
+  background: var(--tar-2);
+  color: var(--text-body);
+  max-width: 56ch;
+}
+.formnote.unwired {
+  border-left: 3px solid var(--warning-500);
+}
+.formnote.error {
+  border-left: 3px solid var(--siren-500);
+}
+
+/* App-pitch section grid — two columns above 1000px, stacked below. */
+.appgrid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 56px;
+  align-items: center;
+}
+@media (max-width: 1000px) {
+  .appgrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.nextcase {
+  color: inherit;
+  text-decoration: none;
+  background-image: none;
+  cursor: pointer;
+}
+.nextcase:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.nextcase:hover .btn.sec {
+  box-shadow: inset 0 0 0 1px var(--voltage-500);
+  color: var(--voltage-500);
+}
+
+/* ── responsive nav ───────────────────────────────────────────────────────────
+   At 390px the brand wordmark, clock, Menu and the CTA together overflow the bar
+   and the CTA wraps to three lines. The CTA is the conversion action and stays;
+   the clock and the wordmark are the affordances that give way. */
+.btn {
+  white-space: nowrap;
+  /* nowrap keeps short labels from breaking mid-phrase, but a long one then pushes
+     the page wider than the viewport — a case-study button overflowed 390px by
+     94px. Below the phone breakpoint, let it wrap and centre instead. */
+  max-width: 100%;
+}
+@media (max-width: 900px) {
+  #khi {
+    display: none;
+  }
+}
+@media (max-width: 620px) {
+  .nav .wm {
+    display: none;
+  }
+  .nav {
+    padding-inline: 16px;
+    gap: 12px;
+  }
+  .nav .btn.sm {
+    padding: 11px 12px;
+    letter-spacing: 0.12em;
+  }
+}
+
+/* Flex items honour max-width past their container, so a ch-based measure on a
+   flex child overflows narrow viewports. These are the flex contexts in the
+   layout; block-level prose is unaffected because it shrinks to fit. */
+.foot > *,
+.cta .wrap > div > * {
+  min-width: 0;
+}
+
+/* Turnstile widget. Renders only when configured; `interaction-only` appearance
+   means it stays invisible unless Cloudflare decides a challenge is warranted. */
+.turnstile {
+  margin: 0 0 18px;
+  min-height: 0;
+}
+.turnstile:not(:empty) {
+  margin-bottom: 22px;
+}
+
+/* ── pause control for auto-animating content ─────────────────────────────────
+   WCAG 2.2.2: content that starts automatically and runs longer than five seconds
+   needs a mechanism to pause it. Hover-pause doesn't satisfy that — it's unusable
+   by keyboard and touch. This control sits beside back-to-top and stops the
+   marquee, the ticker, the orbit ring and the CTA pulse. */
+#motionpause {
+  position: fixed;
+  right: 18px;
+  bottom: 70px;
+  z-index: 70;
+  width: 44px;
+  height: 44px;
+  background: var(--tar-3);
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font: 500 11px/1 var(--font-mono);
+  transition: var(--transition-control);
+}
+#motionpause:hover {
+  color: var(--voltage-500);
+  border-color: var(--voltage-500);
+}
+#motionpause[aria-pressed="true"] {
+  color: var(--voltage-500);
+  border-color: var(--voltage-500);
+}
+@media print {
+  #motionpause {
+    display: none !important;
+  }
+}
+
+[data-motion-paused] .marq div,
+[data-motion-paused] .shipbar > div,
+[data-motion-paused] .orbring,
+[data-motion-paused] .orb .ball,
+[data-motion-paused] .navcta-alt,
+[data-motion-paused] .cue i {
+  animation-play-state: paused;
+}
+
+/* ══ craft + performance pass ═════════════════════════════════════════════════ */
+
+/* 87 — Schibsted at 400 is a display grotesque doing body work: shorter x-height
+   relative to cap and tighter default fit than Instrument Sans. It needs a touch
+   more leading and neutral tracking at text sizes, or paragraphs read cramped.
+   Still inside the brief's 1.5–1.62 body range. */
+.body,
+.small,
+.faq p,
+.steps p {
+  letter-spacing: 0;
+}
+.body {
+  line-height: 1.62;
+}
+
+/* 89 — stats and countdowns change value in place; proportional digits make them
+   jitter as they count. Tabular figures hold the column. */
+.nums .n,
+.shipbar b,
+.metabar b,
+#khi,
+.tno,
+.jn,
+.opnum,
+.svcno,
+.stepno,
+.phaseno {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* 80 — the nav is fixed at 70px, so any in-page anchor would otherwise land with
+   its heading hidden underneath it. */
+:target,
+[id] {
+  scroll-margin-top: 90px;
+}
+
+/* 53 — WCAG 2.5.8 wants 24px minimum, Apple and Google both say 44px. The small
+   button and filter chips were under it on touch. */
+@media (pointer: coarse) {
+  .btn.sm,
+  .filt,
+  .footlinks a,
+  .sheet .close {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .footlinks {
+    gap: 4px;
+  }
+}
+
+/* 63 — below-the-fold bands don't need painting until they're near the viewport.
+   contain-intrinsic-size keeps the scrollbar honest so this doesn't cause jump. */
+.beat,
+.steps,
+.proofgrid,
+.clientstrip {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+
+/* 79 — visible breadcrumb on case pages. The schema already described the trail;
+   this makes it usable rather than only machine-readable. */
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.crumbs a {
+  color: var(--text-muted);
+  text-decoration: none;
+  background-image: none;
+}
+.crumbs a:hover {
+  color: var(--voltage-500);
+}
+.crumbs span[aria-current] {
+  color: var(--text-primary);
+}
+
+/* 94 — previous as well as next, so the case sequence reads both ways. */
+.casenav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border-subtle);
+  border-top: 1px solid var(--border-subtle);
+}
+@media (max-width: 700px) {
+  .casenav {
+    grid-template-columns: 1fr;
+  }
+}
+.casenav a {
+  background: var(--tar);
+  padding: clamp(24px, 3.4vw, 44px) clamp(20px, 3vw, 40px);
+  text-decoration: none;
+  background-image: none;
+  color: inherit;
+  transition: background-color var(--dur-fast) var(--ease-hit);
+}
+.casenav a:hover {
+  background: var(--tar-2);
+  color: inherit;
+}
+.casenav a.prev {
+  text-align: left;
+}
+.casenav a.next {
+  text-align: right;
+}
+@media (max-width: 700px) {
+  .casenav a.next {
+    text-align: left;
+  }
+}
+
+/* 50 — error summary. Red text beside four separate fields makes the reader hunt;
+   a summary that links to each one is the accessible pattern, and it gets focus
+   on failed submit. */
+.errsummary {
+  border: 1px solid var(--siren-500);
+  border-left-width: 3px;
+  background: var(--tar-2);
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  max-width: 56ch;
+}
+.errsummary:focus-visible {
+  outline: 2px solid var(--voltage-500);
+  outline-offset: 2px;
+}
+.errsummary strong {
+  display: block;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--siren-400);
+}
+.errsummary ul {
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+.errsummary li {
+  font: 400 14px/1.6 var(--font-body);
+  color: var(--text-body);
+}
+.errsummary a {
+  color: var(--text-body);
+}
+.errsummary a:hover {
+  color: var(--voltage-500);
+}
+
+/* Inline field errors appear on blur. Reserving their line stops the fields below
+   from jumping as you tab through — the same layout-shift problem the summary had,
+   at smaller scale. */
+.fl {
+  min-height: 0;
+}
+.fielderr {
+  display: block;
+  margin-top: -2px;
+  min-height: 1.5em;
+}
+
+/* ══ third pass ═══════════════════════════════════════════════════════════════ */
+
+/* 98/30 — case studies get printed and PDF'd by prospects sharing them internally.
+   The dark ground burns ink and the placeholders are meaningless on paper. This
+   turns a case page into a readable document without a separate export path. */
+@media print {
+  :root {
+    --tar: #fff;
+    --tar-2: #fff;
+    --tar-3: #fff;
+    --tar-4: #fff;
+    --text-primary: #000;
+    --text-body: #1a1a1a;
+    --text-muted: #555;
+    --border-subtle: #ccc;
+    --border-default: #999;
+    --border-strong: #666;
+  }
+  body,
+  body:after,
+  .grainy:before,
+  .cta:after {
+    background: #fff !important;
+    background-image: none !important;
+  }
+  .disp,
+  .eye {
+    color: #000 !important;
+  }
+  .imageslot,
+  .orb,
+  .wm-logo,
+  .wire,
+  .marq,
+  .clipmark,
+  .casenav,
+  .cta {
+    display: none !important;
+  }
+  .sect {
+    padding-block: 18pt;
+    break-inside: avoid;
+  }
+  .phase,
+  .beat,
+  .nums > div {
+    break-inside: avoid;
+  }
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+  }
+  .metabar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 55 — Windows high-contrast and forced-colours users lose the hairline borders
+   the whole layout is built from, because they're rgba over a dark ground. */
+@media (prefers-contrast: more) {
+  :root {
+    --border-subtle: rgba(242, 240, 234, 0.4);
+    --border-default: rgba(242, 240, 234, 0.6);
+    --border-strong: rgba(242, 240, 234, 0.85);
+    --text-muted: #c8c8d0;
+  }
+}
+@media (forced-colors: active) {
+  .btn,
+  .filt,
+  .tag,
+  .item {
+    border: 1px solid CanvasText;
+  }
+  .fill {
+    forced-color-adjust: none;
+  }
+}
+
+/* 96 — the grain is tuned as `overlay` on Tar. In the Newsprint scope that reads
+   as a grey wash rather than tooth; the brief specifies multiply on light. */
+.drift-paper.grainy:before,
+.paper.grainy:before {
+  mix-blend-mode: multiply;
+  opacity: 0.05;
+}
+
+/* 92 — :hover sticks after a tap on touch, leaving tiles veiled and glared until
+   you tap elsewhere. Gate the whole hover choreography behind a real pointer. */
+@media (hover: none) {
+  .item:hover .veil,
+  .item:hover .glare {
+    opacity: 0;
+  }
+  .item:hover .go {
+    opacity: 0;
+  }
+  .item:hover .shot > .img {
+    transform: translate(9px, 7.8px) rotate(-1.2deg) scale(1.06);
+  }
+  .svc:hover > div {
+    filter: none;
+  }
+}
+
+/* 95 — the marquee duplicates its list and translates -50%. If the two halves
+   don't total more than the viewport, the seam shows at wide sizes. */
+.marq div {
+  min-width: 200vw;
+}
+
+/* 93 — the case meta bar carries client, discipline, timeline and outcome. Keeping
+   it in view while reading the case means the outcome is never more than a glance
+   away. Only above 1000px, where there's vertical room to spare. */
+@media (min-width: 1001px) {
+  .metabar {
+    position: sticky;
+    top: 70px;
+    z-index: 40;
+    background: var(--tar);
+    backdrop-filter: var(--blur-panel);
+  }
+}
+
+/* 52 — the skip link moved focus but the target had no visible focus state, so
+   keyboard users had no confirmation it worked. */
+#main:focus-visible {
+  outline: 2px solid var(--voltage-500);
+  outline-offset: -2px;
+}
+
+/* 97 — Klein is the AI page's one rare moment and it was doing almost nothing at
+   300-step on an eyebrow. Give it a real graphic presence: a die-cut wedge behind
+   the hero. Still graphic-only, still never carrying text. */
+.kleinwedge {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(107deg, transparent 0 62%, var(--klein-500) 62%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* 33 — a case with a visible capture date is a case a prospect trusts. */
+.caseupdated {
+  font: 400 11px/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ══ motion calm pass ═════════════════════════════════════════════════════════
+   The site read as twitchy. The fix is not "slow everything down" — BRIEF §6 bans
+   anything over 520ms in UI, and slowing hover or press makes an interface feel
+   broken rather than calm. What actually caused it was the decorative layer moving
+   at speeds tuned for a demo reel, plus scroll-velocity coupling that made display
+   type breathe on every wheel tick.
+
+   So: ambient motion slows a lot, UI response stays exactly as fast. */
+
+:root {
+  /* Marquee at 64s crossed the viewport fast enough to pull the eye off the
+     headline. At 96s it drifts. */
+  --dur-marquee-slow: 96s;
+}
+
+.shipbar > div {
+  animation-duration: 52s; /* was 34s */
+}
+.orbring {
+  animation-duration: 44s; /* was 26s */
+}
+.orb .ball {
+  animation-duration: 15s; /* was 9s */
+}
+.cue i {
+  animation-duration: 2.6s; /* was 1.8s */
+}
+.marq.dark div {
+  animation-duration: 110s;
+}
+
+/* Entrances: same 520ms arrival, gentler travel. 46px of lift on every heading
+   read as the page assembling itself in front of you. */
+[data-motion="on"] .rv2 {
+  transform: translateY(28px) skewY(1.2deg);
+}
+[data-motion="on"] .rv {
+  transform: translateY(12px);
+}
+
+/* The scroll-velocity coupling was the single twitchiest thing on the page —
+   display tracking shifted on every wheel tick. Halved, and the settle is longer
+   so it reads as drift rather than reaction. */
+.vel {
+  transition: letter-spacing 520ms var(--ease-expo), transform 520ms var(--ease-expo);
+}
+
+/* The CTA ring pulsed every 6s, which is often enough to register as nagging. */
+.navcta-alt {
+  animation-duration: 11s;
+}
+
+/* ══ mobile pass ══════════════════════════════════════════════════════════════ */
+@media (max-width: 700px) {
+  /* The hero reserved a full viewport minus nav, but with the orb hidden on mobile
+     there is nothing filling it — so the fold was mostly empty space above a
+     headline. Let it size to content with a floor. */
+  .hero {
+    min-height: auto;
+    padding-block: clamp(40px, 12vw, 72px) clamp(32px, 8vw, 56px);
+  }
+  .hero h1 {
+    font-size: clamp(44px, 13.5vw, 92px);
+  }
+
+  /* Section rhythm was tuned for desktop; at 390px it left long empty runs
+     between bands and made the page feel padded rather than composed. */
+  .sect {
+    padding-block: clamp(48px, 11vw, 72px);
+  }
+
+  /* Body copy at 19px with 1.62 leading is a lot of scrolling on a phone. */
+  .hero .body,
+  .body[style*="font-size: 19px"] {
+    font-size: 17px;
+  }
+
+  /* The overprint numerals are 26vw — on a phone they swamped the headline they
+     sit behind instead of ghosting it. */
+  .opnum {
+    font-size: clamp(120px, 34vw, 200px);
+    opacity: 0.6;
+  }
+
+  /* Two-column grids that had already collapsed still carried desktop gaps. */
+  .two {
+    gap: 28px;
+  }
+
+  /* The work tiles were 238px tall regardless of width, so on a phone they were
+     nearly square and the misregistration crop lost the subject. */
+  .shot {
+    height: 200px;
+  }
+
+  /* Stacked CTAs read better full-width than as two half-width buttons that
+     wrap awkwardly. */
+  .hero .btn,
+  .cta .btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  /* The fixed chrome stacked up in the bottom-right corner and covered content. */
+  #motionpause {
+    bottom: 64px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+  }
+  #top {
+    right: 12px;
+    bottom: 12px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* The availability banner sits over the bottom of the page; without this the last
+   line of the footer hides underneath it. */
+body {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Mid-funnel CTA. Visually quieter than the closing Voltage band — it should read
+   as an offer, not a second ending. Hairline top and bottom, Tar ground. */
+.midcta {
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--tar-2);
+}
+
+/* The hero footer's right-hand item ran under the fixed pause control at 390px.
+   Reserve the corner rather than moving the control, which is where people now
+   expect to find it. */
+@media (max-width: 700px) {
+  .herofoot {
+    padding-top: 36px;
+    padding-right: 56px;
+  }
+  .herofoot .eye {
+    font-size: 10px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Target size (WCAG 2.2 SC 2.5.8, AA — 24×24 CSS px minimum).
+
+   These controls are all set in small type, so their hit area was the height
+   of a line box: 11–14px in the footer and the breadcrumb, and 18px for the
+   bare icon links in the closing band. Fine with a mouse, a coin-toss with a
+   thumb. The fix is padding, not font size — the type stays where the design
+   put it and only the touch area grows.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* The footer column gap shrinks by what the padding adds, so the rhythm of the
+   list is unchanged while each row becomes tappable. */
+.footlinks {
+  gap: 0;
+}
+.footlinks a {
+  display: inline-block;
+  padding-block: 8px;
+}
+
+.crumbs a {
+  display: inline-block;
+  /* The crumb row is inside a fixed-height band; pull the extra height back out
+     so the bar doesn't grow, and let the hit area overhang instead. */
+  padding-block: 8px;
+  margin-block: -8px;
+}
+
+.copyemail {
+  display: inline-block;
+  padding-block: 7px;
+  margin-block: -7px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
+.iconlink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  min-height: 26px;
+  /* Padding grows the box inward from the icon; the negative margin keeps the
+     row of icons visually the same width it was. */
+  margin-inline: -4px;
+  color: var(--tar);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Real case imagery.
+
+   The receipts grid was built for placeholder frames; a <figure> with a caption
+   is a different shape, so it gets its own rules rather than fighting the
+   `.proofgrid > div` padding reset. Aspect ratio is fixed at 4/3 to match the
+   placeholders, and the image covers it — the source files are square, portrait
+   and panoramic, and letterboxing three different shapes into one row looks like
+   a mistake rather than a decision.
+   ───────────────────────────────────────────────────────────────────────── */
+.proofshot {
+  background: var(--tar);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.proofshot img {
+  width: 100%;
+  /* next/image emits width/height attributes, which map to presentational
+     dimensions — and aspect-ratio only drives a box when one axis is auto. Without
+     this the attribute wins and every frame renders at its source ratio, so the
+     row heights come out ragged. */
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  background: var(--tar-3);
+}
+/* Not `.eye`: that class is what the behaviour layer scrambles on entrance, and a
+   caption decoding itself out of random glyphs reads as a rendering fault rather
+   than an effect. Same type, no hook. */
+.proofcap {
+  font: 500 10px/1.5 var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 14px 16px 16px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Case hero scrim and the lightbox.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* The hero headline sits about 150px off the bottom of the frame, and
+   --scrim-bottom has faded to almost nothing by then. Over the darker colour fields
+   that was survivable; over Zoller's Voltage field the Newsprint headline measured
+   1.47:1. Both variants now stay opaque through the band the type occupies and only
+   let the field through above it. */
+.herescrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 11, 0.94) 0%,
+    rgba(10, 10, 11, 0.86) 34%,
+    rgba(10, 10, 11, 0.4) 66%,
+    rgba(10, 10, 11, 0) 100%
+  );
+}
+/* Hero type is Newsprint over whatever the lead image happens to be, and the
+   standard scrim was built for flat colour fields. Over photography it left the
+   headline at roughly 3:1 against the bright parts. This one is opaque at the
+   baseline and reaches further up the frame. */
+.herescrim.over-image {
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 11, 0.96) 0%,
+    rgba(10, 10, 11, 0.88) 30%,
+    rgba(10, 10, 11, 0.55) 62%,
+    rgba(10, 10, 11, 0.25) 100%
+  );
+}
+
+/* The frame is a button so it is reachable by keyboard and announces what it does;
+   it must not look like one. */
+.proofopen {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  color: inherit;
+}
+.proofopen:focus-visible {
+  outline: 2px solid var(--voltage-500);
+  outline-offset: -2px;
+}
+
+.lightbox {
+  border: 0;
+  padding: 0;
+  max-width: 100vw;
+  max-height: 100vh;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 11, 0.94);
+  color: var(--text-primary);
+}
+.lightbox::backdrop {
+  background: rgba(10, 10, 11, 0.9);
+}
+.lightbox figure {
+  margin: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: clamp(44px, 7vw, 88px) clamp(20px, 6vw, 96px);
+}
+.lightbox img {
+  max-width: 100%;
+  /* Leave room for the caption row; without a bound the image can push it off. */
+  max-height: calc(100vh - 190px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+.lightbox figcaption {
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.lightbox figcaption .proofcap {
+  padding: 0;
+}
+
+.lightclose,
+.lightnav {
+  position: fixed;
+  background: var(--tar-2);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-1);
+  cursor: pointer;
+  /* 44px — the frames open on touch too, and a 24px close button on a full-screen
+     overlay is the one control people jab at repeatedly. */
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+}
+.lightclose:hover,
+.lightnav:hover {
+  background: var(--voltage-500);
+  color: var(--tar);
+}
+.lightclose:focus-visible,
+.lightnav:focus-visible {
+  outline: 2px solid var(--voltage-500);
+  outline-offset: 2px;
+}
+.lightclose {
+  top: 16px;
+  right: 16px;
+}
+.lightnav {
+  top: 50%;
+  transform: translateY(-50%);
+}
+.lightnav.prev {
+  left: 16px;
+}
+.lightnav.next {
+  right: 16px;
+}
+
+@media (max-width: 700px) {
+  .lightnav {
+    top: auto;
+    bottom: 16px;
+    transform: none;
+  }
+}
+
+.tileverified {
+  font: 400 10px/1.5 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* ── Draft-restored note on the brief form ───────────────────────────────── */
+.draftnote {
+  font: 400 13px/1.5 var(--font-body);
+  color: var(--text-muted);
+  border-left: 2px solid var(--voltage-500);
+  padding: 8px 0 8px 12px;
+  margin: 0 0 20px;
+  max-width: 52ch;
+}
+
+/* ── Reduced motion: the lightbox opens and closes, it does not animate ──── */
+@media (prefers-reduced-motion: reduce) {
+  .lightbox,
+  .lightbox * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .proofopen {
+    cursor: pointer;
+  }
+}
+
+/* ── The finding, as a pull quote ────────────────────────────────────────── */
+.pullquote {
+  font: 400 clamp(20px, 2.4vw, 30px) / 1.4 var(--font-body);
+  color: var(--text-primary);
+  max-width: 24ch;
+  margin: 18px 0 0;
+  padding-left: clamp(16px, 2vw, 26px);
+  border-left: 2px solid var(--voltage-500);
+  /* Wider than 24ch and this stops reading as a quote and starts reading as another
+     paragraph that happens to have a rule next to it. */
+  max-width: 34ch;
+}
+
+/* ── Case-nav thumbnails ─────────────────────────────────────────────────── */
+.casenavshot {
+  display: block;
+  width: 96px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--tar-3);
+  margin-bottom: 14px;
+}
+.casenavshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.casenav .next .casenavshot {
+  margin-left: auto;
+}
+
+/* ── Craft badge ─────────────────────────────────────────────────────────── */
+.tag.craft {
+  border-color: var(--ink-400);
+  color: var(--ink-200);
+}
+
+/* ── What happens after you send ─────────────────────────────────────────── */
+.nextsteps {
+  list-style: none;
+  margin: 26px 0 22px;
+  padding: 0;
+  max-width: 52ch;
+  counter-reset: step;
+}
+.nextsteps li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 30px;
+  margin-top: 10px;
+  font: 400 15px/1.5 var(--font-body);
+  color: var(--text-body);
+}
+.nextsteps li:before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 2px;
+  font: 500 10px/1.5 var(--font-mono);
+  letter-spacing: 0.16em;
+  color: var(--voltage-500);
+}
+
+/* ── Marquee and ticker pause on keyboard focus, not just hover ──────────── */
+.marq:focus-within .marqin,
+.shipbar:focus-within .tickin {
+  animation-play-state: paused;
+}
+
+@media (max-width: 560px) {
+  .btn {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.35;
+  }
+}
+
+/* The discipline link sits alone on its line rather than inside a sentence, so the
+   2.5.8 inline exemption does not cover it. */
+.disciplinelink {
+  display: inline-block;
+  padding-block: 6px;
+}
+
+/* ── Select control ──────────────────────────────────────────────────────── */
+/* A native select inherits .ctrl's box but keeps the platform chrome, which on a
+   dark surface renders a light dropdown arrow on a light strip. Reset the appearance
+   and draw the caret ourselves so it matches every other control on the form. */
+select.ctrl {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 42px;
+  cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--voltage-500) 50%),
+    linear-gradient(135deg, var(--voltage-500) 50%, transparent 50%);
+  background-position: calc(100% - 22px) calc(50% + 2px), calc(100% - 16px) calc(50% + 2px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+/* The options list is drawn by the OS, so it does not inherit the dark surface —
+   naming the colours keeps it from flashing white on a dark form. */
+select.ctrl option {
+  background: var(--tar-2);
+  color: var(--text-primary);
+}

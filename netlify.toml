@@ -1,0 +1,53 @@
+# Netlify configuration.
+#
+# The Next.js runtime is installed automatically when Netlify detects a Next app —
+# it is deliberately not declared as a plugin here, because pinning it by hand is a
+# common way to end up on a stale version.
+#
+# This file exists mainly for the headers. Netlify does not read vercel.json, so
+# without this the security headers silently disappear on a host swap. They are
+# duplicated rather than shared because each host has its own format; if you change
+# one, change the other.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Applied to every response. Mirrors vercel.json.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+# Fingerprinted build output is safe to cache forever.
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/work/rss.xml"
+  [headers.values]
+    Content-Type = "application/rss+xml; charset=utf-8"
+
+# Deploy previews and branch builds should never be indexed — otherwise the same
+# content competes with the real domain in search results.
+[context.deploy-preview]
+  [context.deploy-preview.environment]
+    NEXT_PUBLIC_SITE_URL = "https://deploy-preview.netlify.app"
+
+[[context.deploy-preview.headers]]
+  for = "/*"
+  [context.deploy-preview.headers.values]
+    X-Robots-Tag = "noindex"
+
+[[context.branch-deploy.headers]]
+  for = "/*"
+  [context.branch-deploy.headers.values]
+    X-Robots-Tag = "noindex"

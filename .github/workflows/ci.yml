@@ -1,0 +1,50 @@
+name: CI
+
+# CI ran exactly once on this repo — on the pull request that opened in July — and
+# has not run since. It triggers on push-to-main and on pull_request; main has one
+# commit and no pull request has been open since, so twenty commits of work were
+# checked locally and never by CI. Adding the working branches fixes that.
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+
+# A newer push to the same branch makes the in-flight run redundant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Typecheck, build, audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `npm ci` fails loudly if package-lock.json and package.json disagree,
+      # which is what we want on CI.
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      # Fails on high or critical only. Moderate advisories in build-time
+      # dependencies shouldn't block a marketing site's deploy at 3am.
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
+      # A marketing site that ships 300kB of JS has stopped being a marketing site.
+      # The budget is deliberately close to current (worst route ~132kB gzipped)
+      # so a careless dependency shows up here rather than in someone's field data.
+      - name: Bundle budget
+        run: node scripts/bundle-budget.mjs 150

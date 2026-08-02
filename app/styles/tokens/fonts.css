@@ -1,0 +1,20 @@
+/* Webfonts — self-hosted via next/font/google (see app/fonts.ts), which emits the
+   --font-schibsted / --font-jetbrains variables at build time. The design bundle
+   loads these from the Google Fonts CDN; the handoff calls that "prototype
+   convenience" that "costs a render-blocking round-trip", so the @import is gone.
+
+   TWO FAMILIES, BY DECISION. The handoff README states it plainly: "There is no
+   third face. Body copy is Schibsted Grotesk 400." Note that this contradicts both
+   BRIEF §4 and the original token file, which specified Instrument Sans as
+   --font-body. The client resolved it in favour of the README. Do not "correct"
+   this back to Instrument Sans without asking — it is a decision, not a mistake.
+
+   Schibsted Grotesk 900 is the display + lockup face (its stem is 0.30 of cap,
+   matching the D mark) and 400 now carries body. JetBrains Mono carries labels,
+   eyebrows and data. */
+
+:root {
+  --font-display: var(--font-schibsted), "Helvetica Neue", Helvetica, Arial, sans-serif; /* @kind font */
+  --font-body: var(--font-schibsted), "Helvetica Neue", Helvetica, Arial, sans-serif; /* @kind font */
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace; /* @kind font */
+}

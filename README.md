@@ -1,29 +1,170 @@
 # Drifted Marketing
 
-Repository for the Drifted Marketing website. The site itself is not built yet — what lands here first is the approved design handoff.
+The Drifted Marketing website — Next.js 15 (App Router), TypeScript, no CSS framework.
 
-## Where things are
+```bash
+npm install
+cp .env.example .env.local   # everything in it is optional
+npm run dev                  # http://localhost:3000
+npm run build
+npm run typecheck
+```
 
-Everything is in **[`.claude/skills/drifted-design/`](.claude/skills/drifted-design/)**:
+CI runs typecheck, build, a high-severity audit and a bundle budget on every PR
+(`.github/workflows/ci.yml`). The budget is `scripts/bundle-budget.mjs`, which
+measures the gzipped First Load JS of the worst route — currently ~132 kB against
+a 150 kB ceiling. Run it yourself after any `npm run build`:
+
+```bash
+node scripts/bundle-budget.mjs        # defaults to a 130 kB budget
+```
+
+## Deploying
+
+**Full runbook: [`docs/DEPLOY.md`](docs/DEPLOY.md)** — covers the GoDaddy DNS cutover
+and replacing the site currently live at the domain.
+
+The short version: the domain stays registered at GoDaddy and points at a host that
+can run Node. This app needs one — the contact form is a Server Action and OG cards
+render through `next/og`, neither of which survives GoDaddy's shared/cPanel hosting.
+
+1. **https://app.netlify.com/start** → Deploy with GitHub → import
+   `umer-sudo/DriftedMarketing-Revamp`. `netlify.toml` handles the rest.
+2. Add `driftedmarketing.com` in Netlify, then create the DNS records it shows you
+   in GoDaddy.
+3. Set `NEXT_PUBLIC_SITE_URL` to the real origin and redeploy — otherwise canonicals,
+   sitemap and OG tags all claim `driftedmarketing.com`.
+4. Fill in `redirects()` in `next.config.ts` with the old site's URLs before cutover,
+   or their search history is discarded rather than transferred.
+
+Host-agnostic. `netlify.toml` and `vercel.json` each carry the same security headers
+(nosniff, DENY framing, strict referrer, and a Permissions-Policy disabling camera,
+microphone, geolocation and FLoC) because neither host reads the other's config —
+**if you change one, change the other.** Cloudflare Pages works the same way, and
+`npm run build && npm run start` behind nginx works on any VPS.
+
+For a host that can't run Node at all, `npm run build:static` emits `./out` — see
+the tradeoff table in the runbook.
+
+> One caveat on serverless: `lib/rate-limit.ts` keeps its counters in process memory,
+> so each instance limits independently. See the note under **Contact form**.
+
+## Routes
+
+Ten routes, all statically generated.
+
+| Route | Page |
+| --- | --- |
+| `/` | Home |
+| `/work` | Work index, filterable |
+| `/work/[slug]` | Case study — six cases, prerendered |
+| `/services/performance` | Performance media |
+| `/services/creators` | Creator growth |
+| `/services/ai-product` | AI product |
+| `/about` | Studio |
+| `/contact` | The brief form |
+| `/contact/thanks` | Post-submit confirmation |
+| `not-found` | 404 |
+
+## Layout
+
+```
+app/
+  layout.tsx            root chrome: nav, footer, behaviour layer
+  globals.css           imports the token layer, then the component layer
+  styles/tokens/*.css   design-system tokens, shipped as-is
+  styles/components.css component layer, ported from the prototype
+  fonts.ts              self-hosted Schibsted Grotesk / Instrument Sans / JetBrains Mono
+  opengraph-image.tsx   generated 1200×630 OG card
+  sitemap.ts robots.ts
+components/             Nav, Footer, CtaBand, WorkGrid, Chrome (motion), …
+content/cases.ts        the six case studies, typed
+lib/config.ts           site config, unconfirmed endpoints, launch date
+```
+
+`components/Chrome.tsx` carries the global motion the way the prototype's `site.js` did
+— delegated listeners rather than a component per effect. Pages stay server-rendered;
+motion is progressive enhancement. Markup ships settled and `data-motion="on"` is only
+added once the client mounts, so nothing is ever invisible without JS.
+
+## Design source
+
+The approved handoff lives in **[`.claude/skills/drifted-design/`](.claude/skills/drifted-design/)**
+and is also installed as a Claude Code skill (`/drifted-design`) — copy that folder into
+any other project's `.claude/skills/` to make the brand available there.
 
 | File | Read it for |
 | --- | --- |
-| [`README.md`](.claude/skills/drifted-design/README.md) | **Start here.** The website handoff — the full token layer with exact values, the ten-route map, every screen section by section, all motion behaviour, content rules, and the open gaps. |
-| [`DESIGN-SYSTEM.md`](.claude/skills/drifted-design/DESIGN-SYSTEM.md) | Brand-level design system: colour, type, layout, texture, iconography. |
-| [`BRIEF.md`](.claude/skills/drifted-design/BRIEF.md) | Voice, positioning, proof set. §11–12 are hard constraints — never invent a metric. |
-| `styles.css` + `tokens/` | Production-ready CSS. Adopt as-is; do not re-derive the values. |
-| `Drifted Website.html`, `site.js`, `image-slot.js` | Hash-routed prototype of all ten routes. **Reference only — do not ship.** |
-| `reference/*.html` | Approved specimens: foundations, component library, motion spec, mark spec, collateral. |
-| `assets/` | Logos, collage kit, mood references. |
+| [`README.md`](.claude/skills/drifted-design/README.md) | The website handoff: token values, the route map, every screen, motion, content rules, known gaps. |
+| [`DESIGN-SYSTEM.md`](.claude/skills/drifted-design/DESIGN-SYSTEM.md) | Brand-level system: colour, type, layout, texture, iconography. |
+| [`BRIEF.md`](.claude/skills/drifted-design/BRIEF.md) | Voice, positioning, proof set. §11–12 are hard constraints. |
+| `reference/*.html` | Approved specimens: foundations, component library, motion spec, mark spec. |
+| `Drifted Website.html` | The original hash-routed prototype. Reference only. |
 
-The handoff README is self-sufficient: a developer with no context from the design conversation can build from it alone.
+Tokens in `app/styles/tokens/` are copied from the bundle unchanged, with one exception:
+`fonts.css` no longer `@import`s the Google Fonts CDN, because the fonts are self-hosted
+through `next/font` as the handoff asks.
 
-## Using the brand as a skill
+## Content rules
 
-The folder is packaged as a Claude Code skill. It is already at `.claude/skills/drifted-design/`, so in this repo it is live as `/drifted-design`. To use it elsewhere, copy the folder into that project's `.claude/skills/`.
+`content/cases.ts` is the single source of case data. **Never add a figure that has not
+been published or client-approved.** Unmeasured results carry `pending: true` and render
+muted — that flag is a hard constraint from the brief, not a style choice. These numbers
+appeared in early drafts and are permanently unusable: $7M+ revenue driven, 40+ apps
+shipped, 8+ years, 300% ROI, eleven clients.
 
-## Open items
+## Outstanding before launch
 
-Eight gaps are flagged explicitly in the handoff README and need answers before launch: case-study imagery, OG image, Instagram handle, phone number, contact form endpoint, analytics, the countdown date, and the sitemap.
+Carried from the handoff's gap list, plus what surfaced during the build.
 
-Two further flags carry over from the design system: the collage assets are the founder's uploaded references and need rights confirmed (or a commissioned replacement set) before anything ships, and no display font is licensed yet — the system currently runs on Google Fonts.
+| # | Item | State |
+| --- | --- | --- |
+| 1 | Case-study imagery | **Open.** Placeholders throughout. `ImageSlot` renders a labelled frame; pass `src` when assets land. |
+| 2 | Open Graph image | **Done** — generated from brand tokens at `/opengraph-image`. |
+| 3 | Instagram handle | **Unconfirmed.** `lib/config.ts` carries a guessed handle, wired to live DM buttons. Verify, then set `confirmed: true` so it also appears in the Organization schema. |
+| 4 | Phone number | **Unconfirmed.** The CTA-band phone icon is decorative; set `phone.number` to wire a `tel:` link. |
+| 5 | Contact form | **Done.** See below. |
+| 6 | Analytics | **Done** — cookie-free, env-gated. See below. |
+| 7 | Zoller countdown date | **Config value** in `lib/config.ts`. Still needs verifying with the client. |
+| 8 | Sitemap / robots / structured data | **Done** — `app/sitemap.ts`, `app/robots.ts`, and JSON-LD via `lib/structured-data.ts`. |
+| 9 | Collage asset licensing | **Open, client-side.** The five collage objects are the founder's uploaded references; confirm rights or commission a replacement set. Unused by the site today. |
+| 10 | Display font licence | **Open, client-side.** Running on Google Fonts. |
+| 11 | Production origin | Set `NEXT_PUBLIC_SITE_URL` before launch — it feeds canonicals, sitemap and OG. |
+
+## Contact form
+
+`app/contact/actions.ts` runs five checks, cheapest first: honeypot, per-IP rate
+limit (5 per 10 minutes), Turnstile when configured, validation, then delivery.
+
+Two transports, either or both, set by environment variable:
+
+- **Email** — `RESEND_API_KEY` + `CONTACT_TO_EMAIL`
+- **Webhook** — `CONTACT_FORM_ENDPOINT` (+ optional `CONTACT_FORM_TOKEN`)
+
+Email is tried first; the webhook is the fallback. **With neither set the form does
+not pretend to send** — it reports that delivery isn't configured and points at the
+email address, rather than routing to the thank-you page on a lie.
+
+Spam protection is Cloudflare Turnstile (cookie-free, unlike reCAPTCHA), enabled by
+setting `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY`. Without it the
+honeypot and rate limit still apply.
+
+> **Rate-limit caveat.** `lib/rate-limit.ts` is in-process memory. On a single
+> self-hosted server it works as written; on serverless each instance keeps its own
+> counter, so a distributed attacker gets roughly `limit × instances`. For a real
+> ceiling, back it with Upstash/Vercel KV/Postgres — the call site doesn't change.
+
+## Analytics
+
+Cookie-free by requirement of the brief, so no consent banner. Supports Plausible
+(`NEXT_PUBLIC_PLAUSIBLE_DOMAIN`) or Umami (`NEXT_PUBLIC_UMAMI_WEBSITE_ID`), both
+self-hostable. Renders nothing until one is set; loaded `afterInteractive` so it
+never blocks first paint.
+
+## Structured data
+
+`lib/structured-data.ts` emits Organization and WebSite site-wide, plus
+BreadcrumbList, Service, FAQPage and CreativeWork per route. Deliberately
+conservative: no ratings, no review markup, no unpublished numbers — the brief's
+anti-fabrication rule applies to crawlers too. `sameAs` only lists social profiles
+marked `confirmed` in config, which is why Instagram is currently omitted.
