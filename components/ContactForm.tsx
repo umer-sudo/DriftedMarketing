@@ -29,6 +29,40 @@ type Errors = Partial<Record<"name" | "email" | "number" | "date", string>>;
 
 type Status = "idle" | "sending" | "unwired" | "error";
 
+/* Draft persistence.
+
+   This form asks for a written brief — the number, the date, what you need. Losing
+   that to a mis-click, a back button or an accidental refresh is the worst failure
+   this page has, and it is silent: the visitor just sees an empty form and usually
+   does not start again.
+
+   sessionStorage, not localStorage, on purpose. The draft should survive a reload
+   and a navigation away and back; it should not still be sitting there tomorrow on
+   a shared machine. It clears when the tab closes, and explicitly on a successful
+   send.
+
+   The honeypot is excluded — restoring a value into it would make a real visitor
+   look like a bot to our own spam check. */
+const DRAFT_KEY = "drifted-brief-draft";
+const HONEYPOT = "company_url";
+
+const readDraft = (): Record<string, string> => {
+  try {
+    const raw = sessionStorage.getItem(DRAFT_KEY);
+    const parsed: unknown = raw ? JSON.parse(raw) : null;
+    if (!parsed || typeof parsed !== "object") return {};
+    return Object.fromEntries(
+      Object.entries(parsed as Record<string, unknown>)
+        .filter(([k, v]) => k !== HONEYPOT && typeof v === "string")
+        .map(([k, v]) => [k, v as string]),
+    );
+  } catch {
+    /* Private-mode quota errors and hand-edited junk both land here. A form that
+       throws on mount is worse than one that forgets. */
+    return {};
+  }
+};
+
 /* One validator for both blur and submit, so the two can never disagree about
    whether a field is valid — the classic source of "it says it's wrong but it
    submits anyway". */
@@ -74,6 +108,40 @@ export default function ContactForm() {
      lands somewhere else. It's also premature: a summary of what you got wrong
      before you've tried to send is nagging, not help. */
   const [submitted, setSubmitted] = useState(false);
+  const [restored, setRestored] = useState(false);
+
+  /* Restore once, after mount — reading storage during render would differ between
+     the server and the client and break hydration. */
+  useEffect(() => {
+    const draft = readDraft();
+    const form = formRef.current;
+    if (!form || !Object.keys(draft).length) return;
+    let filled = 0;
+    for (const [name, value] of Object.entries(draft)) {
+      const el = form.elements.namedItem(name);
+      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {
+        el.value = value;
+        filled++;
+      }
+    }
+    if (filled) setRestored(true);
+  }, []);
+
+  const saveDraft = () => {
+    const form = formRef.current;
+    if (!form) return;
+    try {
+      const data = new FormData(form);
+      const out: Record<string, string> = {};
+      data.forEach((v, k) => {
+        if (k !== HONEYPOT && typeof v === "string" && v) out[k] = v;
+      });
+      if (Object.keys(out).length) sessionStorage.setItem(DRAFT_KEY, JSON.stringify(out));
+      else sessionStorage.removeItem(DRAFT_KEY);
+    } catch {
+      /* Storage disabled or full. Losing the draft is acceptable; throwing is not. */
+    }
+  };
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -97,6 +165,11 @@ export default function ContactForm() {
     const result = await SUBMIT(data);
 
     if (result.ok) {
+      try {
+        sessionStorage.removeItem(DRAFT_KEY);
+      } catch {
+        /* Nothing to clean up if storage was never available. */
+      }
       router.push("/contact/thanks");
       return;
     }
@@ -147,7 +220,18 @@ export default function ContactForm() {
       onSubmit={onSubmit}
       noValidate
       onFocusCapture={() => setShowTurnstile(true)}
+      /* One delegated handler rather than a save in every field's onChange — it
+         catches the select and the textarea too, and cannot drift out of sync with
+         the field list. */
+      onInput={saveDraft}
+      onChange={saveDraft}
     >
+      {restored && (
+        <p className="draftnote" role="status">
+          Picked up where you left off. Your answers are kept in this tab only, and
+          cleared when you send.
+        </p>
+      )}
       {submitted && errorList.length > 0 && (
         <div
           className="errsummary"

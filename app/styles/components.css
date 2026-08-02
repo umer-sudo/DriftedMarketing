@@ -2667,3 +2667,33 @@ body {
     transform: none;
   }
 }
+
+.tileverified {
+  font: 400 10px/1.5 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* ── Draft-restored note on the brief form ───────────────────────────────── */
+.draftnote {
+  font: 400 13px/1.5 var(--font-body);
+  color: var(--text-muted);
+  border-left: 2px solid var(--voltage-500);
+  padding: 8px 0 8px 12px;
+  margin: 0 0 20px;
+  max-width: 52ch;
+}
+
+/* ── Reduced motion: the lightbox opens and closes, it does not animate ──── */
+@media (prefers-reduced-motion: reduce) {
+  .lightbox,
+  .lightbox * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .proofopen {
+    cursor: pointer;
+  }
+}

@@ -50,6 +50,21 @@ export default function WorkTile({
           </Link>
         </H>
 
+        {/* The case page carries the date its figures were last confirmed; the index
+            did not, so a scanner comparing tiles had no way to tell a figure checked
+            last month from one that could be five years old. Same signal, same
+            source, one line. */}
+        <p className="tileverified">
+          Figures confirmed{" "}
+          <time dateTime={c.verified}>
+            {new Date(c.verified).toLocaleDateString("en-GB", {
+              month: "short",
+              year: "numeric",
+              timeZone: "UTC",
+            })}
+          </time>
+        </p>
+
         <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
           {c.tags.map((t) => (
             <span className="tag" key={t}>
