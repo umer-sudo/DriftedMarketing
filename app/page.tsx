@@ -92,7 +92,11 @@ export default function Home() {
           className="herotext"
           style={{ position: "relative", gridColumn: 1, gridRow: 1, maxWidth: "min(100%,760px)" }}
         >
-          <div className="eye">Drifted Marketing · Est. 2026</div>
+          {/* Was "Drifted Marketing · Est. 2026" — the same two facts the herofoot
+              already carries, in the same viewport, above the one headline that
+              needs the reader to know whether the page is for them. The eyebrow
+              now qualifies instead of introducing. */}
+          <div className="eye chip">DTC brands · Creators · Founders shipping product</div>
           <h1 className="disp" style={{ marginTop: 26 }}>
             Look <span className="fill">bigger</span>
             <br />
@@ -125,7 +129,7 @@ export default function Home() {
 
       {/* ── The numbers ────────────────────────────────────────────────────── */}
       <section className="wrap" style={{ paddingBlock: "clamp(48px,6vw,88px)" }}>
-        <div className="eye">Receipts, not adjectives</div>
+        <div className="eye chip">Receipts, not adjectives</div>
         <p className="body" style={{ maxWidth: "54ch", marginTop: 14, marginBottom: 4 }}>
           Four figures we can name a client against. Everything else on this site is
           either published or says pending — there is no third category.
@@ -183,7 +187,7 @@ export default function Home() {
         <span className="opnum" aria-hidden="true">
           01
         </span>
-        <div className="eye">Why we left</div>
+        <div className="eye chip">Why we left</div>
         <h2 className="disp" style={{ fontSize: "clamp(34px, 5.4vw, 77.8px)", marginTop: 14 }}>
           Every agency
           <br />
@@ -231,7 +235,7 @@ export default function Home() {
         <span className="opnum" aria-hidden="true">
           02
         </span>
-        <div className="eye">Three disciplines, one P&amp;L</div>
+        <div className="eye chip">Three disciplines, one P&amp;L</div>
         <h2 className="disp" style={{ fontSize: "clamp(34px, 5.4vw, 77.8px)", marginTop: 14 }}>
           Pick your
           <br />
@@ -361,7 +365,7 @@ export default function Home() {
           03
         </span>
         <div>
-          <div className="eye">The receipts</div>
+          <div className="eye chip">The receipts</div>
           <h2 className="disp" style={{ fontSize: "clamp(34px, 5.4vw, 77.8px)", marginTop: 14 }}>
             Work,
             <br />
@@ -527,7 +531,7 @@ export default function Home() {
           }}
         >
           <div>
-            <div className="eye">Receipts</div>
+            <div className="eye chip">Receipts</div>
             <h2 className="disp" style={{ fontSize: "clamp(28px, 4vw, 57.6px)", marginTop: 14 }}>
               Proof you can click.
             </h2>
@@ -554,7 +558,7 @@ export default function Home() {
 
       {/* ── Testimonials, held ─────────────────────────────────────────────── */}
       <section className="wrap sect">
-        <div className="eye">What they say</div>
+        <div className="eye chip">What they say</div>
         <div className="held rv" style={{ marginTop: 26 }}>
           <div className="eye mut">Section held</div>
           <p
@@ -572,7 +576,7 @@ export default function Home() {
 
       {/* ── Process ────────────────────────────────────────────────────────── */}
       <section className="wrap sect">
-        <div className="eye">How it runs</div>
+        <div className="eye chip">How it runs</div>
         <h2 className="disp" style={{ fontSize: "clamp(26px, 3.6vw, 51.8px)", marginTop: 14 }}>
           Three steps. No theatre.
         </h2>

@@ -49,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <PlateDefs />
+        <div className="rules" aria-hidden="true" />
         <Nav />
         <main className="page" id="main" tabIndex={-1}>
           {children}

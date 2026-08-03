@@ -2841,3 +2841,95 @@ select.ctrl option {
   background: var(--tar-2);
   color: var(--text-primary);
 }
+
+/* ══ borrowed structure ═══════════════════════════════════════════════════════
+
+   Three devices taken from a reference site the client rated, translated into
+   this brand's tokens rather than copied. None of them touch the palette, the
+   type scale or the voice — they are structural. */
+
+/* 1. Column rules.
+   The layout has been on a 12-column grid since the handoff and has never drawn
+   it. A fixed backdrop at quarter intervals gives every band a shared vertical
+   spine, so sections read as sitting on one page instead of stacking
+   independently. Deliberately near-invisible — at 4% it registers as texture,
+   and anything stronger starts competing with the hairlines on cards.
+
+   z-index -1 puts it behind in-flow content but above the canvas: body carries
+   the Tar background, html does not, so the background propagates to the canvas
+   and a negative layer still paints over it. Sections with their own ground
+   (.appsec, .midcta) cover the rules, which is the intent — those bands are
+   meant to break the rhythm. */
+.rules {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: linear-gradient(to right, rgba(242, 240, 234, 0.04) 1px, transparent 1px);
+  background-size: 25% 100%;
+  max-width: var(--max-w-content);
+  margin-inline: auto;
+}
+/* Quarter intervals on a phone put a rule every ~97px, which stops reading as a
+   spine and starts reading as ruled paper. Halve the count. */
+@media (max-width: 900px) {
+  .rules {
+    background-size: 50% 100%;
+  }
+}
+@media (prefers-contrast: more) {
+  .rules {
+    display: none;
+  }
+}
+
+/* 2. Filled label chip.
+   .eye is Voltage text on Tar; .eye.chip inverts it into a solid Voltage plate
+   with a Tar label — the same relationship as the die-cut knockout in the mark.
+   Tar on Voltage is 13:1, so it passes at 11px where the reverse would not if
+   the accent were any darker. Used for section identity only, never inline. */
+.eye.chip {
+  display: inline-block;
+  background: var(--voltage-500);
+  color: var(--tar);
+  padding: 5px 9px 4px;
+  border-radius: 2px;
+  letter-spacing: 0.16em;
+}
+
+/* 3. Availability, stated rather than hidden.
+   `availability` has been in config since the first build and surfaced in one
+   place: the nav CTA swapped to it after 45 seconds, on an 8-second rotation.
+   Almost nobody sits on a marketing page for 45 seconds without scrolling, so a
+   real scarcity signal — three clients, small on purpose — was effectively
+   never shown. It is now permanent and the rotation is gone. */
+.slots {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 10px/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  align-self: center;
+}
+.slots i {
+  width: 6px;
+  height: 6px;
+  background: var(--voltage-500);
+  border-radius: 1px;
+}
+/* Both are mono, both uppercase, both muted — at a 10px gap they read as one
+   string ("Q4 — 2 SLOTS OPEN KHI 12:44"). A rule separates them without adding
+   another colour. */
+.slots + #khi {
+  padding-left: 12px;
+  margin-left: 2px;
+  border-left: 1px solid var(--border-subtle);
+}
+@media (max-width: 1100px) {
+  .slots {
+    display: none;
+  }
+}

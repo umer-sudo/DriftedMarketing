@@ -17,7 +17,7 @@ const LINKS = [
 const SHEET_LINKS = [{ href: "/", label: "Home" }, ...LINKS, { href: "/contact", label: "Contact" }];
 
 const CTA_LABEL = "Tell us the number";
-const CTA_ALT = `${availability.quarter}: ${availability.slots} slots ↗`;
+const SLOTS = `${availability.quarter} — ${availability.slots} slots open`;
 
 export default function Nav() {
   const pathname = usePathname();
@@ -25,7 +25,6 @@ export default function Nav() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [clock, setClock] = useState<string | null>(null);
   const [ctaLabel, setCtaLabel] = useState(CTA_LABEL);
-  const hoveredRef = useRef(false);
   const sheetRef = useRef<HTMLDivElement>(null);
 
   /* Hides on scroll down past 220px, returns immediately on scroll up. */
@@ -60,24 +59,6 @@ export default function Nav() {
     tick();
     const id = window.setInterval(tick, 30000);
     return () => window.clearInterval(id);
-  }, []);
-
-  /* After 45s the CTA starts alternating its label every 8s, suppressed on hover.
-     Hover state is read through a ref so hovering never restarts the 45s timer. */
-  useEffect(() => {
-    let alt = true;
-    let interval: number | undefined;
-    const start = window.setTimeout(() => {
-      interval = window.setInterval(() => {
-        if (hoveredRef.current) return;
-        setCtaLabel(alt ? CTA_ALT : CTA_LABEL);
-        alt = !alt;
-      }, 8000);
-    }, 45000);
-    return () => {
-      window.clearTimeout(start);
-      window.clearInterval(interval);
-    };
   }, []);
 
   /* Close the sheet on navigation. */
@@ -147,6 +128,10 @@ export default function Nav() {
         </div>
 
         <div style={{ display: "flex", gap: 10 }}>
+          <span className="slots">
+            <i aria-hidden="true" />
+            {SLOTS}
+          </span>
           {clock && <span id="khi">{clock}</span>}
           <button
             className="btn sec sm menubtn"
@@ -159,14 +144,8 @@ export default function Nav() {
           <Link
             href="/contact"
             className="btn sm navcta-alt"
-            onMouseEnter={() => {
-              hoveredRef.current = true;
-              setCtaLabel("30 min. No deck. ↗");
-            }}
-            onMouseLeave={() => {
-              hoveredRef.current = false;
-              setCtaLabel(CTA_LABEL);
-            }}
+            onMouseEnter={() => setCtaLabel("30 min. No deck. ↗")}
+            onMouseLeave={() => setCtaLabel(CTA_LABEL)}
           >
             {ctaLabel}
           </Link>
