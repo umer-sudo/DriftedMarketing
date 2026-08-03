@@ -57,6 +57,26 @@ const BEATS = [
   },
 ];
 
+/* Brand objects. Alt text describes the artifact rather than transcribing it —
+   each one's words already appear as real copy elsewhere on the page. */
+const OBJECTS = [
+  {
+    src: "/objects/number.avif",
+    cap: "The engagement record — one metric, one date",
+    alt: "A dark card headed The Number, with blank ruled fields for metric, date and reporting cadence.",
+  },
+  {
+    src: "/objects/contract.avif",
+    cap: "Clause 4.2 — thirty days' notice",
+    alt: "A printed contract clause on off-white stock, headed Termination, with a plain-English note marked in red beside it.",
+  },
+  {
+    src: "/objects/spec.avif",
+    cap: "The monetization spec — before design starts",
+    alt: "A printed spec sheet listing five numbered lines of an example revenue model, flagged as an example rather than a client result.",
+  },
+];
+
 const PROCESS = [
   {
     n: "01",
@@ -587,6 +607,39 @@ export default function Home() {
               <Icon className="lu" aria-hidden="true" />
               <h3>{title}</h3>
               <p>{body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── The paperwork ──────────────────────────────────────────────────────
+          Studio artifacts, not client proof. They sit here rather than in the
+          Receipts band above on purpose: that band is headed "Proof you can
+          click" and holds evidence of client work, and a document we wrote
+          about ourselves is not evidence of anything we did for anyone else.
+
+          Rendered by scripts/render-objects.mjs, which screenshots them through
+          the live token layer — so they are the real faces and the real colours
+          rather than a designer's approximation, and they can be regenerated
+          when the system moves. */}
+      <section className="wrap sect">
+        <div className="eye chip">The paperwork</div>
+        <h2 className="disp" style={{ fontSize: "clamp(26px, 3.6vw, 51.8px)", marginTop: 14 }}>
+          Everything in writing.
+        </h2>
+        <p className="body" style={{ maxWidth: "54ch", marginTop: 26 }}>
+          Three of the documents an engagement actually runs on. Nothing here is a
+          client result — these are ours, and you see them before you sign anything.
+        </p>
+        <div className="proofgrid">
+          {OBJECTS.map((o) => (
+            <div key={o.src}>
+              <div className="slotframe">
+                <ImageSlot placeholder={o.cap} src={o.src} alt={o.alt} />
+              </div>
+              <div className="slotcap" style={{ paddingInline: 2 }}>
+                {o.cap}
+              </div>
             </div>
           ))}
         </div>
